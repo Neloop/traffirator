@@ -99,6 +99,7 @@ public class Main {
 
             if ("exit".equalsIgnoreCase(line)) {
                 client.finish();
+                log.info("User requested 'exit' action");
                 break;
             } else if (number != null) {
                 client.setScenariosCount(number);
@@ -136,16 +137,19 @@ public class Main {
 
         // wait till both client are finished
         while (!client.finished()) {
-            Thread.sleep(2000);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ignored) {}
         }
 
-        summary.setEnd();
-
-        // do not forget to destroy allocated stacks
-        client.destroy();
-
-        summary.printSummary();
-        log.info("All done... Good bye!");
+        try {
+            // do not forget to destroy allocated stacks
+            client.destroy();
+            log.info("All done... Good bye!");
+        } finally {
+            summary.setEnd();
+            summary.printSummary();
+        }
     }
 
     public void findDeadLocks()
