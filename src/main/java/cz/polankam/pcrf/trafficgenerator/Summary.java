@@ -1,6 +1,7 @@
 package cz.polankam.pcrf.trafficgenerator;
 
 import cz.polankam.pcrf.trafficgenerator.client.ClientConfig;
+import java.io.PrintStream;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,24 +31,25 @@ public class Summary {
         changes.add(new AbstractMap.SimpleEntry<>(System.currentTimeMillis(), scenariosCount));
     }
 
-    public void printSummary() {
-        System.out.println("***** SUMMARY START *****");
-        System.out.println("Start: " + start);
-        System.out.println("End: " + end);
+    public void printSummary(PrintStream out) {
+        out.println("***** SUMMARY START *****");
+        out.println("Start: " + start);
+        out.println("End: " + end);
 
-        System.out.println("Initial Setup: ");
-        System.out.println("    Call Count: " + config.getCallCount());
-        System.out.println("    Initial Scenarios Count: " + config.getInitialScenariosCount());
-        System.out.println("    Thread Count: " + config.getThreadCount());
+        out.println("Initial Setup: ");
+        out.println("    Call Count: " + config.getCallCount());
+        out.println("    Initial Scenarios Count: " + config.getInitialScenariosCount());
+        out.println("    Thread Count: " + config.getThreadCount());
 
         if (!changes.isEmpty()) {
-            System.out.println("Changes (Time; Scenarios Count):");
+            out.println("Changes (Time; Scenarios Count):");
             for (Map.Entry<Long, Integer> entry : changes) {
-                System.out.println("    " + entry.getKey() + "; " + entry.getValue());
+                out.println("    " + entry.getKey() + "; " + entry.getValue());
             }
         }
 
-        System.out.println("***** SUMMARY END *****");
+        out.println("***** SUMMARY END *****");
+        out.flush();
     }
 
 }

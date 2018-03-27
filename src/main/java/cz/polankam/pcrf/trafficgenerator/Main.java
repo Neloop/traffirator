@@ -7,6 +7,7 @@ import cz.polankam.pcrf.trafficgenerator.scenario.factory.SimpleDemoScenarioFact
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
@@ -27,10 +28,12 @@ public class Main {
     private Summary summary;
     private String[] args;
     private CommandLine cmd;
+    private PrintStream summaryOut;
 
     protected Main(String[] args) throws ParseException {
         this.args = args;
         summary = new Summary();
+        summaryOut = System.out;
     }
 
     protected void processCmdArguments() throws ParseException {
@@ -42,6 +45,8 @@ public class Main {
                 .desc("Number of scenarios which will be created at the beginning, default is 1").build());
         options.addOption(Option.builder("t").longOpt("threadCount").argName("count").hasArg()
                 .desc("Number threads which will handle sending and receiving of messages, default is 1").build());
+        options.addOption(Option.builder("s").longOpt("summary").argName("file").hasArg()
+                .desc("File to which summary should be written, default is stdout").build());
         options.addOption(new Option("h", "help", false, "Print this message"));
 
         CommandLineParser parser = new DefaultParser();
@@ -69,6 +74,10 @@ public class Main {
 
         if (cmd.hasOption("threadCount")) {
             threadCount = Integer.parseUnsignedInt(cmd.getOptionValue("threadCount"));
+        }
+
+        if (cmd.hasOption("summary")) {
+            summaryOut = new PrintStream(cmd.getOptionValue("summary"));
         }
 
         return new ClientConfig(callCount, initialScenariosCount, threadCount);
@@ -148,7 +157,8 @@ public class Main {
             log.info("All done... Good bye!");
         } finally {
             summary.setEnd();
-            summary.printSummary();
+            summary.printSummary(summaryOut);
+            summaryOut.close();
         }
     }
 
