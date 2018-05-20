@@ -1,7 +1,6 @@
 package cz.polankam.pcrf.trafficgenerator;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import cz.polankam.pcrf.trafficgenerator.client.Client;
 import cz.polankam.pcrf.trafficgenerator.config.Config;
@@ -30,8 +29,8 @@ public class Main {
 
     private static final Logger log = Logger.getLogger(Main.class);
 
-    private Summary summary;
-    private String[] args;
+    private final Summary summary;
+    private final String[] args;
     private CommandLine cmd;
     private PrintStream summaryOut;
 
@@ -44,7 +43,7 @@ public class Main {
     protected void processCmdArguments() throws ParseException {
         Options options = new Options();
 
-        options.addOption(Option.builder("c").required().longOpt("config").argName("file").hasArg()
+        options.addOption(Option.builder("c").longOpt("config").argName("file").hasArg()
                 .desc("YAML configuration file for the generator").build());
         options.addOption(new Option("h", "help", false, "Print this message"));
 
@@ -55,6 +54,10 @@ public class Main {
             HelpFormatter formatter = new HelpFormatter();
             formatter.printHelp("traffirator", "Traffic generator for PCRF server within LTE network", options, "");
             System.exit(0);
+        }
+
+        if (!cmd.hasOption("config")) {
+            throw new ParseException("Missing required option 'config'");
         }
     }
 
@@ -130,7 +133,7 @@ public class Main {
             }).start();
         }
 
-        // wait till both client are finished
+        // wait till both is finished
         while (!client.finished()) {
             try {
                 Thread.sleep(2000);
