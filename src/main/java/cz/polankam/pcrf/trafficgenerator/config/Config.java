@@ -1,25 +1,16 @@
 package cz.polankam.pcrf.trafficgenerator.config;
 
+import java.util.List;
+
 
 public class Config {
 
-    private int callCount;
     private int initialScenariosCount;
     private int threadCount;
     private String summary;
+    private List<ProfileItem> profile;
+    private long end;
 
-
-    /**
-     * How many times scenarios should be run, -1 if there is no limit.
-     * @return
-     */
-    public int getCallCount() {
-        return callCount;
-    }
-
-    public void setCallCount(int callCount) {
-        this.callCount = callCount;
-    }
 
     /**
      * Number of scenario executors which should be spawned by client.
@@ -27,10 +18,6 @@ public class Config {
      */
     public int getInitialScenariosCount() {
         return initialScenariosCount;
-    }
-
-    public void setInitialScenariosCount(int initialScenariosCount) {
-        this.initialScenariosCount = initialScenariosCount;
     }
 
     /**
@@ -41,10 +28,6 @@ public class Config {
         return threadCount;
     }
 
-    public void setThreadCount(int threadCount) {
-        this.threadCount = threadCount;
-    }
-
     /**
      * File to which summary should be written.
      * @return
@@ -53,10 +36,20 @@ public class Config {
         return summary;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    /**
+     * Testing profile configuration.
+     * @return
+     */
+    public List<ProfileItem> getProfile() {
+        return profile;
     }
 
-
+    /**
+     * When will the execution ends, in milliseconds.
+     * @return
+     */
+    public long getEnd() {
+        return end;
+    }
 
 }

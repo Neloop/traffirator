@@ -57,10 +57,6 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
      * Boolean telling if we finished our interaction.
      */
     private final AtomicBoolean finished;
-    /**
-     * Remaining call count of scenarios.
-     */
-    private int callCount;
 
 
     public Client(Config config) throws Exception {
@@ -75,7 +71,6 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosMap = new HashMap<>();
         finished = new AtomicBoolean(false);
 
-        callCount = config.getCallCount();
         scenariosCount = config.getInitialScenariosCount();
     }
 
@@ -100,7 +95,8 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
         // create scenarios
         for (int i = 0; i < config.getInitialScenariosCount(); i++) {
-            createScenario();
+            // TODO
+            //createScenario();
         }
     }
 
@@ -157,26 +153,12 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosCount = count;
     }
 
-    private synchronized boolean canCreateScenario() {
-        if (callCount == -1) {
-            return true;
-        }
-
-        if ((callCount - scenariosList.size()) > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private synchronized boolean areScenariosEmpty() {
-        return scenariosList.isEmpty();
-    }
-
     private synchronized Scenario createAndStartScenario() throws Exception {
-        Scenario scenario = createScenario();
+        // TODO
+        /*Scenario scenario = createScenario();
         sendNextMessage(scenario);
-        return scenario;
+        return scenario;*/
+        return null;
     }
 
     private synchronized Scenario createScenario(String type) {
@@ -202,9 +184,6 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
         log.info("New scenario created. Current active scenarios: " + scenariosList.size());
 
-        if (callCount != -1) {
-            callCount--;
-        }
         return scenario;
     }
 
@@ -232,17 +211,10 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         }
 
         log.error(errorMessage);
-
         removeScenario(scenario);
-        if (canCreateScenario()) {
-            log.info("Scenario failed, load next");
-
-            // send next message of newly created scenario
-            sendNextMessage(createScenario(scenario.getType()));
-        } else {
-            finish();
-            return;
-        }
+        log.info("Scenario failed, loading next one");
+        // send next message of newly created scenario
+        sendNextMessage(createScenario(scenario.getType()));
     }
 
     private synchronized void sendNextMessage(final Scenario scenario) {
@@ -274,17 +246,9 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                     // delete scenario from all internal structures
                     removeScenario(scenario);
 
-                    if (canCreateScenario()) {
-                        log.info("Scenario empty, load next");
-
-                        // send next message of newly created scenario
-                        sendNextMessage(createScenario(scenario.getType()));
-                    } else if (areScenariosEmpty()) {
-                        // call count reached zero and there are no more scenarios, end whole execution...
-                        log.info("Scenarios empty, finishing...");
-                        finish();
-                        return;
-                    }
+                    log.info("Scenario empty, load next");
+                    // send next message of newly created scenario
+                    sendNextMessage(createScenario(scenario.getType()));
                 } else if (sent) { // message was sent, check if there are others in queue
                     sendNextMessage(scenario);
                 }

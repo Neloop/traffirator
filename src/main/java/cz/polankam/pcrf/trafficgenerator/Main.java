@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import cz.polankam.pcrf.trafficgenerator.client.Client;
 import cz.polankam.pcrf.trafficgenerator.config.Config;
-import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -121,12 +120,8 @@ public class Main {
         summary.setStart();
         client.start();
 
-        // if this is infinite execution allow user to change number of active scenarios
-        if (config.getCallCount() == -1) {
-            new Thread(() -> {
-                controlClient(client);
-            }).start();
-        }
+        // schedule ending of the execution from the configuration
+        // TODO
 
         // wait till both is finished
         while (!client.finished()) {

@@ -1,5 +1,14 @@
 --- 
-callCount: -1  # Number of call which will be executed
-initialScenariosCount: 1  # Number of scenarios which will be created at the beginning
-threadCount: 1  # Number threads which will handle sending and receiving of messages
-summary: ./logs/summary.txt  # File to which summary should be written
+initialScenariosCount: 1  # number of scenarios which will be created at the beginning
+threadCount: 1  # number threads which will handle sending and receiving of messages
+summary: ./logs/summary.txt  # file to which summary should be written
+profile:
+  - start: 0  # begin this testing profile item at, in milliseconds
+    scenarios:  # list of scenarios used in this profile item
+      - type: Demo  # type of the used scenario
+        count: 1  # number of scenarios with particular type which will be spawned, in absolute numbers
+  - start: 10000
+    scenarios:
+      - type: Demo
+        count: 10
+end: 100000  # when will the execution ends, in milliseconds
