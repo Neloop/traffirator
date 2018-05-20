@@ -1,0 +1,5 @@
+--- 
+callCount: -1  # Number of call which will be executed
+initialScenariosCount: 1  # Number of scenarios which will be created at the beginning
+threadCount: 1  # Number threads which will handle sending and receiving of messages
+summary: ./logs/summary.txt  # File to which summary should be written

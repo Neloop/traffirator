@@ -1,11 +1,16 @@
 package cz.polankam.pcrf.trafficgenerator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import cz.polankam.pcrf.trafficgenerator.client.Client;
 import cz.polankam.pcrf.trafficgenerator.config.Config;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 import cz.polankam.pcrf.trafficgenerator.scenario.factory.SimpleDemoScenarioFactory;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
@@ -39,14 +44,8 @@ public class Main {
     protected void processCmdArguments() throws ParseException {
         Options options = new Options();
 
-        options.addOption(Option.builder("c").longOpt("callCount").argName("count").hasArg()
-                .desc("Number of call which will be executed, -1 if there is no limit, default is 1").build());
-        options.addOption(Option.builder("i").longOpt("initialScenarios").argName("count").hasArg()
-                .desc("Number of scenarios which will be created at the beginning, default is 1").build());
-        options.addOption(Option.builder("t").longOpt("threadCount").argName("count").hasArg()
-                .desc("Number threads which will handle sending and receiving of messages, default is 1").build());
-        options.addOption(Option.builder("s").longOpt("summary").argName("file").hasArg()
-                .desc("File to which summary should be written, default is stdout").build());
+        options.addOption(Option.builder("c").required().longOpt("config").argName("file").hasArg()
+                .desc("YAML configuration file for the generator").build());
         options.addOption(new Option("h", "help", false, "Print this message"));
 
         CommandLineParser parser = new DefaultParser();
@@ -60,27 +59,14 @@ public class Main {
     }
 
     protected Config getClientConfig() throws Exception {
-        int callCount = 1;
-        int initialScenariosCount = 1;
-        int threadCount = 1;
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
-        if (cmd.hasOption("callCount")) {
-            callCount = Integer.parseInt(cmd.getOptionValue("callCount"));
+        String filename = cmd.getOptionValue("config");
+        try (InputStream configFile = new FileInputStream(filename)) {
+            Config config = mapper.readValue(configFile, Config.class);
+            summaryOut = new PrintStream(config.getSummary());
+            return config;
         }
-
-        if (cmd.hasOption("initialScenarios")) {
-            initialScenariosCount = Integer.parseUnsignedInt(cmd.getOptionValue("initialScenarios"));
-        }
-
-        if (cmd.hasOption("threadCount")) {
-            threadCount = Integer.parseUnsignedInt(cmd.getOptionValue("threadCount"));
-        }
-
-        if (cmd.hasOption("summary")) {
-            summaryOut = new PrintStream(cmd.getOptionValue("summary"));
-        }
-
-        return new Config(callCount, initialScenariosCount, threadCount);
     }
 
     protected ScenarioFactory getScenarioFactory() {
