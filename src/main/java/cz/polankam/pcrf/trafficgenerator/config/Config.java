@@ -5,20 +5,11 @@ import java.util.List;
 
 public class Config {
 
-    private int initialScenariosCount;
     private int threadCount;
     private String summary;
     private List<ProfileItem> profile;
     private long end;
 
-
-    /**
-     * Number of scenario executors which should be spawned by client.
-     * @return
-     */
-    public int getInitialScenariosCount() {
-        return initialScenariosCount;
-    }
 
     /**
      * Get size of internal client thread-pool.

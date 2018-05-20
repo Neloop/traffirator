@@ -70,8 +70,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosList = new ArrayList<>();
         scenariosMap = new HashMap<>();
         finished = new AtomicBoolean(false);
-
-        scenariosCount = config.getInitialScenariosCount();
+        scenariosCount = 0;
     }
 
     private void prepareSessionFactories() {
@@ -92,12 +91,6 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
         // prepare session factories
         prepareSessionFactories();
-
-        // create scenarios
-        for (int i = 0; i < config.getInitialScenariosCount(); i++) {
-            // TODO
-            //createScenario();
-        }
     }
 
     public synchronized void destroy() throws Exception {

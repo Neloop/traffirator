@@ -37,9 +37,8 @@ public class Summary {
         out.println("End: " + end);
 
         out.println("Initial Setup: ");
-        out.println("    Call Count: " + config.getCallCount());
-        out.println("    Initial Scenarios Count: " + config.getInitialScenariosCount());
         out.println("    Thread Count: " + config.getThreadCount());
+        out.println("    End: " + config.getEnd());
 
         if (!changes.isEmpty()) {
             out.println("Changes (Time; Scenarios Count):");
