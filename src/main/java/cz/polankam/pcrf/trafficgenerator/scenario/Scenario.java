@@ -156,4 +156,10 @@ public abstract class Scenario {
      */
     public abstract ScenarioNode getRootNode() throws Exception;
 
+    /**
+     * Get type of scenario which will be used in scenario factory.
+     * @return
+     */
+    public abstract String getType();
+
 }

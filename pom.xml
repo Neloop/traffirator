@@ -4,11 +4,11 @@
 
     <groupId>cz.polankam.pcrf</groupId>
     <artifactId>traffirator</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>traffirator</name>
-    <url>http://maven.apache.org</url>
+    <url>https://github.com/Neloop/traffirator</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

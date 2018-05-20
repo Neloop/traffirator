@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 public class SimpleDemoScenario extends Scenario {
 
+    public static String TYPE = "SimpleDemo";
     private static ScenarioNode rootNode;
 
     private static void init() throws Exception {
@@ -52,6 +53,11 @@ public class SimpleDemoScenario extends Scenario {
     public ScenarioNode getRootNode() throws Exception {
         init();
         return rootNode;
+    }
+
+    @Override
+    public String getType() {
+        return TYPE;
     }
 
 }

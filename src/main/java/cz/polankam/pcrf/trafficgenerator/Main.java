@@ -5,7 +5,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import cz.polankam.pcrf.trafficgenerator.client.Client;
 import cz.polankam.pcrf.trafficgenerator.config.Config;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
-import cz.polankam.pcrf.trafficgenerator.scenario.factory.SimpleDemoScenarioFactory;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -72,10 +71,6 @@ public class Main {
         }
     }
 
-    protected ScenarioFactory getScenarioFactory() {
-        return new SimpleDemoScenarioFactory();
-    }
-
     protected void waitForConnections() throws Exception {
         //wait for connection to peer
         log.info("Waiting for connection to peer...");
@@ -113,7 +108,7 @@ public class Main {
         log.info("****************************************");
 
         Config config = getClientConfig();
-        Client client = new Client(config, getScenarioFactory());
+        Client client = new Client(config);
 
         // initialization
         client.init();

@@ -63,9 +63,9 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     private int callCount;
 
 
-    public Client(Config config, ScenarioFactory scenarioFactory) throws Exception {
+    public Client(Config config) throws Exception {
         this.config = config;
-        this.scenarioFactory = scenarioFactory;
+        this.scenarioFactory = new ScenarioFactory();
 
         gx = new GxStack();
         rx = new RxStack();
@@ -179,11 +179,12 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         return scenario;
     }
 
-    private synchronized Scenario createScenario() {
-        Scenario scenario = scenarioFactory.create();
+    private synchronized Scenario createScenario(String type) {
+        Scenario scenario = null;
         List<AppRequestEvent> receivedRequests = Collections.synchronizedList(new ArrayList<>());
 
         try {
+            scenario = scenarioFactory.create(type);
             scenario.init(gx, rx, receivedRequests);
         } catch (Exception e) {
             // should not happen, in case it will, stop whole execution
@@ -237,7 +238,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
             log.info("Scenario failed, load next");
 
             // send next message of newly created scenario
-            sendNextMessage(createScenario());
+            sendNextMessage(createScenario(scenario.getType()));
         } else {
             finish();
             return;
@@ -277,7 +278,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                         log.info("Scenario empty, load next");
 
                         // send next message of newly created scenario
-                        sendNextMessage(createScenario());
+                        sendNextMessage(createScenario(scenario.getType()));
                     } else if (areScenariosEmpty()) {
                         // call count reached zero and there are no more scenarios, end whole execution...
                         log.info("Scenarios empty, finishing...");
