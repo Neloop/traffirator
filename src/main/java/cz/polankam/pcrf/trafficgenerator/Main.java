@@ -13,6 +13,9 @@ import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -31,6 +34,7 @@ public class Main {
     private final String[] args;
     private CommandLine cmd;
     private PrintStream summaryOut;
+    private ScheduledExecutorService executor;
 
     protected Main(String[] args) throws ParseException {
         this.args = args;
@@ -78,36 +82,15 @@ public class Main {
 
     }
 
-    protected void controlClient(Client client) {
-        System.out.println("Write number of scenarios which should be active or 'exit':");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            String line = null;
-            Integer number = null;
-            try {
-                line = br.readLine();
-                number = Integer.parseUnsignedInt(line);
-            } catch (NumberFormatException | IOException e) {}
-
-            if ("exit".equalsIgnoreCase(line)) {
-                client.finish();
-                log.info("User requested 'exit' action");
-                break;
-            } else if (number != null) {
-                client.setScenariosCount(number);
-                summary.addChange(number);
-                System.out.println("Current count of active scenarios: " + client.getScenariosCount());
-            }
-        }
-    }
-
     protected void start() throws Exception {
         log.info("****************************************");
         log.info("* STARTING TRAFFIRATOR *****************");
         log.info("****************************************");
 
         Config config = getClientConfig();
-        Client client = new Client(config);
+        // prepare executor service based on given thread count and pass it to the client
+        executor = Executors.newScheduledThreadPool(config.getThreadCount());
+        Client client = new Client(config, executor);
 
         // initialization
         client.init();
@@ -121,7 +104,10 @@ public class Main {
         client.start();
 
         // schedule ending of the execution from the configuration
-        // TODO
+        executor.schedule(() -> {
+            client.finish();
+            log.info("End trigger activated");
+        }, config.getEnd(), TimeUnit.MILLISECONDS);
 
         // wait till both is finished
         while (!client.finished()) {

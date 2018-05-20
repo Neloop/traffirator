@@ -4,6 +4,7 @@ import cz.polankam.pcrf.trafficgenerator.config.Config;
 import cz.polankam.pcrf.trafficgenerator.utils.DumpUtils;
 import cz.polankam.pcrf.trafficgenerator.rx.MyRxSessionFactoryImpl;
 import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
+import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 
 import org.apache.log4j.Logger;
 import org.jdiameter.api.IllegalDiameterStateException;
@@ -33,7 +34,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -60,12 +60,16 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
 
     public Client(Config config) throws Exception {
+        this(config, Executors.newScheduledThreadPool(config.getThreadCount()));
+    }
+
+    public Client(Config config, ScheduledExecutorService executor) {
         this.config = config;
         this.scenarioFactory = new ScenarioFactory();
 
         gx = new GxStack();
         rx = new RxStack();
-        executorService = Executors.newScheduledThreadPool(config.getThreadCount());
+        executorService = executor;
         scenariosReceivedRequestsMap = new HashMap<>();
         scenariosList = new ArrayList<>();
         scenariosMap = new HashMap<>();
