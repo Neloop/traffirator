@@ -1,7 +1,7 @@
 package cz.polankam.pcrf.trafficgenerator;
 
 import cz.polankam.pcrf.trafficgenerator.client.Client;
-import cz.polankam.pcrf.trafficgenerator.client.ClientConfig;
+import cz.polankam.pcrf.trafficgenerator.config.Config;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 import cz.polankam.pcrf.trafficgenerator.scenario.factory.SimpleDemoScenarioFactory;
 import java.io.BufferedReader;
@@ -59,7 +59,7 @@ public class Main {
         }
     }
 
-    protected ClientConfig getClientConfig() throws Exception {
+    protected Config getClientConfig() throws Exception {
         int callCount = 1;
         int initialScenariosCount = 1;
         int threadCount = 1;
@@ -80,7 +80,7 @@ public class Main {
             summaryOut = new PrintStream(cmd.getOptionValue("summary"));
         }
 
-        return new ClientConfig(callCount, initialScenariosCount, threadCount);
+        return new Config(callCount, initialScenariosCount, threadCount);
     }
 
     protected ScenarioFactory getScenarioFactory() {
@@ -123,7 +123,7 @@ public class Main {
         log.info("* STARTING TRAFFIRATOR *****************");
         log.info("****************************************");
 
-        ClientConfig config = getClientConfig();
+        Config config = getClientConfig();
         Client client = new Client(config, getScenarioFactory());
 
         // initialization

@@ -68,6 +68,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>2.9.2</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.mobicents.diameter</groupId>
             <artifactId>jdiameter-impl</artifactId>
             <version>1.7.1-123</version>

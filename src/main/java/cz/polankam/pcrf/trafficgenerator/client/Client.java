@@ -1,5 +1,6 @@
 package cz.polankam.pcrf.trafficgenerator.client;
 
+import cz.polankam.pcrf.trafficgenerator.config.Config;
 import cz.polankam.pcrf.trafficgenerator.utils.DumpUtils;
 import cz.polankam.pcrf.trafficgenerator.rx.MyRxSessionFactoryImpl;
 import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
@@ -45,7 +46,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
     private final GxStack gx;
     private final RxStack rx;
-    private final ClientConfig config;
+    private final Config config;
     private final ScenarioFactory scenarioFactory;
     private final ScheduledExecutorService executorService;
     private int scenariosCount;
@@ -62,7 +63,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     private int callCount;
 
 
-    public Client(ClientConfig config, ScenarioFactory scenarioFactory) throws Exception {
+    public Client(Config config, ScenarioFactory scenarioFactory) throws Exception {
         this.config = config;
         this.scenarioFactory = scenarioFactory;
 
