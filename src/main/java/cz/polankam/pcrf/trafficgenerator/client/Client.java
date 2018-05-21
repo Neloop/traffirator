@@ -46,7 +46,6 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
     private final GxStack gx;
     private final RxStack rx;
-    private final Config config;
     private final ScenarioFactory scenarioFactory;
     private final ScheduledExecutorService executorService;
     private int scenariosCount;
@@ -59,12 +58,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     private final AtomicBoolean finished;
 
 
-    public Client(Config config) throws Exception {
-        this(config, Executors.newScheduledThreadPool(config.getThreadCount()));
-    }
-
-    public Client(Config config, ScheduledExecutorService executor) {
-        this.config = config;
+    public Client(ScheduledExecutorService executor) {
         this.scenarioFactory = new ScenarioFactory();
 
         gx = new GxStack();

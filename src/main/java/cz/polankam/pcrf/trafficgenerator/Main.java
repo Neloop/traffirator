@@ -123,7 +123,7 @@ public class Main {
         Config config = getClientConfig();
         // prepare executor service based on given thread count and pass it to the client
         executor = Executors.newScheduledThreadPool(config.getThreadCount());
-        Client client = new Client(config, executor);
+        Client client = new Client(executor);
 
         // initialization
         client.init();
