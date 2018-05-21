@@ -4,13 +4,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import cz.polankam.pcrf.trafficgenerator.client.Client;
 import cz.polankam.pcrf.trafficgenerator.config.Config;
+import cz.polankam.pcrf.trafficgenerator.config.ProfileItem;
 import cz.polankam.pcrf.trafficgenerator.config.ProfileValidator;
+import cz.polankam.pcrf.trafficgenerator.config.ScenarioItem;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -61,6 +65,36 @@ public class Main {
         }
     }
 
+    class ChangeActionRunnable implements Runnable {
+
+        private final Queue<ProfileItem> queue;
+        private final Client client;
+
+        public ChangeActionRunnable(Queue<ProfileItem> queue, Client client) {
+            this.queue = queue;
+            this.client = client;
+        }
+
+        @Override
+        public void run() {
+            ProfileItem current = queue.poll();
+            for (ScenarioItem scenario : current.getScenarios()) {
+                client.setScenariosCount(scenario.getType(), scenario.getCount());
+            }
+            summary.addChange(current);
+
+            if (!queue.isEmpty()) {
+                long nextStart = queue.peek().getStart() - current.getStart();
+                executor.schedule(new ChangeActionRunnable(queue, client), nextStart, TimeUnit.MILLISECONDS);
+            }
+        }
+    }
+
+    protected void scheduleTestProfile(Config config, Client client) {
+        Queue<ProfileItem> queue = new LinkedList<>(config.getProfile());
+        executor.schedule(new ChangeActionRunnable(queue, client), queue.peek().getStart(), TimeUnit.MILLISECONDS);
+    }
+
     protected Config getClientConfig() throws Exception {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
@@ -101,6 +135,9 @@ public class Main {
         // start sending/receiving messages on gx and rx interfaces
         summary.setStart();
         client.start();
+
+        // schedule execution of test profile
+        scheduleTestProfile(config, client);
 
         // schedule ending of the execution from the configuration
         executor.schedule(() -> {

@@ -1,6 +1,8 @@
 package cz.polankam.pcrf.trafficgenerator;
 
 import cz.polankam.pcrf.trafficgenerator.config.Config;
+import cz.polankam.pcrf.trafficgenerator.config.ProfileItem;
+import cz.polankam.pcrf.trafficgenerator.config.ScenarioItem;
 import java.io.PrintStream;
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ public class Summary {
     private long start;
     private long end;
     private Config config;
-    private List<Map.Entry<Long, Integer>> changes = new ArrayList<>();
+    private final List<Map.Entry<Long, ProfileItem>> changes = new ArrayList<>();
 
     public void setStart() {
         start = System.currentTimeMillis();
@@ -27,8 +29,9 @@ public class Summary {
         this.config = config;
     }
 
-    public synchronized void addChange(int scenariosCount) {
-        changes.add(new AbstractMap.SimpleEntry<>(System.currentTimeMillis(), scenariosCount));
+    public synchronized void addChange(ProfileItem item) {
+        // TODO: type
+        changes.add(new AbstractMap.SimpleEntry<>(System.currentTimeMillis(), item));
     }
 
     public void printSummary(PrintStream out) {
@@ -41,9 +44,14 @@ public class Summary {
         out.println("    End: " + config.getEnd());
 
         if (!changes.isEmpty()) {
-            out.println("Changes (Time; Scenarios Count):");
-            for (Map.Entry<Long, Integer> entry : changes) {
-                out.println("    " + entry.getKey() + "; " + entry.getValue());
+            out.println("Changes:");
+            for (Map.Entry<Long, ProfileItem> entry : changes) {
+                out.println("    " + entry.getKey());
+
+                ProfileItem item = entry.getValue();
+                for (ScenarioItem scenario : item.getScenarios()) {
+                    out.println("        " + scenario.getType() + "; " + scenario.getCount());
+                }
             }
         }
 

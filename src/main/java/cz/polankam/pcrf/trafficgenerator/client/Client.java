@@ -124,17 +124,19 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         return scenariosList.size();
     }
 
-    public synchronized void setScenariosCount(int count) {
+    public synchronized void setScenariosCount(String type, int count) {
         if (scenariosCount == count) {
             return;
         }
+
+        // TODO: count is absolute, type is not considered yet
 
         if (scenariosCount < count) {
             // add scenarios
             int diff = count - scenariosCount;
             for (int i = 0; i < diff; ++i) {
                 try {
-                    createAndStartScenario();
+                    createAndStartScenario(type);
                 } catch (Exception e) {
                     log.error(e);
                 }
@@ -150,12 +152,10 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosCount = count;
     }
 
-    private synchronized Scenario createAndStartScenario() throws Exception {
-        // TODO
-        /*Scenario scenario = createScenario();
+    private synchronized Scenario createAndStartScenario(String type) throws Exception {
+        Scenario scenario = createScenario(type);
         sendNextMessage(scenario);
-        return scenario;*/
-        return null;
+        return scenario;
     }
 
     private synchronized Scenario createScenario(String type) {

@@ -4,7 +4,7 @@ package cz.polankam.pcrf.trafficgenerator.config;
 public class ScenarioItem {
 
     private String type;
-    private long count;
+    private int count;
 
 
     /**
@@ -19,7 +19,7 @@ public class ScenarioItem {
      * Number of scenarios with particular type which will be spawned, in absolute numbers.
      * @return
      */
-    public long getCount() {
+    public int getCount() {
         return count;
     }
 

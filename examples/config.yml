@@ -10,4 +10,4 @@ profile:
     scenarios:
       - type: Demo
         count: 10
-end: 100000  # when will the execution ends, in milliseconds
+end: 20000  # when will the execution ends, in milliseconds

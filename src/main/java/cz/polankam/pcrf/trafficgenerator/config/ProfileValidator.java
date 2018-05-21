@@ -12,6 +12,10 @@ public class ProfileValidator {
      * @throws Exception
      */
     public static void validate(Config config) throws Exception {
+        if (config.getProfile().isEmpty()) {
+            throw new Exception("Test profile has to contain at least one item");
+        }
+
         long previous = 0;
         for (ProfileItem item : config.getProfile()) {
             if (item.getStart() < previous) {
