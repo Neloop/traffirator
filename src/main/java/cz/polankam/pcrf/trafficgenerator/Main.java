@@ -4,11 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import cz.polankam.pcrf.trafficgenerator.client.Client;
 import cz.polankam.pcrf.trafficgenerator.config.Config;
-import java.io.BufferedReader;
+import cz.polankam.pcrf.trafficgenerator.config.ProfileValidator;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
@@ -69,6 +67,7 @@ public class Main {
         String filename = cmd.getOptionValue("config");
         try (InputStream configFile = new FileInputStream(filename)) {
             Config config = mapper.readValue(configFile, Config.class);
+            ProfileValidator.validate(config);
             summaryOut = new PrintStream(config.getSummary());
             return config;
         }

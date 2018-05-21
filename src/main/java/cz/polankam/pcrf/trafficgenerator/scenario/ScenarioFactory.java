@@ -8,13 +8,17 @@ import java.util.Map;
 
 public class ScenarioFactory {
 
-    private Map<String, Class<? extends Scenario>> scenarios = new HashMap<>();
+    private final static Map<String, Class<? extends Scenario>> scenarios = new HashMap<>();
 
-    public ScenarioFactory() {
+    static {
         scenarios.put(DemoScenario.TYPE, DemoScenario.class);
         scenarios.put(SimpleDemoScenario.TYPE, SimpleDemoScenario.class);
     }
 
+
+    public static boolean check(String type) {
+        return scenarios.get(type) != null;
+    }
 
     public Scenario create(String type) throws Exception {
         Class<? extends Scenario> factory = scenarios.get(type);
