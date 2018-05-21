@@ -79,7 +79,7 @@ public class Main {
         public void run() {
             ProfileItem current = queue.poll();
             for (ScenarioItem scenario : current.getScenarios()) {
-                client.setScenariosCount(scenario.getType(), scenario.getCount());
+                client.controlScenarios(scenario.getType(), scenario.getCount());
             }
             summary.addChange(current);
 

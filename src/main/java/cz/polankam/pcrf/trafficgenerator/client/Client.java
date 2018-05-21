@@ -46,13 +46,16 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     private final RxStack rx;
     private final ScenarioFactory scenarioFactory;
     private final ScheduledExecutorService executorService;
-    private int scenariosCount;
-    private final List<Scenario> scenariosList;
-    private final Map<String, Scenario> scenariosMap;
+
+    /** Key is type of the scenario, value is number of currently running scenarios with that type. */
+    private final Map<String, Integer> scenarioTypesCount;
+    /** Key is type of the scenario, value is list of the scenarios belonging to that type. */
+    private final Map<String, List<Scenario>> scenariosForTypes;
+    /** Key is session identification, value is scenario for that session. */
+    private final Map<String, Scenario> scenariosForSessions;
     private final Map<String, List<AppRequestEvent>> scenariosReceivedRequestsMap;
-    /**
-     * Boolean telling if we finished our interaction.
-     */
+
+    /** Boolean telling if we finished our interaction. */
     private final AtomicBoolean finished;
 
 
@@ -63,10 +66,10 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         rx = new RxStack();
         executorService = executor;
         scenariosReceivedRequestsMap = new HashMap<>();
-        scenariosList = new ArrayList<>();
-        scenariosMap = new HashMap<>();
+        scenariosForTypes = new HashMap<>();
+        scenariosForSessions = new HashMap<>();
         finished = new AtomicBoolean(false);
-        scenariosCount = 0;
+        scenarioTypesCount = new HashMap<>();
     }
 
     private void prepareSessionFactories() {
@@ -91,8 +94,11 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
     public synchronized void destroy() throws Exception {
         executorService.shutdownNow();
-        for (Scenario scen : scenariosList) {
-            scen.destroy();
+        for (String scenarioType : scenariosForTypes.keySet()) {
+            List<Scenario> scenariosList = scenariosForTypes.get(scenarioType);
+            for (Scenario scen : scenariosList) {
+                scen.destroy();
+            }
         }
         gx.destroy();
         rx.destroy();
@@ -106,16 +112,11 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         return finished.get();
     }
 
-    public synchronized int getScenariosCount() {
-        return scenariosList.size();
-    }
-
-    public synchronized void setScenariosCount(String type, int count) {
+    public synchronized void controlScenarios(String type, int count) {
+        int scenariosCount = scenarioTypesCount.getOrDefault(type, 0);
         if (scenariosCount == count) {
             return;
         }
-
-        // TODO: count is absolute, type is not considered yet
 
         if (scenariosCount < count) {
             // add scenarios
@@ -131,11 +132,11 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
             // delete scenarios
             int diff = scenariosCount - count;
             for (int i = 0; i < diff; ++i) {
-                removeRandomScenario();
+                removeRandomScenario(type);
             }
         }
 
-        scenariosCount = count;
+        scenarioTypesCount.put(type, count);
     }
 
     private synchronized Scenario createAndStartScenario(String type) throws Exception {
@@ -161,31 +162,37 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosReceivedRequestsMap.put(scenario.getGxSession().getSessionId(), receivedRequests);
         scenariosReceivedRequestsMap.put(scenario.getRxSession().getSessionId(), receivedRequests);
 
-        scenariosList.add(scenario);
-        scenariosMap.put(scenario.getGxSession().getSessionId(), scenario);
-        scenariosMap.put(scenario.getRxSession().getSessionId(), scenario);
+        // if there was no scenario for given type, create an empty list
+        if (!scenariosForTypes.containsKey(type)) {
+            scenariosForTypes.put(type, new ArrayList<>());
+        }
 
-        log.info("New scenario created. Current active scenarios: " + scenariosList.size());
+        scenariosForTypes.get(type).add(scenario);
+        scenariosForSessions.put(scenario.getGxSession().getSessionId(), scenario);
+        scenariosForSessions.put(scenario.getRxSession().getSessionId(), scenario);
+
+        log.info("New scenario created. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
 
         return scenario;
     }
 
-    private synchronized void removeRandomScenario() {
-        if (scenariosList.isEmpty()) {
+    private synchronized void removeRandomScenario(String type) {
+        if (scenariosForTypes.get(type).isEmpty()) {
             return;
         }
 
-        removeScenario(scenariosList.get(0));
+        removeScenario(scenariosForTypes.get(type).get(0));
     }
 
     private synchronized void removeScenario(Scenario scenario) {
-        scenariosList.remove(scenario);
-        scenariosMap.remove(scenario.getGxSession().getSessionId());
-        scenariosMap.remove(scenario.getRxSession().getSessionId());
+        String type = scenario.getType();
+        scenariosForTypes.get(type).remove(scenario);
+        scenariosForSessions.remove(scenario.getGxSession().getSessionId());
+        scenariosForSessions.remove(scenario.getRxSession().getSessionId());
         scenariosReceivedRequestsMap.remove(scenario.getGxSession().getSessionId());
         scenariosReceivedRequestsMap.remove(scenario.getRxSession().getSessionId());
         scenario.destroy();
-        log.info("Scenario removed and destroyed. Current active scenarios: " + scenariosList.size());
+        log.info("Scenario removed and destroyed. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
     }
 
     private synchronized void handleFailure(final Scenario scenario, String errorMessage) {
@@ -265,7 +272,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                     receivedRequests.add(request);
                 }
 
-                scenario = scenariosMap.get(session.getSessionId());
+                scenario = scenariosForSessions.get(session.getSessionId());
                 if (scenario == null) {
                     // probably because session was already released, just warn the user and continue
                     log.warn("Session '" + session.getSessionId() + "' not found in scenarios map.");
