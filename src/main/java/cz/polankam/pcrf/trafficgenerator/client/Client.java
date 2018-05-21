@@ -1,6 +1,5 @@
 package cz.polankam.pcrf.trafficgenerator.client;
 
-import cz.polankam.pcrf.trafficgenerator.config.Config;
 import cz.polankam.pcrf.trafficgenerator.utils.DumpUtils;
 import cz.polankam.pcrf.trafficgenerator.rx.MyRxSessionFactoryImpl;
 import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
@@ -34,7 +33,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -106,12 +104,6 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
     public boolean finished() {
         return finished.get();
-    }
-
-    public synchronized void start() throws Exception {
-        for (Scenario scenario : scenariosList) {
-            sendNextMessage(scenario);
-        }
     }
 
     public synchronized int getScenariosCount() {

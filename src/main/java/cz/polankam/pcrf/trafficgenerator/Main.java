@@ -134,8 +134,6 @@ public class Main {
 
         // start sending/receiving messages on gx and rx interfaces
         summary.setStart();
-        client.start();
-
         // schedule execution of test profile
         scheduleTestProfile(config, client);
 
