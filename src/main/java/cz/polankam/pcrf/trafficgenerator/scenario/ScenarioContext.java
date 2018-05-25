@@ -2,12 +2,13 @@ package cz.polankam.pcrf.trafficgenerator.scenario;
 
 import cz.polankam.pcrf.trafficgenerator.client.GxStack;
 import cz.polankam.pcrf.trafficgenerator.client.RxStack;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.gx.ClientGxSession;
 import org.jdiameter.api.rx.ClientRxSession;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class ScenarioContext {
@@ -24,7 +25,7 @@ public class ScenarioContext {
     
     
     public ScenarioContext(GxStack gx, RxStack rx, ClientGxSession gxSession, ClientRxSession rxSession,
-            List<AppRequestEvent> receivedEvents, HashMap<String, Object> state) throws Exception {
+            List<AppRequestEvent> receivedEvents, Map<String, Object> state) {
         this.gx = gx;
         this.rx = rx;
         this.gxSession = gxSession;
