@@ -1,6 +1,6 @@
 ---
 threadCount: 1  # number threads which will handle sending and receiving of messages
-summary: ./logs/summary.txt  # file to which summary should be written
+summary: ./logs/summary.log  # file to which summary should be written
 profile:
   - start: 0  # begin this testing profile item at, in milliseconds
     scenarios:  # list of scenarios used in this profile item
