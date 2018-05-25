@@ -16,7 +16,7 @@ public class StdoutPrintAction implements ScenarioAction {
     }
 
     @Override
-    public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {
+    public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) {
         System.out.println(message);
     }
 

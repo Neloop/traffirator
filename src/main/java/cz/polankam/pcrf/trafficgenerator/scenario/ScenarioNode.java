@@ -56,12 +56,12 @@ public class ScenarioNode {
         return children;
     }
 
-    public ScenarioNode addChild(ScenarioNode child) throws Exception {
+    public ScenarioNode addChild(ScenarioNode child) {
         children.add(new ScenarioNodeEntry(child));
         return this;
     }
 
-    public ScenarioNode addChild(int probability, ScenarioNode child) throws Exception {
+    public ScenarioNode addChild(int probability, ScenarioNode child) {
         children.add(new ScenarioNodeEntry(probability, child));
         return this;
     }
@@ -87,9 +87,7 @@ public class ScenarioNode {
         }
 
         // determine if probabilities were set or not
-        boolean notSet = children.stream().allMatch((ScenarioNodeEntry entry) -> {
-            return entry.getProbability() == 0;
-        });
+        boolean notSet = children.stream().allMatch((ScenarioNodeEntry entry) -> entry.getProbability() == 0);
 
         // validate or compute probabilities
         int sum = 0;
@@ -104,7 +102,7 @@ public class ScenarioNode {
         }
 
         if (!notSet && sum != 100) {
-            throw new Exception("Sum of the probabilites of children is not equal to 100");
+            throw new Exception("Sum of the probabilities of children is not equal to 100");
         }
     }
 

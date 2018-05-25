@@ -12,21 +12,21 @@ class ScenarioNodeTest {
     }
 
     @Test
-    void testHasChildren_childWithoutProbability() throws Exception {
+    void testHasChildren_childWithoutProbability() {
         ScenarioNode node = new ScenarioNode();
         node.addChild(new ScenarioNode());
         assertTrue(node.hasChildren());
     }
 
     @Test
-    void testHasChildren_childWithProbability() throws Exception {
+    void testHasChildren_childWithProbability() {
         ScenarioNode node = new ScenarioNode();
         node.addChild(100, new ScenarioNode());
         assertTrue(node.hasChildren());
     }
 
     @Test
-    void testAddChild_childWithoutProbability() throws Exception {
+    void testAddChild_childWithoutProbability() {
         ScenarioNode node = new ScenarioNode();
         ScenarioNode a = new ScenarioNode(), b = new ScenarioNode(), c = new ScenarioNode();
         node.addChild(a);
@@ -46,7 +46,7 @@ class ScenarioNodeTest {
     }
 
     @Test
-    void testAddChild_childWithProbability() throws Exception {
+    void testAddChild_childWithProbability() {
         ScenarioNode node = new ScenarioNode();
         ScenarioNode a = new ScenarioNode(), b = new ScenarioNode(), c = new ScenarioNode();
         node.addChild(50, a);
@@ -89,7 +89,7 @@ class ScenarioNodeTest {
     }
 
     @Test
-    void testValidateProbabilities_notCorrect() throws Exception {
+    void testValidateProbabilities_notCorrect() {
         ScenarioNode node = new ScenarioNode();
         node.addChild(20, new ScenarioNode());
         node.addChild(20, new ScenarioNode());
@@ -99,7 +99,7 @@ class ScenarioNodeTest {
         Throwable exception = assertThrows(Exception.class, () -> {
             node.validateProbabilities();
         });
-        assertEquals("Sum of the probabilites of children is not equal to 100", exception.getMessage());
+        assertEquals("Sum of the probabilities of children is not equal to 100", exception.getMessage());
     }
 
     @Test

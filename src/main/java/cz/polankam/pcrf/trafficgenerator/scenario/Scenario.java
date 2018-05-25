@@ -31,7 +31,7 @@ public abstract class Scenario {
         ClientGxSession gxSession = gx.getSessionFactory().getNewAppSession(GxStack.authAppId, ClientGxSession.class);
         ClientRxSession rxSession = rx.getSessionFactory().getNewAppSession(RxStack.authAppId, ClientRxSession.class);
 
-        // create scenario state and initalize context
+        // create scenario state and initialize context
         HashMap<String, Object> state = createNewScenarioState();
         context = new ScenarioContext(gx, rx, gxSession, rxSession, receivedRequests, state);
 
@@ -164,7 +164,7 @@ public abstract class Scenario {
      * @return
      * @throws java.lang.Exception
      */
-    public abstract HashMap<String, Object> createNewScenarioState() throws Exception;
+    public abstract HashMap<String, Object> createNewScenarioState();
 
     /**
      * Get root node/entry point for this scenario automaton.

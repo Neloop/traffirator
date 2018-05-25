@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class SimpleDemoScenario extends Scenario {
 
-    public static String TYPE = "SimpleDemo";
+    public static final String TYPE = "SimpleDemo";
     private static ScenarioNode rootNode;
 
     private static void init() throws Exception {
@@ -45,7 +45,7 @@ public class SimpleDemoScenario extends Scenario {
     }
 
     @Override
-    public HashMap<String, Object> createNewScenarioState() throws Exception {
+    public HashMap<String, Object> createNewScenarioState() {
         return new HashMap<>();
     }
 

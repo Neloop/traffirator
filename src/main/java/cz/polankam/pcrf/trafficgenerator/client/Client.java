@@ -5,10 +5,7 @@ import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 import cz.polankam.pcrf.trafficgenerator.utils.DumpUtils;
 import org.apache.log4j.Logger;
-import org.jdiameter.api.IllegalDiameterStateException;
 import org.jdiameter.api.InternalException;
-import org.jdiameter.api.OverloadException;
-import org.jdiameter.api.RouteException;
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.app.AppSession;
@@ -333,44 +330,44 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
 
     @Override
-    public void doAAAnswer(ClientRxSession session, RxAARequest request, RxAAAnswer answer) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+    public void doAAAnswer(ClientRxSession session, RxAARequest request, RxAAAnswer answer) throws InternalException {
         DumpUtils.dumpMessage(answer.getMessage(), false);
         processIncoming(session, request, answer);
     }
 
     @Override
-    public void doReAuthRequest(ClientRxSession session, RxReAuthRequest request) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+    public void doReAuthRequest(ClientRxSession session, RxReAuthRequest request) throws InternalException {
         DumpUtils.dumpMessage(request.getMessage(), false);
         logger.error("Unexpected message");
         finish();
     }
 
     @Override
-    public void doSessionTermAnswer(ClientRxSession session, RxSessionTermRequest request, RxSessionTermAnswer answer) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+    public void doSessionTermAnswer(ClientRxSession session, RxSessionTermRequest request, RxSessionTermAnswer answer) throws InternalException {
         DumpUtils.dumpMessage(answer.getMessage(), false);
         processIncoming(session, request, answer);
     }
 
     @Override
-    public void doAbortSessionRequest(ClientRxSession session, RxAbortSessionRequest request) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+    public void doAbortSessionRequest(ClientRxSession session, RxAbortSessionRequest request) throws InternalException {
         DumpUtils.dumpMessage(request.getMessage(), false);
         processIncoming(session, request, null);
     }
 
     @Override
-    public void doOtherEvent(AppSession session, AppRequestEvent request, AppAnswerEvent answer) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+    public void doOtherEvent(AppSession session, AppRequestEvent request, AppAnswerEvent answer) {
         logger.error("Unexpected message");
         finish();
     }
 
     @Override
-    public void doCreditControlAnswer(ClientGxSession session, GxCreditControlRequest request, GxCreditControlAnswer answer) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+    public void doCreditControlAnswer(ClientGxSession session, GxCreditControlRequest request, GxCreditControlAnswer answer) throws InternalException {
         DumpUtils.dumpMessage(answer.getMessage(), false);
         processIncoming(session, request, answer);
     }
 
     @Override
-    public void doGxReAuthRequest(ClientGxSession session, GxReAuthRequest request) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+    public void doGxReAuthRequest(ClientGxSession session, GxReAuthRequest request) throws InternalException {
         DumpUtils.dumpMessage(request.getMessage(), false);
         processIncoming(session, request, null);
     }

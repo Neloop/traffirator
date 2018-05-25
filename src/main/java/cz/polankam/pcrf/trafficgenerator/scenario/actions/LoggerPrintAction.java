@@ -19,7 +19,7 @@ public class LoggerPrintAction implements ScenarioAction {
     }
     
     @Override
-    public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {
+    public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) {
         logger.info(message);
     }
     

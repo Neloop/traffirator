@@ -37,7 +37,7 @@ public abstract class AppStack {
             Configuration config = new XMLConfiguration(is);
             factory = (ISessionFactory) stack.init(config);
             logger.info(identifier + " Stack Configuration successfully loaded.");
-            // Print info about applicatio
+            // Print info about application
             Set<org.jdiameter.api.ApplicationId> appIds = stack.getMetaData().getLocalPeer().getCommonApplications();
 
             logger.info("Diameter " + identifier + " Stack  :: Supporting " + appIds.size() + " applications.");

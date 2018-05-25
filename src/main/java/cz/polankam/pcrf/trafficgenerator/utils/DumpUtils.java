@@ -86,7 +86,7 @@ public class DumpUtils {
                 printAvpsAux(avp.getGrouped(), level + 1);
                 logger.debug(prefix + "</avp>");
             } else if (avpRep != null) {
-                String value = "";
+                String value;
 
                 if (avpRep.getType().equals("Integer32")) {
                     value = String.valueOf(avp.getInteger32());
