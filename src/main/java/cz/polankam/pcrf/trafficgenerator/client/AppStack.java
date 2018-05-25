@@ -21,7 +21,7 @@ import org.jdiameter.server.impl.helpers.XMLConfiguration;
 
 public abstract class AppStack {
 
-    private static final Logger log = Logger.getLogger(AppStack.class);
+    private static final Logger logger = Logger.getLogger(AppStack.class);
 
 
     protected Stack stack;
@@ -30,19 +30,19 @@ public abstract class AppStack {
     protected String serverURI;
 
     protected void initStack(String configFile, ApplicationId appId, String identifier) {
-        log.info("Initializing " + identifier + " Stack...");
+        logger.info("Initializing " + identifier + " Stack...");
         try (InputStream is = this.getClass().getClassLoader().getResourceAsStream(configFile)) {
             stack = new StackImpl();
             // Parse stack configuration
             Configuration config = new XMLConfiguration(is);
             factory = (ISessionFactory) stack.init(config);
-            log.info(identifier + " Stack Configuration successfully loaded.");
+            logger.info(identifier + " Stack Configuration successfully loaded.");
             // Print info about applicatio
             Set<org.jdiameter.api.ApplicationId> appIds = stack.getMetaData().getLocalPeer().getCommonApplications();
 
-            log.info("Diameter " + identifier + " Stack  :: Supporting " + appIds.size() + " applications.");
+            logger.info("Diameter " + identifier + " Stack  :: Supporting " + appIds.size() + " applications.");
             for (org.jdiameter.api.ApplicationId x : appIds) {
-                log.info("Diameter " + identifier + " Stack  :: Common :: " + x);
+                logger.info("Diameter " + identifier + " Stack  :: Common :: " + x);
             }
 
             // Register network req listener, even though we wont receive requests
@@ -62,7 +62,7 @@ public abstract class AppStack {
         //ignore for now.
         if (metaData.getStackType() != StackType.TYPE_SERVER || metaData.getMinorVersion() <= 0) {
             stack.destroy();
-            log.error("Incorrect driver");
+            logger.error("Incorrect driver");
             return;
         }
 
@@ -73,15 +73,15 @@ public abstract class AppStack {
         serverURI = serverURI.substring(6, serverURI.length() - 5);
 
         try {
-            log.info("Starting " + identifier + " Stack");
+            logger.info("Starting " + identifier + " Stack");
             stack.start();
-            log.info(identifier + " Stack is running.");
+            logger.info(identifier + " Stack is running.");
         } catch (Exception e) {
             e.printStackTrace();
             stack.destroy();
             return;
         }
-        log.info(identifier + " Stack initialization successfully completed.");
+        logger.info(identifier + " Stack initialization successfully completed.");
     }
 
     public void destroy() throws Exception {

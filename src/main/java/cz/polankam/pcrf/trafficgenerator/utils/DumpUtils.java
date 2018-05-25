@@ -14,7 +14,7 @@ import org.mobicents.diameter.dictionary.AvpRepresentation;
  */
 public class DumpUtils {
 
-    private static final Logger log = Logger.getLogger(DumpUtils.class);
+    private static final Logger logger = Logger.getLogger(DumpUtils.class);
 
     private static final String dictionaryFile = "dictionary.xml";
     private static final AvpDictionary dictionary = AvpDictionary.INSTANCE;
@@ -23,18 +23,18 @@ public class DumpUtils {
         try {
             // Parse dictionary, it is used for user friendly info.
             dictionary.parseDictionary(DumpUtils.class.getClassLoader().getResourceAsStream(dictionaryFile));
-            log.info("AVP Dictionary successfully parsed.");
+            logger.info("AVP Dictionary successfully parsed.");
         } catch (Exception e) {
-            log.error(e);
+            logger.error(e);
         }
     }
 
 
     public static void dumpMessage(Message message, boolean sending) {
-        log.info((sending ? "Sending " : "Received ") + (message.isRequest() ? "Request: " : "Answer: ") + commandCodeToString(message.getCommandCode()) + " (E2E:"
+        logger.info((sending ? "Sending " : "Received ") + (message.isRequest() ? "Request: " : "Answer: ") + commandCodeToString(message.getCommandCode()) + " (E2E:"
                 + message.getEndToEndIdentifier() + "; HBH:" + message.getHopByHopIdentifier() + "; AppID:" + message.getApplicationId() + ")");
 
-        if (!log.isDebugEnabled()) {
+        if (!logger.isDebugEnabled()) {
             return;
         }
 
@@ -63,7 +63,7 @@ public class DumpUtils {
     }
 
     public static void printAvps(AvpSet avpSet) throws AvpDataException {
-        log.debug("AVPS[" + avpSet.size() + "]: \n");
+        logger.debug("AVPS[" + avpSet.size() + "]: \n");
         printAvpsAux(avpSet, 0);
     }
 
@@ -82,9 +82,9 @@ public class DumpUtils {
             AvpRepresentation avpRep = dictionary.getAvp(avp.getCode(), avp.getVendorId());
 
             if (avpRep != null && avpRep.getType().equals("Grouped")) {
-                log.debug(prefix + "<avp name=\"" + avpRep.getName() + "\" code=\"" + avp.getCode() + "\" vendor=\"" + avp.getVendorId() + "\">");
+                logger.debug(prefix + "<avp name=\"" + avpRep.getName() + "\" code=\"" + avp.getCode() + "\" vendor=\"" + avp.getVendorId() + "\">");
                 printAvpsAux(avp.getGrouped(), level + 1);
-                log.debug(prefix + "</avp>");
+                logger.debug(prefix + "</avp>");
             } else if (avpRep != null) {
                 String value = "";
 
@@ -101,7 +101,7 @@ public class DumpUtils {
                     value = new String(avp.getOctetString(), StandardCharsets.UTF_8);
                 }
 
-                log.debug(prefix + "<avp name=\"" + avpRep.getName() + "\" code=\"" + avp.getCode() + "\" vendor=\"" + avp.getVendorId()
+                logger.debug(prefix + "<avp name=\"" + avpRep.getName() + "\" code=\"" + avp.getCode() + "\" vendor=\"" + avp.getVendorId()
                         + "\" value=\"" + value + "\" />");
             }
         }

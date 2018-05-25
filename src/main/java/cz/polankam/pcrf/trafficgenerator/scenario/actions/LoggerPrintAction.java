@@ -9,7 +9,7 @@ import org.jdiameter.api.app.AppRequestEvent;
 
 public class LoggerPrintAction implements ScenarioAction {
 
-    private static final Logger log = Logger.getLogger(LoggerPrintAction.class);
+    private static final Logger logger = Logger.getLogger(LoggerPrintAction.class);
     
     private final String message;
     
@@ -20,7 +20,7 @@ public class LoggerPrintAction implements ScenarioAction {
     
     @Override
     public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {
-        log.info(message);
+        logger.info(message);
     }
     
 }

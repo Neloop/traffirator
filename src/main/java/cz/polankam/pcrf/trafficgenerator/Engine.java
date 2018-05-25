@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Engine {
 
-    private static final Logger log = Logger.getLogger(Engine.class);
+    private static final Logger logger = Logger.getLogger(Engine.class);
 
     private final Summary summary;
     private final String[] args;
@@ -101,16 +101,16 @@ public class Engine {
 
     private void waitForConnections() throws Exception {
         //wait for connection to peer
-        log.info("Waiting for connection to peer...");
+        logger.info("Waiting for connection to peer...");
         Thread.sleep(5000);
-        log.info("Enough waiting, lets roll");
+        logger.info("Enough waiting, lets roll");
 
     }
 
     private void start() throws Exception {
-        log.info("****************************************");
-        log.info("* STARTING TRAFFIRATOR *****************");
-        log.info("****************************************");
+        logger.info("****************************************");
+        logger.info("* STARTING TRAFFIRATOR *****************");
+        logger.info("****************************************");
 
         Config config = getClientConfig();
         // prepare executor service based on given thread count and pass it to the client
@@ -134,7 +134,7 @@ public class Engine {
         // schedule ending of the execution from the configuration
         executor.schedule(() -> {
             client.finish();
-            log.info("End trigger activated");
+            logger.info("End trigger activated");
         }, config.getEnd(), TimeUnit.MILLISECONDS);
 
         // schedule timeouts logging
@@ -151,7 +151,7 @@ public class Engine {
         try {
             // do not forget to destroy allocated stacks
             client.destroy();
-            log.info("All done... Good bye!");
+            logger.info("All done... Good bye!");
         } finally {
             summary.setEnd();
             summary.printSummary(summaryOut);
@@ -166,7 +166,7 @@ public class Engine {
             engine.processCmdArguments();
             engine.start();
         } catch (Exception e) {
-            log.error(e);
+            logger.error(e);
             e.printStackTrace();
             System.exit(1);
         }

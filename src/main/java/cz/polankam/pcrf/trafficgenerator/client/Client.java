@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class Client implements ClientRxSessionListener, ClientGxSessionListener {
 
-    private static final Logger log = Logger.getLogger(Client.class);
+    private static final Logger logger = Logger.getLogger(Client.class);
 
     private final GxStack gx;
     private final RxStack rx;
@@ -124,7 +124,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                 try {
                     createAndStartScenario(type);
                 } catch (Exception e) {
-                    log.error(e);
+                    logger.error(e);
                 }
             }
         } else {
@@ -153,7 +153,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
             scenario.init(gx, rx, receivedRequests);
         } catch (Exception e) {
             // should not happen, in case it will, stop whole execution
-            log.error(e);
+            logger.error(e);
             finish();
             return null;
         }
@@ -170,7 +170,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosForSessions.put(scenario.getGxSession().getSessionId(), scenario);
         scenariosForSessions.put(scenario.getRxSession().getSessionId(), scenario);
 
-        log.info("New scenario created. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
+        logger.info("New scenario created. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
 
         return scenario;
     }
@@ -191,7 +191,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosReceivedRequestsMap.remove(scenario.getGxSession().getSessionId());
         scenariosReceivedRequestsMap.remove(scenario.getRxSession().getSessionId());
         scenario.destroy();
-        log.info("Scenario removed and destroyed. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
+        logger.info("Scenario removed and destroyed. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
     }
 
     private synchronized void handleFailure(final Scenario scenario, String errorMessage) {
@@ -199,9 +199,9 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
             return;
         }
 
-        log.error(errorMessage);
+        logger.error(errorMessage);
         removeScenario(scenario);
-        log.info("Scenario failed, creating next one");
+        logger.info("Scenario failed, creating next one");
         // send next message of newly created scenario
         sendNextMessage(createScenario(scenario.getType()));
     }
@@ -213,7 +213,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
         long delay = scenario.getNextDelay();
         if (delay != 0) {
-            log.info("Next send delayed of " + delay + " ms");
+            logger.info("Next send delayed of " + delay + " ms");
         }
 
         // schedule sending of next message of given scenario with appropriate delay
@@ -236,7 +236,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                     // delete scenario from all internal structures
                     removeScenario(scenario);
 
-                    log.info("Scenario empty, loading next");
+                    logger.info("Scenario empty, loading next");
                     // send next message of newly created scenario
                     sendNextMessage(createScenario(scenario.getType()));
                 } else if (sent && isNextSending) {
@@ -269,7 +269,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                     List<AppRequestEvent> receivedRequests = scenariosReceivedRequestsMap.get(session.getSessionId());
                     if (receivedRequests == null) {
                         // probably because session was already released, just warn the user and continue
-                        log.warn("Received requests list not found for given session '" + session.getSessionId() + "'");
+                        logger.warn("Received requests list not found for given session '" + session.getSessionId() + "'");
                         return;
                     }
                     // request arrived, add it to received requests
@@ -279,7 +279,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                 scenario = scenariosForSessions.get(session.getSessionId());
                 if (scenario == null) {
                     // probably because session was already released, just warn the user and continue
-                    log.warn("Session '" + session.getSessionId() + "' not found in scenarios map.");
+                    logger.warn("Session '" + session.getSessionId() + "' not found in scenarios map.");
                     return;
                 }
 
@@ -290,7 +290,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
             try {
                 scenario.receiveNext(request, answer);
-                log.info("Incoming message processed");
+                logger.info("Incoming message processed");
             } catch (Exception e) {
                 handleFailure(scenario, e.getMessage());
                 return;
@@ -314,19 +314,19 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         long receivedCount = scenario.getReceivedCount();
         long timeout = scenario.getNextDelay();
         if (timeout != 0) {
-            log.info("Next receive has timeout of " + timeout + " ms");
+            logger.info("Next receive has timeout of " + timeout + " ms");
         }
 
         if (timeout == 0) {
             // timeout is not set, ignore it and do not schedule timeout handler
-            log.debug("Timeout not set on scenario receive action");
+            logger.debug("Timeout not set on scenario receive action");
             return;
         }
 
         executorService.schedule(() -> {
             if (scenario.getReceivedCount() > receivedCount) {
                 // the message was received in the meantime, do not engage
-                log.debug("Timeout action not performed, messages was received before timeout");
+                logger.debug("Timeout action not performed, messages was received before timeout");
                 return;
             }
 
@@ -346,7 +346,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     @Override
     public void doReAuthRequest(ClientRxSession session, RxReAuthRequest request) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
         DumpUtils.dumpMessage(request.getMessage(), false);
-        log.error("Unexpected message");
+        logger.error("Unexpected message");
         finish();
     }
 
@@ -364,7 +364,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
     @Override
     public void doOtherEvent(AppSession session, AppRequestEvent request, AppAnswerEvent answer) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
-        log.error("Unexpected message");
+        logger.error("Unexpected message");
         finish();
     }
 
