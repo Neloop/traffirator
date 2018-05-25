@@ -105,6 +105,14 @@ public abstract class Scenario {
         return next.getDelay();
     }
 
+    public synchronized boolean isNextSending() {
+        if (isEmpty() || isDestroyed()) {
+            return false;
+        }
+
+        return currentActions.peek().isSending();
+    }
+
     /**
      *
      * @return true if message was sent, false if next action is receive of message

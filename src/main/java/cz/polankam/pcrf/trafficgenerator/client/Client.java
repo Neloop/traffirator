@@ -231,6 +231,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                     return;
                 }
 
+                boolean isNextSending = scenario.isNextSending();
                 if (!sent && scenario.isEmpty()) { // message was not send, so check if scenario is not empty
                     // delete scenario from all internal structures
                     removeScenario(scenario);
@@ -238,8 +239,12 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                     log.info("Scenario empty, load next");
                     // send next message of newly created scenario
                     sendNextMessage(createScenario(scenario.getType()));
-                } else if (sent) { // message was sent, check if there are others in queue
+                } else if (sent && isNextSending) {
+                    // message was sent, check if there are others in queue
                     sendNextMessage(scenario);
+                } else if (!isNextSending) {
+                    // next one is receiving, schedule the timeout guard
+                    // TODO
                 }
             }
         }, delay, TimeUnit.MILLISECONDS);
@@ -287,7 +292,13 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                 scenario.receiveNext(request, answer);
                 log.info("Incoming message processed");
 
-                sendNextMessage(scenario); // after receiving message, immediatelly send next one
+                if (scenario.isNextSending()) {
+                    // after receiving message, immediatelly send next one
+                    sendNextMessage(scenario);
+                } else {
+                    // next one is receiving, schedule the timeout guard
+                    // TODO
+                }
                 return;
             } catch (Exception e) {
                 handleFailure(scenario, e.getMessage());
