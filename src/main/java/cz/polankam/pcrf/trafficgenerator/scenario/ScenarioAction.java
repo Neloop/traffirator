@@ -11,7 +11,7 @@ public interface ScenarioAction {
     public static long UNSUCCESS_RESULT_CODE = 5005;
 
     /**
-     * TODO
+     * Perform this scenario action with given parameters.
      * @param context
      * @param request
      * @param answer

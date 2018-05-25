@@ -201,7 +201,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
         log.error(errorMessage);
         removeScenario(scenario);
-        log.info("Scenario failed, loading next one");
+        log.info("Scenario failed, creating next one");
         // send next message of newly created scenario
         sendNextMessage(createScenario(scenario.getType()));
     }
@@ -236,7 +236,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                     // delete scenario from all internal structures
                     removeScenario(scenario);
 
-                    log.info("Scenario empty, load next");
+                    log.info("Scenario empty, loading next");
                     // send next message of newly created scenario
                     sendNextMessage(createScenario(scenario.getType()));
                 } else if (sent && isNextSending) {
@@ -244,7 +244,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                     sendNextMessage(scenario);
                 } else if (!isNextSending) {
                     // next one is receiving, schedule the timeout guard
-                    // TODO
+                    processTimeout(scenario);
                 }
             }
         }, delay, TimeUnit.MILLISECONDS);
@@ -263,7 +263,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                 return;
             }
 
-            Scenario scenario = null;
+            Scenario scenario;
             synchronized (this) {
                 if (answer == null) {
                     List<AppRequestEvent> receivedRequests = scenariosReceivedRequestsMap.get(session.getSessionId());
@@ -291,20 +291,49 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
             try {
                 scenario.receiveNext(request, answer);
                 log.info("Incoming message processed");
-
-                if (scenario.isNextSending()) {
-                    // after receiving message, immediatelly send next one
-                    sendNextMessage(scenario);
-                } else {
-                    // next one is receiving, schedule the timeout guard
-                    // TODO
-                }
-                return;
             } catch (Exception e) {
                 handleFailure(scenario, e.getMessage());
                 return;
             }
+
+            if (scenario.isNextSending()) {
+                // after receiving message, immediately send next one
+                sendNextMessage(scenario);
+            } else {
+                // next one is receiving, schedule the timeout guard
+                processTimeout(scenario);
+            }
         });
+    }
+
+    private void processTimeout(Scenario scenario) {
+        if (scenario == null || finished() || scenario.isDestroyed()) {
+            return;
+        }
+
+        long receivedCount = scenario.getReceivedCount();
+        long timeout = scenario.getNextDelay();
+        if (timeout != 0) {
+            log.info("Next receive has timeout of " + timeout + " ms");
+        }
+
+        if (timeout == 0) {
+            // timeout is not set, ignore it and do not schedule timeout handler
+            log.debug("Timeout not set on scenario receive action");
+            return;
+        }
+
+        executorService.schedule(() -> {
+            if (scenario.getReceivedCount() > receivedCount) {
+                // the message was received in the meantime, do not engage
+                log.debug("Timeout action not performed, messages was received before timeout");
+                return;
+            }
+
+            // message was not received in time, handle it with care
+            timeoutsCount.incrementAndGet();
+            handleFailure(scenario, "Scenario timed out for '" + timeout + "'");
+        }, timeout, TimeUnit.MILLISECONDS);
     }
 
 
