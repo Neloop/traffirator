@@ -7,7 +7,7 @@ public class ScenarioNodeEntry {
     private final ScenarioNode node;
 
 
-    public ScenarioNodeEntry(int probability, ScenarioNode node) throws Exception {
+    public ScenarioNodeEntry(int probability, ScenarioNode node) {
         this.probability = probability;
         this.node = node;
     }
@@ -15,9 +15,8 @@ public class ScenarioNodeEntry {
     /**
      * New scenario node entry with undefined probability.
      * @param node
-     * @throws Exception
      */
-    public ScenarioNodeEntry(ScenarioNode node) throws Exception {
+    public ScenarioNodeEntry(ScenarioNode node) {
         this(0, node);
     }
 
