@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.gx.ClientGxSession;
@@ -20,6 +22,8 @@ public abstract class Scenario {
     private ScenarioNode currentNode;
     private Queue<ScenarioActionEntry> currentActions;
     private final AtomicBoolean destroyed = new AtomicBoolean(false);
+    private final AtomicLong sentCount = new AtomicLong(0);
+    private final AtomicLong receivedCount = new AtomicLong(0);
 
 
     public void init(GxStack gx, RxStack rx, List<AppRequestEvent> receivedRequests) throws Exception {
@@ -58,6 +62,14 @@ public abstract class Scenario {
         return context.getRxSession();
     }
 
+    public long getSentCount() {
+        return sentCount.get();
+    }
+
+    public long getReceivedCount() {
+        return receivedCount.get();
+    }
+
     /**
      * If current node is processed, randomly find next one.
      */
@@ -77,7 +89,7 @@ public abstract class Scenario {
     }
 
     /**
-     * Get delay with which next action should be processed.
+     * Get delay or timeout with which next action should be processed or received.
      * @return
      */
     public synchronized long getNextDelay() {
@@ -108,6 +120,7 @@ public abstract class Scenario {
             return false;
         }
 
+        sentCount.incrementAndGet();
         next.getAction().perform(context, null, null);
 
         // do not forget to remove successfully sent entry
@@ -133,6 +146,7 @@ public abstract class Scenario {
             throw new Exception("Next action is sending, but event received");
         }
 
+        receivedCount.incrementAndGet();
         next.getAction().perform(context, request, answer);
 
         // do not forget to remove successfully received entry

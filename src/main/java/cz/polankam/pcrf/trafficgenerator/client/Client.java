@@ -218,7 +218,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
         // schedule sending of next message of given scenario with appropriate delay
         executorService.schedule(() -> {
-            boolean sent = false;
+            boolean sent;
             try {
                 sent = scenario.sendNext();
             } catch (Exception e) {
