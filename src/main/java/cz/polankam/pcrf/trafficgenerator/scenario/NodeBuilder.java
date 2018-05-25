@@ -27,6 +27,11 @@ public class NodeBuilder {
         return this;
     }
 
+    public NodeBuilder addReceiveAction(long timeout, ScenarioAction action) throws Exception {
+        node.addAction(new ScenarioActionEntry(false, timeout, action));
+        return this;
+    }
+
     public ScenarioNode build() {
         return node;
     }

@@ -30,7 +30,7 @@ public class Engine {
     private PrintStream summaryOut;
     private ScheduledExecutorService executor;
 
-    private Engine(String[] args) throws ParseException {
+    private Engine(String[] args) {
         this.args = args;
         summary = new Summary();
         summaryOut = System.out;
@@ -141,7 +141,7 @@ public class Engine {
         executor.scheduleAtFixedRate(timeouts::log, config.getTimeouts().getSamplingPeriod(),
                 config.getTimeouts().getSamplingPeriod(), TimeUnit.MILLISECONDS);
 
-        // wait till both is finished
+        // wait till client is finished
         while (!client.finished()) {
             try {
                 Thread.sleep(2000);

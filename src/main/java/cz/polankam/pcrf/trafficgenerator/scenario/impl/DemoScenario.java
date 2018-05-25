@@ -28,7 +28,7 @@ public class DemoScenario extends Scenario {
         ScenarioNode BD = new NodeBuilder().addSendAction(new StdoutPrintAction("*** BD ***")).build();
         ScenarioNode END = new NodeBuilder().addSendAction(new StdoutPrintAction("*** END ***")).build();
 
-        /**
+        /*
          *
          *  START   _______
          *      \  /    ___\____

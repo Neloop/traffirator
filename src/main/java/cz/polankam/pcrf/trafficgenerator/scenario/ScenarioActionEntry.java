@@ -22,7 +22,7 @@ public class ScenarioActionEntry {
     }
     
     /**
-     * New scenario entry with no delay.
+     * New scenario entry with no delay or timeout.
      * @param sending
      * @param action
      * @throws Exception 
@@ -40,8 +40,9 @@ public class ScenarioActionEntry {
     }
 
     /**
-     * Get delay of this action in milliseconds.
-     * @return 
+     * Get delay or timeout of this action in milliseconds.
+     * For sending actions this field is delay, for receiving actions it is timeout.
+     * @return in milliseconds
      */
     public long getDelay() {
         return delay;
