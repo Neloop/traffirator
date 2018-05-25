@@ -7,25 +7,17 @@ import cz.polankam.pcrf.trafficgenerator.config.Config;
 import cz.polankam.pcrf.trafficgenerator.config.ProfileItem;
 import cz.polankam.pcrf.trafficgenerator.config.ProfileValidator;
 import cz.polankam.pcrf.trafficgenerator.config.ScenarioItem;
+import org.apache.commons.cli.*;
+import org.apache.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.apache.log4j.Logger;
 
 
 public class Engine {
@@ -165,23 +157,6 @@ public class Engine {
             summary.printSummary(summaryOut);
             summaryOut.close();
             timeouts.close();
-        }
-    }
-
-    public void findDeadLocks()
-    {
-        ThreadMXBean tmx = ManagementFactory.getThreadMXBean();
-        long[] ids = tmx.findDeadlockedThreads();
-        if (ids != null ) {
-            ThreadInfo[] infos = tmx.getThreadInfo(ids,true,true);
-            System.out.println("Following Threads are deadlocked");
-            for (ThreadInfo info : infos) {
-                System.out.println(info);
-                System.out.println("Stacktrace:");
-                for (StackTraceElement ste : info.getStackTrace()) {
-                    System.out.println("  " + ste);
-                }
-            }
         }
     }
 
