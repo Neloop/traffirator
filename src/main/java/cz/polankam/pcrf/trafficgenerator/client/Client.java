@@ -138,14 +138,13 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenarioTypesCount.put(type, count);
     }
 
-    private synchronized Scenario createAndStartScenario(String type) throws Exception {
+    private synchronized void createAndStartScenario(String type) {
         Scenario scenario = createScenario(type);
         sendNextMessage(scenario);
-        return scenario;
     }
 
     private synchronized Scenario createScenario(String type) {
-        Scenario scenario = null;
+        Scenario scenario;
         List<AppRequestEvent> receivedRequests = Collections.synchronizedList(new ArrayList<>());
 
         try {
@@ -213,7 +212,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
         long delay = scenario.getNextDelay();
         if (delay != 0) {
-            logger.info("Next send delayed of " + delay + " ms");
+            logger.debug("Next send delayed of " + delay + " ms");
         }
 
         // schedule sending of next message of given scenario with appropriate delay
@@ -232,7 +231,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
                 }
 
                 boolean isNextSending = scenario.isNextSending();
-                if (!sent && scenario.isEmpty()) { // message was not send, so check if scenario is not empty
+                if (scenario.isEmpty()) { // check if scenario is empty and if so, handle creating next one
                     // delete scenario from all internal structures
                     removeScenario(scenario);
 
@@ -290,7 +289,6 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
             try {
                 scenario.receiveNext(request, answer);
-                logger.info("Incoming message processed");
             } catch (Exception e) {
                 handleFailure(scenario, e.getMessage());
                 return;
@@ -313,16 +311,13 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
         long receivedCount = scenario.getReceivedCount();
         long timeout = scenario.getNextDelay();
-        if (timeout != 0) {
-            logger.info("Next receive has timeout of " + timeout + " ms");
-        }
-
         if (timeout == 0) {
             // timeout is not set, ignore it and do not schedule timeout handler
             logger.debug("Timeout not set on scenario receive action");
             return;
         }
 
+        logger.debug("Next receive has timeout of " + timeout + " ms");
         executorService.schedule(() -> {
             if (scenario.getReceivedCount() > receivedCount) {
                 // the message was received in the meantime, do not engage
@@ -332,7 +327,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
             // message was not received in time, handle it with care
             timeoutsCount.incrementAndGet();
-            handleFailure(scenario, "Scenario timed out for '" + timeout + "'");
+            handleFailure(scenario, "Scenario timed out in " + timeout + " ms");
         }, timeout, TimeUnit.MILLISECONDS);
     }
 

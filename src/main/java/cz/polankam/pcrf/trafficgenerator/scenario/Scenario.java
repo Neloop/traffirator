@@ -97,12 +97,7 @@ public abstract class Scenario {
             return 0;
         }
 
-        ScenarioActionEntry next = currentActions.peek();
-        if (!next.isSending()) {
-            return 0;
-        }
-
-        return next.getDelay();
+        return currentActions.peek().getDelay();
     }
 
     public synchronized boolean isNextSending() {
