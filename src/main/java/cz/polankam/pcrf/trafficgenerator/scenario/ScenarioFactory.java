@@ -23,7 +23,7 @@ public class ScenarioFactory {
     public Scenario create(String type) throws Exception {
         Class<? extends Scenario> factory = scenarios.get(type);
         if (factory == null) {
-            throw new Exception("Unknow type of scenario '" + type + "'");
+            throw new Exception("Unknown type of scenario '" + type + "'");
         }
 
         return factory.newInstance();

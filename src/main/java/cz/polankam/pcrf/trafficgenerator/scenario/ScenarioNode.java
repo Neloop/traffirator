@@ -68,9 +68,7 @@ public class ScenarioNode {
 
     public Queue<ScenarioActionEntry> getActionsCopy() {
         Queue<ScenarioActionEntry> copy = new LinkedList<>();
-        actions.forEach((ScenarioActionEntry entry) -> {
-            copy.add(entry);
-        });
+        copy.addAll(actions);
         return copy;
     }
 
