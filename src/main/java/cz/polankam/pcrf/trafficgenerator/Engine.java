@@ -28,9 +28,9 @@ import org.apache.commons.cli.ParseException;
 import org.apache.log4j.Logger;
 
 
-public class Main {
+public class Engine {
 
-    private static final Logger log = Logger.getLogger(Main.class);
+    private static final Logger log = Logger.getLogger(Engine.class);
 
     private final Summary summary;
     private final String[] args;
@@ -38,7 +38,7 @@ public class Main {
     private PrintStream summaryOut;
     private ScheduledExecutorService executor;
 
-    private Main(String[] args) throws ParseException {
+    private Engine(String[] args) throws ParseException {
         this.args = args;
         summary = new Summary();
         summaryOut = System.out;
@@ -180,9 +180,9 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            Main main = new Main(args);
-            main.processCmdArguments();
-            main.start();
+            Engine engine = new Engine(args);
+            engine.processCmdArguments();
+            engine.start();
         } catch (Exception e) {
             log.error(e);
             e.printStackTrace();

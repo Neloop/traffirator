@@ -24,7 +24,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <configuration>
-                    <mainClass>cz.polankam.pcrf.trafficgenerator.Main</mainClass>
+                    <mainClass>cz.polankam.pcrf.trafficgenerator.Engine</mainClass>
                 </configuration>
             </plugin>
             <plugin>
