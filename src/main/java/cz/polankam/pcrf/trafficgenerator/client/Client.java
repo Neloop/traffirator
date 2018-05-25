@@ -321,7 +321,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         executorService.schedule(() -> {
             if (scenario.getReceivedCount() > receivedCount) {
                 // the message was received in the meantime, do not engage
-                logger.debug("Timeout action not performed, messages was received before timeout");
+                logger.debug("Timeout action not performed, message was received before timeout");
                 return;
             }
 

@@ -12,22 +12,22 @@ public class NodeBuilder {
         node = new ScenarioNode();
     }
 
-    public NodeBuilder addSendAction(ScenarioAction action) throws Exception {
+    public NodeBuilder addSendAction(ScenarioAction action) {
         node.addAction(new ScenarioActionEntry(true, action));
         return this;
     }
 
-    public NodeBuilder addSendAction(long delay, ScenarioAction action) throws Exception {
+    public NodeBuilder addSendAction(long delay, ScenarioAction action) {
         node.addAction(new ScenarioActionEntry(true, delay, action));
         return this;
     }
 
-    public NodeBuilder addReceiveAction(ScenarioAction action) throws Exception {
+    public NodeBuilder addReceiveAction(ScenarioAction action) {
         node.addAction(new ScenarioActionEntry(false, action));
         return this;
     }
 
-    public NodeBuilder addReceiveAction(long timeout, ScenarioAction action) throws Exception {
+    public NodeBuilder addReceiveAction(long timeout, ScenarioAction action) {
         node.addAction(new ScenarioActionEntry(false, timeout, action));
         return this;
     }

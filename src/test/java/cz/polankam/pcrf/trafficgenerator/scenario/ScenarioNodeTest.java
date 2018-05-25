@@ -3,30 +3,30 @@ package cz.polankam.pcrf.trafficgenerator.scenario;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-public class ScenarioNodeTest {
+class ScenarioNodeTest {
 
     @Test
-    public void testHasChildren_noChildren() {
+    void testHasChildren_noChildren() {
         ScenarioNode node = new ScenarioNode();
         assertFalse(node.hasChildren());
     }
 
     @Test
-    public void testHasChildren_childWithoutProbability() throws Exception {
+    void testHasChildren_childWithoutProbability() throws Exception {
         ScenarioNode node = new ScenarioNode();
         node.addChild(new ScenarioNode());
         assertTrue(node.hasChildren());
     }
 
     @Test
-    public void testHasChildren_childWithProbability() throws Exception {
+    void testHasChildren_childWithProbability() throws Exception {
         ScenarioNode node = new ScenarioNode();
         node.addChild(100, new ScenarioNode());
         assertTrue(node.hasChildren());
     }
 
     @Test
-    public void testAddChild_childWithoutProbability() throws Exception {
+    void testAddChild_childWithoutProbability() throws Exception {
         ScenarioNode node = new ScenarioNode();
         ScenarioNode a = new ScenarioNode(), b = new ScenarioNode(), c = new ScenarioNode();
         node.addChild(a);
@@ -46,7 +46,7 @@ public class ScenarioNodeTest {
     }
 
     @Test
-    public void testAddChild_childWithProbability() throws Exception {
+    void testAddChild_childWithProbability() throws Exception {
         ScenarioNode node = new ScenarioNode();
         ScenarioNode a = new ScenarioNode(), b = new ScenarioNode(), c = new ScenarioNode();
         node.addChild(50, a);
@@ -66,14 +66,14 @@ public class ScenarioNodeTest {
     }
 
     @Test
-    public void testValidateProbabilities_emptyChildren() throws Exception {
+    void testValidateProbabilities_emptyChildren() throws Exception {
         ScenarioNode node = new ScenarioNode();
         node.validateProbabilities();
         assertFalse(node.hasChildren());
     }
 
     @Test
-    public void testValidateProbabilities_balanceZeroes() throws Exception {
+    void testValidateProbabilities_balanceZeroes() throws Exception {
         ScenarioNode node = new ScenarioNode();
         node.addChild(new ScenarioNode());
         node.addChild(new ScenarioNode());
@@ -89,7 +89,7 @@ public class ScenarioNodeTest {
     }
 
     @Test
-    public void testValidateProbabilities_notCorrect() throws Exception {
+    void testValidateProbabilities_notCorrect() throws Exception {
         ScenarioNode node = new ScenarioNode();
         node.addChild(20, new ScenarioNode());
         node.addChild(20, new ScenarioNode());
@@ -103,7 +103,7 @@ public class ScenarioNodeTest {
     }
 
     @Test
-    public void testValidateProbabilities_correct() throws Exception {
+    void testValidateProbabilities_correct() throws Exception {
         ScenarioNode node = new ScenarioNode();
         node.addChild(25, new ScenarioNode());
         node.addChild(25, new ScenarioNode());
@@ -115,7 +115,7 @@ public class ScenarioNodeTest {
     }
 
     @Test
-    public void testGetChild_badLowerProbability() {
+    void testGetChild_badLowerProbability() {
         ScenarioNode node = new ScenarioNode();
         Throwable exception = assertThrows(Exception.class, () -> {
             node.getChild(-30);
@@ -124,7 +124,7 @@ public class ScenarioNodeTest {
     }
 
     @Test
-    public void testGetChild_badHigherProbability() {
+    void testGetChild_badHigherProbability() {
         ScenarioNode node = new ScenarioNode();
         Throwable exception = assertThrows(Exception.class, () -> {
             node.getChild(102);
@@ -133,13 +133,13 @@ public class ScenarioNodeTest {
     }
 
     @Test
-    public void testGetChild_emptyChildren() throws Exception {
+    void testGetChild_emptyChildren() throws Exception {
         ScenarioNode node = new ScenarioNode();
         assertNull(node.getChild(50));
     }
 
     @Test
-    public void testGetChild_middle() throws Exception {
+    void testGetChild_middle() throws Exception {
         ScenarioNode node = new ScenarioNode();
         ScenarioNode a = new ScenarioNode(), b = new ScenarioNode(), c = new ScenarioNode(), d = new ScenarioNode();
         node.addChild(25, a);
@@ -153,7 +153,7 @@ public class ScenarioNodeTest {
     }
 
     @Test
-    public void testGetChild_last() throws Exception {
+    void testGetChild_last() throws Exception {
         ScenarioNode node = new ScenarioNode();
         ScenarioNode a = new ScenarioNode(), b = new ScenarioNode(), c = new ScenarioNode();
         node.addChild(33, a);

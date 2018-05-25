@@ -13,9 +13,8 @@ public class ScenarioActionEntry {
      * @param sending
      * @param delay in milliseconds
      * @param action
-     * @throws Exception 
      */
-    public ScenarioActionEntry(boolean sending, long delay, ScenarioAction action) throws Exception {
+    public ScenarioActionEntry(boolean sending, long delay, ScenarioAction action) {
         this.sending = sending;
         this.delay = delay;
         this.action = action;
@@ -25,9 +24,8 @@ public class ScenarioActionEntry {
      * New scenario entry with no delay or timeout.
      * @param sending
      * @param action
-     * @throws Exception 
      */
-    public ScenarioActionEntry(boolean sending, ScenarioAction action) throws Exception {
+    public ScenarioActionEntry(boolean sending, ScenarioAction action) {
         this(sending, 0, action);
     }
 
