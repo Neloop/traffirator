@@ -30,7 +30,6 @@ public class Summary {
     }
 
     public synchronized void addChange(ProfileItem item) {
-        // TODO: type
         changes.add(new AbstractMap.SimpleEntry<>(System.currentTimeMillis(), item));
     }
 

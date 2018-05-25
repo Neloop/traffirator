@@ -1,10 +1,9 @@
 package cz.polankam.pcrf.trafficgenerator.client;
 
-import cz.polankam.pcrf.trafficgenerator.utils.DumpUtils;
 import cz.polankam.pcrf.trafficgenerator.rx.MyRxSessionFactoryImpl;
 import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
-
+import cz.polankam.pcrf.trafficgenerator.utils.DumpUtils;
 import org.apache.log4j.Logger;
 import org.jdiameter.api.IllegalDiameterStateException;
 import org.jdiameter.api.InternalException;
@@ -20,22 +19,14 @@ import org.jdiameter.api.gx.events.GxCreditControlRequest;
 import org.jdiameter.api.gx.events.GxReAuthRequest;
 import org.jdiameter.api.rx.ClientRxSession;
 import org.jdiameter.api.rx.ClientRxSessionListener;
-import org.jdiameter.api.rx.events.RxAAAnswer;
-import org.jdiameter.api.rx.events.RxAARequest;
-import org.jdiameter.api.rx.events.RxAbortSessionRequest;
-import org.jdiameter.api.rx.events.RxReAuthRequest;
-import org.jdiameter.api.rx.events.RxSessionTermAnswer;
-import org.jdiameter.api.rx.events.RxSessionTermRequest;
+import org.jdiameter.api.rx.events.*;
 import org.jdiameter.common.impl.app.gx.GxSessionFactoryImpl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 public class Client implements ClientRxSessionListener, ClientGxSessionListener {
@@ -55,6 +46,9 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     private final Map<String, Scenario> scenariosForSessions;
     private final Map<String, List<AppRequestEvent>> scenariosReceivedRequestsMap;
 
+    /** Number of timeouts from the beginning of the execution */
+    private final AtomicLong timeoutsCount;
+
     /** Boolean telling if we finished our interaction. */
     private final AtomicBoolean finished;
 
@@ -69,6 +63,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosForTypes = new HashMap<>();
         scenariosForSessions = new HashMap<>();
         finished = new AtomicBoolean(false);
+        timeoutsCount = new AtomicLong(0);
         scenarioTypesCount = new HashMap<>();
     }
 
@@ -84,7 +79,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         rx.getSessionFactory().registerAppFacory(ClientRxSession.class, rxSessionFactory);
     }
 
-    public synchronized void init() throws Exception {
+    public synchronized void init() {
         gx.initStack();
         rx.initStack();
 
@@ -110,6 +105,10 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
     public boolean finished() {
         return finished.get();
+    }
+
+    public long getTimeoutsCount() {
+        return timeoutsCount.get();
     }
 
     public synchronized void controlScenarios(String type, int count) {

@@ -124,9 +124,11 @@ public class Engine {
         // prepare executor service based on given thread count and pass it to the client
         executor = Executors.newScheduledThreadPool(config.getThreadCount());
         Client client = new Client(executor);
+        TimeoutsLogger timeouts = new TimeoutsLogger(client, config.getTimeouts());
 
         // initialization
         client.init();
+        timeouts.init();
         summary.setClientConfig(config);
 
         //
@@ -143,6 +145,10 @@ public class Engine {
             log.info("End trigger activated");
         }, config.getEnd(), TimeUnit.MILLISECONDS);
 
+        // schedule timeouts logging
+        executor.scheduleAtFixedRate(timeouts::log, config.getTimeouts().getSamplingPeriod(),
+                config.getTimeouts().getSamplingPeriod(), TimeUnit.MILLISECONDS);
+
         // wait till both is finished
         while (!client.finished()) {
             try {
@@ -158,6 +164,7 @@ public class Engine {
             summary.setEnd();
             summary.printSummary(summaryOut);
             summaryOut.close();
+            timeouts.close();
         }
     }
 
