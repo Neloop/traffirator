@@ -1,7 +1,10 @@
 ---
 threadCount: 1  # number threads which will handle sending and receiving of messages
 summary: ./logs/summary.log  # file to which summary should be written
-profile:
+timeouts:
+  logFile: ./logs/timeouts.log  # file where sampled timeouts counts will be written
+  samplingPeriod: 1000  # period of sampling for timeouts logging, in milliseconds
+profile:  # testing profile
   - start: 0  # begin this testing profile item at, in milliseconds
     scenarios:  # list of scenarios used in this profile item
       - type: Demo  # type of the used scenario

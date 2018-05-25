@@ -7,6 +7,7 @@ public class Config {
 
     private int threadCount;
     private String summary;
+    private Timeouts timeouts;
     private List<ProfileItem> profile;
     private long end;
 
@@ -25,6 +26,14 @@ public class Config {
      */
     public String getSummary() {
         return summary;
+    }
+
+    /**
+     * Configuration for sampling and logging timeouts.
+     * @return
+     */
+    public Timeouts getTimeouts() {
+        return timeouts;
     }
 
     /**

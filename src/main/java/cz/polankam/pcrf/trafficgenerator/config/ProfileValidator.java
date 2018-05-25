@@ -26,7 +26,7 @@ public class ProfileValidator {
             // check correct scenarios types
             for (ScenarioItem scenario : item.getScenarios()) {
                 if (!ScenarioFactory.check(scenario.getType())) {
-                    throw new Exception("Unknow scenario type '" + scenario.getType() + "'");
+                    throw new Exception("Unknown scenario type '" + scenario.getType() + "'");
                 }
             }
         }

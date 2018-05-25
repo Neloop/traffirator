@@ -38,13 +38,13 @@ public class Main {
     private PrintStream summaryOut;
     private ScheduledExecutorService executor;
 
-    protected Main(String[] args) throws ParseException {
+    private Main(String[] args) throws ParseException {
         this.args = args;
         summary = new Summary();
         summaryOut = System.out;
     }
 
-    protected void processCmdArguments() throws ParseException {
+    private void processCmdArguments() throws ParseException {
         Options options = new Options();
 
         options.addOption(Option.builder("c").longOpt("config").argName("file").hasArg()
@@ -70,7 +70,7 @@ public class Main {
         private final Queue<ProfileItem> queue;
         private final Client client;
 
-        public ChangeActionRunnable(Queue<ProfileItem> queue, Client client) {
+        ChangeActionRunnable(Queue<ProfileItem> queue, Client client) {
             this.queue = queue;
             this.client = client;
         }
@@ -90,12 +90,12 @@ public class Main {
         }
     }
 
-    protected void scheduleTestProfile(Config config, Client client) {
+    private void scheduleTestProfile(Config config, Client client) {
         Queue<ProfileItem> queue = new LinkedList<>(config.getProfile());
         executor.schedule(new ChangeActionRunnable(queue, client), queue.peek().getStart(), TimeUnit.MILLISECONDS);
     }
 
-    protected Config getClientConfig() throws Exception {
+    private Config getClientConfig() throws Exception {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
         String filename = cmd.getOptionValue("config");
@@ -107,7 +107,7 @@ public class Main {
         }
     }
 
-    protected void waitForConnections() throws Exception {
+    private void waitForConnections() throws Exception {
         //wait for connection to peer
         log.info("Waiting for connection to peer...");
         Thread.sleep(5000);
@@ -115,7 +115,7 @@ public class Main {
 
     }
 
-    protected void start() throws Exception {
+    private void start() throws Exception {
         log.info("****************************************");
         log.info("* STARTING TRAFFIRATOR *****************");
         log.info("****************************************");
