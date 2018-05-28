@@ -2,10 +2,7 @@ package cz.polankam.pcrf.trafficgenerator.scenario;
 
 import cz.polankam.pcrf.trafficgenerator.scenario.impl.DemoScenario;
 import cz.polankam.pcrf.trafficgenerator.scenario.impl.SimpleDemoScenario;
-import cz.polankam.pcrf.trafficgenerator.scenario.impl.real.CallCenterEmployeeScenario;
-import cz.polankam.pcrf.trafficgenerator.scenario.impl.real.CallPerformanceScenario;
-import cz.polankam.pcrf.trafficgenerator.scenario.impl.real.ClassicUserScenario;
-import cz.polankam.pcrf.trafficgenerator.scenario.impl.real.MalfunctioningCellPhoneScenario;
+import cz.polankam.pcrf.trafficgenerator.scenario.impl.real.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +20,7 @@ public class ScenarioFactory {
         scenarios.put(CallPerformanceScenario.TYPE, CallPerformanceScenario.class);
         scenarios.put(MalfunctioningCellPhoneScenario.TYPE, MalfunctioningCellPhoneScenario.class);
         scenarios.put(CallCenterEmployeeScenario.TYPE, CallCenterEmployeeScenario.class);
+        scenarios.put(TravellingManagerScenario.TYPE, TravellingManagerScenario.class);
     }
 
 
