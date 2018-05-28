@@ -1,9 +1,17 @@
 package cz.polankam.pcrf.trafficgenerator.config;
 
+import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 
 
 public class ProfileValidator {
+
+    private ScenarioFactory scenarioFactory;
+
+    public ProfileValidator(ScenarioFactory factory) {
+        this.scenarioFactory = factory;
+    }
+
 
     /**
      * Validate test profile from given configuration. Validator checks for correct order of events and if correct types
@@ -11,7 +19,7 @@ public class ProfileValidator {
      * @param config
      * @throws Exception
      */
-    public static void validate(Config config) throws Exception {
+    public void validate(Config config) throws Exception {
         if (config.getProfile().isEmpty()) {
             throw new Exception("Test profile has to contain at least one item");
         }
@@ -25,7 +33,7 @@ public class ProfileValidator {
 
             // check correct scenarios types
             for (ScenarioItem scenario : item.getScenarios()) {
-                if (!ScenarioFactory.check(scenario.getType())) {
+                if (!scenarioFactory.check(scenario.getType())) {
                     throw new Exception("Unknown scenario type '" + scenario.getType() + "'");
                 }
             }

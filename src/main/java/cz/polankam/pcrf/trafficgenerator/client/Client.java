@@ -51,12 +51,11 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     private String finishedReason;
 
 
-    public Client(ScheduledExecutorService executor) {
-        this.scenarioFactory = new ScenarioFactory();
-
+    public Client(ScheduledExecutorService executor, ScenarioFactory factory) {
         gx = new GxStack();
         rx = new RxStack();
         executorService = executor;
+        scenarioFactory = factory;
         scenariosReceivedRequestsMap = new HashMap<>();
         scenariosForTypes = new HashMap<>();
         scenariosForSessions = new HashMap<>();

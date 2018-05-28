@@ -7,6 +7,7 @@ import cz.polankam.pcrf.trafficgenerator.config.Config;
 import cz.polankam.pcrf.trafficgenerator.config.ProfileItem;
 import cz.polankam.pcrf.trafficgenerator.config.ProfileValidator;
 import cz.polankam.pcrf.trafficgenerator.config.ScenarioItem;
+import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
@@ -29,12 +30,17 @@ public class Engine {
     private CommandLine cmd;
     private PrintStream summaryOut;
     private ScheduledExecutorService executor;
+    private final ScenarioFactory scenarioFactory;
+    private final ProfileValidator profileValidator;
 
     private Engine(String[] args) {
         this.args = args;
         summary = new Summary();
         summaryOut = System.out;
+        scenarioFactory = new ScenarioFactory();
+        profileValidator = new ProfileValidator(scenarioFactory);
     }
+
 
     private void processCmdArguments() throws ParseException {
         Options options = new Options();
@@ -93,7 +99,7 @@ public class Engine {
         String filename = cmd.getOptionValue("config");
         try (InputStream configFile = new FileInputStream(filename)) {
             Config config = mapper.readValue(configFile, Config.class);
-            ProfileValidator.validate(config);
+            profileValidator.validate(config);
             summaryOut = new PrintStream(config.getSummary());
             return config;
         }
@@ -115,7 +121,7 @@ public class Engine {
         Config config = getClientConfig();
         // prepare executor service based on given thread count and pass it to the client
         executor = Executors.newScheduledThreadPool(config.getThreadCount());
-        Client client = new Client(executor);
+        Client client = new Client(executor, scenarioFactory);
         TimeoutsLogger timeouts = new TimeoutsLogger(client, config.getTimeouts());
 
         // initialization
@@ -160,6 +166,7 @@ public class Engine {
             timeouts.close();
         }
     }
+
 
     public static void main(String[] args) {
         try {

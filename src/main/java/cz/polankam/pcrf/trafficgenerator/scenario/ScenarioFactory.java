@@ -11,9 +11,10 @@ import java.util.Map;
 
 public class ScenarioFactory {
 
-    private final static Map<String, Class<? extends Scenario>> scenarios = new HashMap<>();
+    private final Map<String, Class<? extends Scenario>> scenarios;
 
-    static {
+    public ScenarioFactory() {
+        scenarios = new HashMap<>();
         scenarios.put(DemoScenario.TYPE, DemoScenario.class);
         scenarios.put(SimpleDemoScenario.TYPE, SimpleDemoScenario.class);
         scenarios.put(ClassicUserScenario.TYPE, ClassicUserScenario.class);
@@ -21,7 +22,7 @@ public class ScenarioFactory {
     }
 
 
-    public static boolean check(String type) {
+    public boolean check(String type) {
         return scenarios.get(type) != null;
     }
 
