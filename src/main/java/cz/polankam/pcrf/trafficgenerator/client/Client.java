@@ -48,6 +48,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
     /** Boolean telling if we finished our interaction. */
     private final AtomicBoolean finished;
+    private String finishedReason;
 
 
     public Client(ScheduledExecutorService executor) {
@@ -60,6 +61,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosForTypes = new HashMap<>();
         scenariosForSessions = new HashMap<>();
         finished = new AtomicBoolean(false);
+        finishedReason = "OK";
         timeoutsCount = new AtomicLong(0);
         scenarioTypesCount = new HashMap<>();
     }
@@ -100,8 +102,17 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         finished.set(true);
     }
 
+    public synchronized void finish(String reason) {
+        finished.set(true);
+        finishedReason = reason;
+    }
+
     public boolean finished() {
         return finished.get();
+    }
+
+    public String getFinishedReason() {
+        return finishedReason;
     }
 
     public long getTimeoutsCount() {
@@ -150,7 +161,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         } catch (Exception e) {
             // should not happen, in case it will, stop whole execution
             logger.error(e);
-            finish();
+            finish(e.getMessage());
             return null;
         }
 
@@ -339,7 +350,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     public void doReAuthRequest(ClientRxSession session, RxReAuthRequest request) throws InternalException {
         DumpUtils.dumpMessage(request.getMessage(), false);
         logger.error("Unexpected message");
-        finish();
+        finish("Unexpected message");
     }
 
     @Override
@@ -357,7 +368,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     @Override
     public void doOtherEvent(AppSession session, AppRequestEvent request, AppAnswerEvent answer) {
         logger.error("Unexpected message");
-        finish();
+        finish("Unexpected message");
     }
 
     @Override

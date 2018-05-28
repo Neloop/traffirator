@@ -154,6 +154,7 @@ public class Engine {
             logger.info("All done... Good bye!");
         } finally {
             summary.setEnd();
+            summary.setStatus(client.getFinishedReason());
             summary.printSummary(summaryOut);
             summaryOut.close();
             timeouts.close();

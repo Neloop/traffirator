@@ -14,6 +14,7 @@ public class Summary {
 
     private long start;
     private long end;
+    private String status;
     private Config config;
     private final List<Map.Entry<Long, ProfileItem>> changes = new ArrayList<>();
 
@@ -23,6 +24,10 @@ public class Summary {
 
     public void setEnd() {
         end = System.currentTimeMillis();
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setClientConfig(Config config) {
@@ -37,6 +42,7 @@ public class Summary {
         out.println("***** SUMMARY START *****");
         out.println("Start: " + start);
         out.println("End: " + end);
+        out.println("Status: " + status);
 
         out.println("Initial Setup: ");
         out.println("    Thread Count: " + config.getThreadCount());
