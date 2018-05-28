@@ -1,6 +1,5 @@
 package cz.polankam.pcrf.trafficgenerator.config;
 
-import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 
 
