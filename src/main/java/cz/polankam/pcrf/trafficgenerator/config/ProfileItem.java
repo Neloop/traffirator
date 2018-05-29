@@ -17,6 +17,10 @@ public class ProfileItem {
         return start;
     }
 
+    public void setStart(long start) {
+        this.start = start;
+    }
+
     /**
      * List of scenarios used in this profile item.
      * @return
@@ -25,4 +29,7 @@ public class ProfileItem {
         return scenarios;
     }
 
+    public void setScenarios(List<ScenarioItem> scenarios) {
+        this.scenarios = scenarios;
+    }
 }

@@ -20,12 +20,20 @@ public class Config {
         return threadCount;
     }
 
+    public void setThreadCount(int threadCount) {
+        this.threadCount = threadCount;
+    }
+
     /**
      * File to which summary should be written.
      * @return
      */
     public String getSummary() {
         return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     /**
@@ -36,12 +44,20 @@ public class Config {
         return timeouts;
     }
 
+    public void setTimeouts(Timeouts timeouts) {
+        this.timeouts = timeouts;
+    }
+
     /**
      * Testing profile configuration.
      * @return
      */
     public List<ProfileItem> getProfile() {
         return profile;
+    }
+
+    public void setProfile(List<ProfileItem> profile) {
+        this.profile = profile;
     }
 
     /**
@@ -52,4 +68,7 @@ public class Config {
         return end;
     }
 
+    public void setEnd(long end) {
+        this.end = end;
+    }
 }
