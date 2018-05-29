@@ -9,7 +9,11 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.ReceiveScenarioActionEntry;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioAction;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioActionEntry;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.SendScenarioActionEntry;
+import cz.polankam.pcrf.trafficgenerator.utils.DiameterAppType;
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.gx.ClientGxSession;
@@ -90,15 +94,27 @@ public abstract class Scenario {
     }
 
     /**
-     * Get delay or timeout with which next action should be processed or received.
+     * Get delay with which next action should be processed.
      * @return
      */
     public synchronized long getNextDelay() {
-        if (isEmpty() || isDestroyed()) {
+        if (isEmpty() || isDestroyed() || !currentActions.peek().isSending()) {
             return 0;
         }
 
-        return currentActions.peek().getDelay();
+        return ((SendScenarioActionEntry) currentActions.peek()).getDelay();
+    }
+
+    /**
+     * Get timeout with which next action should be received.
+     * @return
+     */
+    public synchronized long getNextTimeout() {
+        if (isEmpty() || isDestroyed() || currentActions.peek().isSending()) {
+            return 0;
+        }
+
+        return ((ReceiveScenarioActionEntry) currentActions.peek()).getTimeout();
     }
 
     public synchronized boolean isNextSending() {
@@ -119,11 +135,11 @@ public abstract class Scenario {
             return false;
         }
 
-        ScenarioActionEntry next = currentActions.peek();
-        if (!next.isSending()) {
+        if (!currentActions.peek().isSending()) {
             return false;
         }
 
+        SendScenarioActionEntry next = (SendScenarioActionEntry) currentActions.peek();
         sentCount.incrementAndGet();
         next.getAction().perform(context, null, null);
 
@@ -140,23 +156,41 @@ public abstract class Scenario {
      * @param answer
      * @throws java.lang.Exception
      */
-    public synchronized void receiveNext(AppRequestEvent request, AppAnswerEvent answer) throws Exception {
+    public synchronized void receiveNext(AppRequestEvent request, AppAnswerEvent answer, DiameterAppType appType) throws Exception {
         if (isEmpty() || isDestroyed()) {
             return;
         }
 
-        ScenarioActionEntry next = currentActions.peek();
-        if (next.isSending()) {
+        if (currentActions.peek().isSending()) {
             throw new Exception("Next action is sending, but event received");
         }
 
+        ReceiveScenarioActionEntry next = (ReceiveScenarioActionEntry) currentActions.peek();
         receivedCount.incrementAndGet();
-        next.getAction().perform(context, request, answer);
+        ScenarioAction action;
+        if (appType.equals(DiameterAppType.Gx)) {
+            action = next.getGxAction();
+            next.setGxAction(null);
+        } else if (appType.equals(DiameterAppType.Rx)) {
+            action = next.getRxAction();
+            next.setRxAction(null);
+        } else {
+            throw new Exception("Unknown application type");
+        }
 
-        // do not forget to remove successfully received entry
-        currentActions.poll();
-        // optionally find next node
-        findNextNode();
+        if (action == null) {
+            throw new Exception("Unexpected message received");
+        }
+
+        // perform the action
+        action.perform(context, request, answer);
+
+        if (next.getGxAction() == null && next.getRxAction() == null) {
+            // do not forget to remove entry, if both actions were successful
+            currentActions.poll();
+            // optionally find next node
+            findNextNode();
+        }
     }
 
 

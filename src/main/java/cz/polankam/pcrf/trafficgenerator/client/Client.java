@@ -3,6 +3,7 @@ package cz.polankam.pcrf.trafficgenerator.client;
 import cz.polankam.pcrf.trafficgenerator.rx.MyRxSessionFactoryImpl;
 import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
+import cz.polankam.pcrf.trafficgenerator.utils.DiameterAppType;
 import cz.polankam.pcrf.trafficgenerator.utils.DumpUtils;
 import org.apache.log4j.Logger;
 import org.jdiameter.api.InternalException;
@@ -263,7 +264,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
      * @param request
      * @param answer
      */
-    private void processIncoming(AppSession session, AppRequestEvent request, AppAnswerEvent answer) {
+    private void processIncoming(AppSession session, AppRequestEvent request, AppAnswerEvent answer, DiameterAppType appType) {
         executorService.execute(() -> {
             if (finished()) {
                 return;
@@ -295,7 +296,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
             }
 
             try {
-                scenario.receiveNext(request, answer);
+                scenario.receiveNext(request, answer, appType);
             } catch (Exception e) {
                 handleFailure(scenario, e.getMessage());
                 return;
@@ -317,7 +318,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         }
 
         long receivedCount = scenario.getReceivedCount();
-        long timeout = scenario.getNextDelay();
+        long timeout = scenario.getNextTimeout();
         if (timeout == 0) {
             // timeout is not set, ignore it and do not schedule timeout handler
             logger.debug("Timeout not set on scenario receive action");
@@ -342,7 +343,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     @Override
     public void doAAAnswer(ClientRxSession session, RxAARequest request, RxAAAnswer answer) throws InternalException {
         DumpUtils.dumpMessage(answer.getMessage(), false);
-        processIncoming(session, request, answer);
+        processIncoming(session, request, answer, DiameterAppType.Rx);
     }
 
     @Override
@@ -355,13 +356,13 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     @Override
     public void doSessionTermAnswer(ClientRxSession session, RxSessionTermRequest request, RxSessionTermAnswer answer) throws InternalException {
         DumpUtils.dumpMessage(answer.getMessage(), false);
-        processIncoming(session, request, answer);
+        processIncoming(session, request, answer, DiameterAppType.Rx);
     }
 
     @Override
     public void doAbortSessionRequest(ClientRxSession session, RxAbortSessionRequest request) throws InternalException {
         DumpUtils.dumpMessage(request.getMessage(), false);
-        processIncoming(session, request, null);
+        processIncoming(session, request, null, DiameterAppType.Rx);
     }
 
     @Override
@@ -373,13 +374,13 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     @Override
     public void doCreditControlAnswer(ClientGxSession session, GxCreditControlRequest request, GxCreditControlAnswer answer) throws InternalException {
         DumpUtils.dumpMessage(answer.getMessage(), false);
-        processIncoming(session, request, answer);
+        processIncoming(session, request, answer, DiameterAppType.Gx);
     }
 
     @Override
     public void doGxReAuthRequest(ClientGxSession session, GxReAuthRequest request) throws InternalException {
         DumpUtils.dumpMessage(request.getMessage(), false);
-        processIncoming(session, request, null);
+        processIncoming(session, request, null, DiameterAppType.Gx);
     }
 
     @Override
