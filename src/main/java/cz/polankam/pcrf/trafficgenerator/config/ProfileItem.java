@@ -1,12 +1,13 @@
 package cz.polankam.pcrf.trafficgenerator.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ProfileItem {
 
-    private long start;
-    private List<ScenarioItem> scenarios;
+    private long start = 0;
+    private List<ScenarioItem> scenarios = new ArrayList<>();
 
 
     /**

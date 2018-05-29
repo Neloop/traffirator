@@ -20,14 +20,18 @@ public class ProfileValidator {
      * @throws Exception
      */
     public void validate(Config config) throws ValidationException {
-        if (config.getProfile().isEmpty()) {
+        if (config.getProfile() == null || config.getProfile().isEmpty()) {
             throw new ValidationException("Test profile has to contain at least one item");
         }
 
         long previous = 0;
         for (ProfileItem item : config.getProfile()) {
+            if (item.getStart() < 0) {
+                throw new ValidationException("Profile item start '" + item.getStart() + "' is lower than zero");
+            }
+
             if (item.getStart() < previous) {
-                throw new ValidationException("Profile item '" + item.getStart() + "' start is lower then previous one '" + previous + "'.");
+                throw new ValidationException("Profile item '" + item.getStart() + "' start is lower then previous one '" + previous + "'");
             }
             previous = item.getStart();
 
