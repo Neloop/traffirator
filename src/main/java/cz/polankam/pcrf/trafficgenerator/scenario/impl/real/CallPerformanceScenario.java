@@ -3,9 +3,9 @@ package cz.polankam.pcrf.trafficgenerator.scenario.impl.real;
 import cz.polankam.pcrf.trafficgenerator.scenario.NodeBuilder;
 import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioNode;
-import cz.polankam.pcrf.trafficgenerator.scenario.actions.LoggerPrintAction;
-import cz.polankam.pcrf.trafficgenerator.scenario.actions.call.*;
-import cz.polankam.pcrf.trafficgenerator.scenario.actions.control.*;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.LoggerPrintAction;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.call.*;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.control.*;
 
 import java.util.HashMap;
 

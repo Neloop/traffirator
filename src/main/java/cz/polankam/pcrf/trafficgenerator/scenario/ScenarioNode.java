@@ -1,5 +1,7 @@
 package cz.polankam.pcrf.trafficgenerator.scenario;
 
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioActionEntry;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

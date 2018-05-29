@@ -1,8 +1,8 @@
-package cz.polankam.pcrf.trafficgenerator.scenario.actions.control;
+package cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.control;
 
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioContext;
-import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioAction;
-import cz.polankam.pcrf.trafficgenerator.scenario.actions.factory.GxRequestsFactory;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioAction;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.factory.GxRequestsFactory;
 import cz.polankam.pcrf.trafficgenerator.utils.DumpUtils;
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;

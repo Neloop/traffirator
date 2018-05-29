@@ -1,6 +1,9 @@
 package cz.polankam.pcrf.trafficgenerator.scenario;
 
 
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioAction;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioActionEntry;
+
 /**
  * Scenario node builder which brings simpler and fluent building mechanism for ScenarioNode structures.
  */

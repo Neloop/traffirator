@@ -1,14 +1,14 @@
-package cz.polankam.pcrf.trafficgenerator.scenario.actions.control;
+package cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.control;
 
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioContext;
-import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioAction;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioAction;
 import org.jdiameter.api.Avp;
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.gx.events.GxCreditControlAnswer;
 
 
-public class GxCcaU_Success_ReceiveAction implements ScenarioAction {
+public class GxCcaI_Success_ReceiveAction implements ScenarioAction {
 
     @Override
     public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {

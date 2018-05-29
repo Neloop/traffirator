@@ -1,5 +1,7 @@
 package cz.polankam.pcrf.trafficgenerator.scenario;
 
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioAction;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioActionEntry;
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.junit.jupiter.api.Test;

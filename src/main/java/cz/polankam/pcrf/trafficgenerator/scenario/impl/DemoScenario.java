@@ -3,7 +3,7 @@ package cz.polankam.pcrf.trafficgenerator.scenario.impl;
 import cz.polankam.pcrf.trafficgenerator.scenario.NodeBuilder;
 import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioNode;
-import cz.polankam.pcrf.trafficgenerator.scenario.actions.StdoutPrintAction;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.StdoutPrintAction;
 import java.util.HashMap;
 
 

@@ -1,4 +1,4 @@
-package cz.polankam.pcrf.trafficgenerator.scenario;
+package cz.polankam.pcrf.trafficgenerator.scenario.actions;
 
 
 public class ScenarioActionEntry {

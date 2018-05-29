@@ -1,4 +1,4 @@
-package cz.polankam.pcrf.trafficgenerator.scenario.actions.factory;
+package cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.factory;
 
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioContext;
 import org.jdiameter.api.AvpSet;
