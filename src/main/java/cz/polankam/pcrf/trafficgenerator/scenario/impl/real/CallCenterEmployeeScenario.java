@@ -3,7 +3,9 @@ package cz.polankam.pcrf.trafficgenerator.scenario.impl.real;
 import cz.polankam.pcrf.trafficgenerator.scenario.NodeBuilder;
 import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioNode;
-import cz.polankam.pcrf.trafficgenerator.scenario.actions.StdoutPrintAction;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.LoggerPrintAction;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.call.*;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.control.*;
 
 import java.util.HashMap;
 
@@ -18,16 +20,47 @@ public class CallCenterEmployeeScenario extends Scenario {
             return;
         }
 
-        ScenarioNode START = rootNode = new NodeBuilder().addSendAction(new StdoutPrintAction("*** START ***")).build();
-        ScenarioNode connect = new NodeBuilder().addSendAction(new StdoutPrintAction("*** Connect ***")).build();
-        ScenarioNode update = new NodeBuilder().addSendAction(new StdoutPrintAction("*** Update ***")).build();
-        ScenarioNode disconnect = new NodeBuilder().addSendAction(new StdoutPrintAction("*** Disconnect ***")).build();
-        ScenarioNode lostConnection = new NodeBuilder().addSendAction(new StdoutPrintAction("*** LostConnection ***")).build();
-        ScenarioNode callInit = new NodeBuilder().addSendAction(new StdoutPrintAction("*** CallInit ***")).build();
-        ScenarioNode callUpdateCodec = new NodeBuilder().addSendAction(new StdoutPrintAction("*** CallUpdateCodec ***")).build();
-        ScenarioNode callTermination = new NodeBuilder().addSendAction(new StdoutPrintAction("*** CallTermination ***")).build();
-        ScenarioNode callLostConnection = new NodeBuilder().addSendAction(new StdoutPrintAction("*** CallLostConnection ***")).build();
-        ScenarioNode END = new NodeBuilder().addSendAction(new StdoutPrintAction("*** END ***")).build();
+        ScenarioNode START = rootNode = new NodeBuilder().addSendAction(new LoggerPrintAction("*** START ***")).build();
+        ScenarioNode END = new NodeBuilder().addSendAction(new LoggerPrintAction("*** END ***")).build();
+
+        ScenarioNode connect = new NodeBuilder()
+                .addSendAction(new GxCcrI_SendAction())
+                .addReceiveAction(new GxCcaI_Success_ReceiveAction())
+                .build();
+        ScenarioNode update = new NodeBuilder()
+                .addSendAction(new GxCcrU_SendAction())
+                .addReceiveAction(new GxCcaU_Success_ReceiveAction())
+                .build();
+        ScenarioNode disconnect = new NodeBuilder()
+                .addSendAction(new GxCcrT_SendAction())
+                .addReceiveAction(new GxCcaT_Success_ReceiveAction())
+                .build();
+        ScenarioNode lostConnection = new NodeBuilder()
+                .addSendAction(new GxCcrU_LostConnection_SendAction())
+                .addReceiveAction(new GxCcaU_Success_ReceiveAction())
+                .build();
+        ScenarioNode callInit = new NodeBuilder()
+                .addSendAction(new RxAar_SendAction(0, new String[]{}, new String[]{}, new String[]{})) // TODO
+                .addReceiveAction(new GxRar_And_RxAaa_Success_ReceiveAction())
+                .addReceiveAction(new GxRar_And_RxAaa_Success_ReceiveAction())
+                .addSendAction(new GxRaa_Success_SendAction())
+                .addSendAction(new RxAar_SendAction(0, new String[]{}, new String[]{}, new String[]{})) // TODO
+                .addReceiveAction(new RxAaa_Success_ReceiveAction())
+                .build();
+        ScenarioNode callUpdateCodec = new NodeBuilder() // TODO
+                .build();
+        ScenarioNode callTermination = new NodeBuilder()
+                .addSendAction(new RxStr_SendAction())
+                .addReceiveAction(new GxRar_And_RxSta_Success_ReceiveAction())
+                .addReceiveAction(new GxRar_And_RxSta_Success_ReceiveAction())
+                .addSendAction(new GxRaa_Success_SendAction())
+                .build();
+        ScenarioNode callLostConnection = new NodeBuilder()
+                .addSendAction(new GxCcrU_LostConnection_SendAction())
+                .addReceiveAction(new GxCcaU_And_RxAsr_Success_ReceiveAction())
+                .addReceiveAction(new GxCcaU_And_RxAsr_Success_ReceiveAction())
+                .addSendAction(new RxAsa_Success_SendAction())
+                .build();
 
         /*
          *  Simplified image, some relations are missing
