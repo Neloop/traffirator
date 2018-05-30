@@ -11,26 +11,9 @@ import org.jdiameter.api.gx.events.GxCreditControlRequest;
 
 public class GxCcrT_SendAction implements ScenarioAction {
 
-    private boolean isWrongSession;
-    private boolean isSubscriptionId;
-
-    public GxCcrT_SendAction() {
-        this(false, false);
-    }
-
-    public GxCcrT_SendAction(boolean isWrongSession) {
-        this(isWrongSession, false);
-    }
-
-    public GxCcrT_SendAction(boolean isWrongSession, boolean isSubscriptionId) {
-        this.isWrongSession = isWrongSession;
-        this.isSubscriptionId = isSubscriptionId;
-    }
-
-
     @Override
     public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {
-        GxCreditControlRequest req = GxRequestsFactory.createCcrT(context, isSubscriptionId);
+        GxCreditControlRequest req = GxRequestsFactory.createCcrT(context);
         context.getGxSession().sendCreditControlRequest(req);
         DumpUtils.dumpMessage(req.getMessage(), true);
     }

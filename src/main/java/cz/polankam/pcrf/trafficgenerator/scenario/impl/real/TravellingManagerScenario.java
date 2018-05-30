@@ -102,6 +102,7 @@ public class TravellingManagerScenario extends Scenario {
         state.put("msisdn", RandomGenerator.randomMSISDN());
         state.put("an_gw_address", RandomGenerator.randomAnGwAddress());
         state.put("an_ci_gx", RandomGenerator.randomAnCiGx());
+        state.put("called_station", "ims");
 
         return state;
     }

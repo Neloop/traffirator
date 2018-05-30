@@ -73,7 +73,7 @@ public class GxRequestsFactory {
         return req;
     }
 
-    public static GxCreditControlRequest createCcrT(ScenarioContext context, boolean isSubscriptionId) throws Exception {
+    public static GxCreditControlRequest createCcrT(ScenarioContext context) throws Exception {
         ClientGxSession session = context.getGxSession();
         ConcurrentHashMap<String, Object> state = context.getState();
         int requestNumber = (int) state.get("cc_request_number");
@@ -84,7 +84,20 @@ public class GxRequestsFactory {
         GxCreditControlRequestImpl req = new GxCreditControlRequestImpl(session, context.getGxRealm(), context.getGxServerUri());
         AvpSet avps = req.getMessage().getAvps();
 
-        // TODO
+        avps.addAvp(Avp.CC_REQUEST_TYPE, 3, true, false);
+        avps.addAvp(Avp.CC_REQUEST_NUMBER, requestNumber, true, false);
+        avps.addAvp(AvpUtils.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
+        avps.addAvp(AvpUtils.CALLED_STATION_ID, (String) state.get("called_station"), true, false, true);
+        avps.addAvp(AvpUtils.ACCESS_NETWORK_CHARGING_ADDRESS, (InetAddress) state.get("an_gw_address"), true, false);
+        avps.addAvp(Avp.TERMINATION_CAUSE, 1, true, false);
+
+        AvpSet subscrMSISDN = avps.addGroupedAvp(Avp.SUBSCRIPTION_ID, true, false);
+        subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 0, true, false);
+        subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_DATA, (Integer) state.get("msisdn"), true, false, true);
+
+        AvpSet userEquipment = avps.addGroupedAvp(Avp.USER_EQUIPMENT_INFO, Vendor.TGPP, false, false);
+        userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_TYPE, 0, Vendor.TGPP, false, false);
+        userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_VALUE, (String) state.get("imei"), Vendor.TGPP, false, false, true);
 
         // *** RETURN REQUEST
 
