@@ -167,6 +167,7 @@ public class GxRequestsFactory {
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_TYPE, 0, true, false);
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_VALUE, (String) state.get("imei"), true, false, true);
 
+        // TODO
         AvpSet chargRuleReport = avps.addGroupedAvp(AvpUtils.CHARGING_RULE_REPORT, Vendor.TGPP, true, false);
         chargRuleReport.addAvp(AvpUtils.CHARGING_RULE_NAME, "TODO: RULE NAME FROM PREVIOUS RAR", Vendor.TGPP, true, false, true);
         chargRuleReport.addAvp(AvpUtils.CHARGING_RULE_NAME, "TODO: RULE NAME FROM PREVIOUS RAR", Vendor.TGPP, true, false, true);

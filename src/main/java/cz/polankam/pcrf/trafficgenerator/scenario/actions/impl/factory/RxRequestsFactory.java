@@ -1,6 +1,7 @@
 package cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.factory;
 
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioContext;
+import org.jdiameter.api.Avp;
 import org.jdiameter.api.AvpSet;
 import org.jdiameter.api.rx.ClientRxSession;
 import org.jdiameter.api.rx.events.RxAARequest;
@@ -37,8 +38,7 @@ public class RxRequestsFactory {
 
         RxSessionTermRequestImpl req = new RxSessionTermRequestImpl(session, context.getRxRealm(), context.getRxServerUri());
         AvpSet avps = req.getMessage().getAvps();
-
-        // TODO
+        avps.addAvp(Avp.TERMINATION_CAUSE, 1, true, false);
 
         // *** RETURN REQUEST
 
