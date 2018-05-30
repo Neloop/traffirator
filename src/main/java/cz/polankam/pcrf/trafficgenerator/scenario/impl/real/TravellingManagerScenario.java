@@ -92,13 +92,13 @@ public class TravellingManagerScenario extends Scenario {
     }
 
     @Override
-    public HashMap<String, Object> createNewScenarioState() {
+    protected HashMap<String, Object> createNewScenarioState() {
         // TODO
         return new HashMap<>();
     }
 
     @Override
-    public ScenarioNode getRootNode() throws Exception {
+    protected ScenarioNode getRootNode() throws Exception {
         init();
         return rootNode;
     }

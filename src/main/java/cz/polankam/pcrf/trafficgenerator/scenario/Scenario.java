@@ -197,16 +197,15 @@ public abstract class Scenario {
     /**
      * On every call create new unique scenario state.
      * @return
-     * @throws java.lang.Exception
      */
-    public abstract HashMap<String, Object> createNewScenarioState();
+    protected abstract HashMap<String, Object> createNewScenarioState();
 
     /**
      * Get root node/entry point for this scenario automaton.
      * @return
      * @throws java.lang.Exception
      */
-    public abstract ScenarioNode getRootNode() throws Exception;
+    protected abstract ScenarioNode getRootNode() throws Exception;
 
     /**
      * Get type of scenario which will be used in scenario factory.
