@@ -6,6 +6,7 @@ import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioNode;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.LoggerPrintAction;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.call.*;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.control.*;
+import cz.polankam.pcrf.trafficgenerator.utils.RandomGenerator;
 
 import java.util.HashMap;
 
@@ -87,9 +88,17 @@ public class MalfunctioningCellPhoneScenario extends Scenario {
     }
 
     @Override
-    protected HashMap<String, Object> createNewScenarioState() {
-        // TODO
-        return new HashMap<>();
+    protected HashMap<String, Object> createNewScenarioState() throws Exception {
+        HashMap<String, Object> state = new HashMap<>();
+
+        state.put("cc_request_number", 0);
+        state.put("framed_ip", RandomGenerator.randomFramedIp());
+        state.put("imei", RandomGenerator.randomIMEI());
+        state.put("msisdn", RandomGenerator.randomMSISDN());
+        state.put("an_gw_address", RandomGenerator.randomAnGwAddress());
+        state.put("an_ci_gx", RandomGenerator.randomAnCiGx());
+
+        return state;
     }
 
     @Override

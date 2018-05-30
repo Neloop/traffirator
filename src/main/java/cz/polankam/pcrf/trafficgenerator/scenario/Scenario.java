@@ -206,7 +206,7 @@ public abstract class Scenario {
      * On every call create new unique scenario state.
      * @return
      */
-    protected abstract HashMap<String, Object> createNewScenarioState();
+    protected abstract HashMap<String, Object> createNewScenarioState() throws Exception;
 
     /**
      * Get root node/entry point for this scenario automaton.

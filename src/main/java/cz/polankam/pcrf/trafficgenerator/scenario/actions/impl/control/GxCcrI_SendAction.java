@@ -11,26 +11,9 @@ import org.jdiameter.api.gx.events.GxCreditControlRequest;
 
 public class GxCcrI_SendAction implements ScenarioAction {
 
-    private boolean isFramedIp;
-    private boolean isSubscriptionId;
-
-    public GxCcrI_SendAction() {
-        this(true, false);
-    }
-
-    public GxCcrI_SendAction(boolean isFramedIp) {
-        this(isFramedIp, false);
-    }
-
-    public GxCcrI_SendAction(boolean isFramedIp, boolean isSubscriptionId) {
-        this.isFramedIp = isFramedIp;
-        this.isSubscriptionId = isSubscriptionId;
-    }
-
-
     @Override
     public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {
-        GxCreditControlRequest req = GxRequestsFactory.createCcrI(context, isFramedIp, isSubscriptionId);
+        GxCreditControlRequest req = GxRequestsFactory.createCcrI(context);
         context.getGxSession().sendCreditControlRequest(req);
         DumpUtils.dumpMessage(req.getMessage(), true);
     }
