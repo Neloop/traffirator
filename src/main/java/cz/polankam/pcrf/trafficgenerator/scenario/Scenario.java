@@ -51,6 +51,14 @@ public abstract class Scenario {
         destroyed.set(true);
     }
 
+    protected ScenarioContext getContext() {
+        return context;
+    }
+
+    protected ScenarioNode getCurrentNode() {
+        return currentNode;
+    }
+
     public boolean isDestroyed() {
         return destroyed.get();
     }
@@ -78,7 +86,7 @@ public abstract class Scenario {
     /**
      * If current node is processed, randomly find next one.
      */
-    private synchronized void findNextNode() throws Exception {
+    protected synchronized void findNextNode() throws Exception {
         if (!currentActions.isEmpty()) {
             return;
         }
