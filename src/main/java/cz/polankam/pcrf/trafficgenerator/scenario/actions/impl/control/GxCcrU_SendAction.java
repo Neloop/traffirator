@@ -11,20 +11,9 @@ import org.jdiameter.api.gx.events.GxCreditControlRequest;
 
 public class GxCcrU_SendAction implements ScenarioAction {
 
-    private final boolean isSubscriptionId;
-
-    public GxCcrU_SendAction() {
-        this(false);
-    }
-
-    public GxCcrU_SendAction(boolean isSubscriptionId) {
-        this.isSubscriptionId = isSubscriptionId;
-    }
-
-
     @Override
     public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {
-        GxCreditControlRequest req = GxRequestsFactory.createCcrU(context, isSubscriptionId);
+        GxCreditControlRequest req = GxRequestsFactory.createCcrU(context);
         context.getGxSession().sendCreditControlRequest(req);
         DumpUtils.dumpMessage(req.getMessage(), true);
     }
