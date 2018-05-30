@@ -6,7 +6,7 @@ import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioNode;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.LoggerPrintAction;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.call.*;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.control.*;
-import cz.polankam.pcrf.trafficgenerator.utils.RandomGenerator;
+import cz.polankam.pcrf.trafficgenerator.utils.RandomDataProvider;
 
 import java.util.HashMap;
 
@@ -41,10 +41,10 @@ public class MalfunctioningCellPhoneScenario extends Scenario {
                 .addReceiveGxAction(new GxCcaU_Success_ReceiveAction())
                 .build();
         ScenarioNode callInit = new NodeBuilder()
-                .addSendAction(new RxAar_SendAction(0, new String[]{}, new String[]{}, new String[]{})) // TODO
+                .addSendAction(new RxAar_SendAction(new String[]{}, new String[]{}, new String[]{})) // TODO
                 .addReceiveAction(new GxRar_ReceiveAction(), new RxAaa_Success_ReceiveAction())
                 .addSendAction(new GxRaa_Success_SendAction())
-                .addSendAction(new RxAar_SendAction(0, new String[]{}, new String[]{}, new String[]{})) // TODO
+                .addSendAction(new RxAar_SendAction(new String[]{}, new String[]{}, new String[]{})) // TODO
                 .addReceiveRxAction(new RxAaa_Success_ReceiveAction())
                 .build();
         ScenarioNode callUpdateCodec = new NodeBuilder() // TODO
@@ -92,12 +92,13 @@ public class MalfunctioningCellPhoneScenario extends Scenario {
         HashMap<String, Object> state = new HashMap<>();
 
         state.put("cc_request_number", 0);
-        state.put("framed_ip", RandomGenerator.randomFramedIp());
-        state.put("imei", RandomGenerator.randomIMEI());
-        state.put("msisdn", RandomGenerator.randomMSISDN());
-        state.put("an_gw_address", RandomGenerator.randomAnGwAddress());
-        state.put("an_ci_gx", RandomGenerator.randomAnCiGx());
+        state.put("framed_ip", RandomDataProvider.randomFramedIp());
+        state.put("imei", RandomDataProvider.randomIMEI());
+        state.put("msisdn", RandomDataProvider.randomMSISDN());
+        state.put("an_gw_address", RandomDataProvider.randomAnGwAddress());
+        state.put("an_ci_gx", RandomDataProvider.randomAnCiGx());
         state.put("called_station", "ims");
+        state.put("af_charging_identifier", RandomDataProvider.randomAfChargingIdentifier());
 
         return state;
     }

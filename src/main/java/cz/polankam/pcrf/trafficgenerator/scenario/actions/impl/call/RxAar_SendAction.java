@@ -11,14 +11,12 @@ import org.jdiameter.api.rx.events.RxAARequest;
 
 public class RxAar_SendAction implements ScenarioAction {
 
-    private final int bandwidth;
     private final String[] codecData;
     private final String[] firstFlowDesc;
     private final String[] secondFlowDesc;
 
 
-    public RxAar_SendAction(int bandwidth, String[] codecData, String[] firstFlowDesc, String[] secondFlowDesc) {
-        this.bandwidth = bandwidth;
+    public RxAar_SendAction(String[] codecData, String[] firstFlowDesc, String[] secondFlowDesc) {
         this.codecData = codecData;
         this.firstFlowDesc = firstFlowDesc;
         this.secondFlowDesc = secondFlowDesc;
@@ -26,7 +24,7 @@ public class RxAar_SendAction implements ScenarioAction {
 
     @Override
     public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {
-        RxAARequest req = RxRequestsFactory.createAar(context, bandwidth, codecData, firstFlowDesc, secondFlowDesc);
+        RxAARequest req = RxRequestsFactory.createAar(context, codecData, firstFlowDesc, secondFlowDesc);
         context.getRxSession().sendAARequest(req);
         DumpUtils.dumpMessage(req.getMessage(), true);
     }

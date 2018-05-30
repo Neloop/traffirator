@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Random;
 
-public class RandomGenerator {
+public class RandomDataProvider {
 
     private static final String ALPHA_NUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final String NUMERIC = "0123456789";
@@ -41,6 +41,14 @@ public class RandomGenerator {
         return random.nextInt(Integer.MAX_VALUE);
     }
 
+    public static int randomMediaComponentNumber() {
+        return random.nextInt(Integer.MAX_VALUE);
+    }
+
+    public static int randomFlowNumber() {
+        return random.nextInt(Integer.MAX_VALUE);
+    }
+
     public static String randomIMEI() {
         int length = 15;
         StringBuilder sb = new StringBuilder(length);
@@ -68,5 +76,9 @@ public class RandomGenerator {
 
     public static String randomUserLocation() {
         return randomAlphanumString(26);
+    }
+
+    public static String randomAfChargingIdentifier() {
+        return randomAlphanumString(50);
     }
 }
