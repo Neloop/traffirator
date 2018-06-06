@@ -206,12 +206,12 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         logger.info("Scenario removed and destroyed. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
     }
 
-    private synchronized void handleFailure(final Scenario scenario, String errorMessage) {
+    private synchronized void handleFailure(final Scenario scenario, Exception ex, String errorMessage) {
         if (scenario == null) {
             return;
         }
 
-        logger.error(errorMessage);
+        logger.error(errorMessage, ex);
         removeScenario(scenario);
         logger.info("Scenario failed, creating next one");
         // send next message of newly created scenario
@@ -234,7 +234,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
             try {
                 sent = scenario.sendNext();
             } catch (Exception e) {
-                handleFailure(scenario, e.getMessage());
+                handleFailure(scenario, e, e.getMessage());
                 return;
             }
 
@@ -303,7 +303,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
             try {
                 scenario.receiveNext(request, answer, appType);
             } catch (Exception e) {
-                handleFailure(scenario, e.getMessage());
+                handleFailure(scenario, e, e.getMessage());
                 return;
             }
 
@@ -340,7 +340,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
             // message was not received in time, handle it with care
             timeoutsCount.incrementAndGet();
-            handleFailure(scenario, "Scenario timed out in " + timeout + " ms");
+            handleFailure(scenario, null, "Scenario timed out in " + timeout + " ms");
         }, timeout, TimeUnit.MILLISECONDS);
     }
 

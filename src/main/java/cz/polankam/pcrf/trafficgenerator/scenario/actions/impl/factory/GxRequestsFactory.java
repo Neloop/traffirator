@@ -60,7 +60,7 @@ public class GxRequestsFactory {
         allocRetPrior.addAvp(AvpUtils.PRE_EMPTION_VULNERABILITY, 1, Vendor.TGPP, true, false);
 
         AvpSet accessNetCharg = avps.addGroupedAvp(AvpUtils.ACCESS_NETWORK_CHARGING_IDENTIFIER_GX, Vendor.TGPP, true, false);
-        accessNetCharg.addAvp(Avp.ACCESS_NETWORK_CHARGING_IDENTIFIER_VALUE, (String) state.get("an_ci_gw"), Vendor.TGPP, true, false, true);
+        accessNetCharg.addAvp(Avp.ACCESS_NETWORK_CHARGING_IDENTIFIER_VALUE, (String) state.get("an_ci_gx"), Vendor.TGPP, true, false, true);
 
         int bitrate = DataProvider.randomBitrate();
         AvpSet qosInfo = avps.addGroupedAvp(Avp.QOS_INFORMATION, Vendor.TGPP, true, false);
