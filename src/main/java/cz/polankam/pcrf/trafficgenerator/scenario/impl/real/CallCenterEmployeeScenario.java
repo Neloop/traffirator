@@ -47,7 +47,10 @@ public class CallCenterEmployeeScenario extends Scenario {
                 .addSendAction(new RxAar_SendAction())
                 .addReceiveRxAction(new RxAaa_Success_ReceiveAction())
                 .build();
-        ScenarioNode callUpdateCodec = new NodeBuilder() // TODO: what to do here?
+        ScenarioNode callUpdateCodec = new NodeBuilder()
+                .addSendAction(new RxAar_SendAction())
+                .addReceiveAction(new GxRar_ReceiveAction(), new RxAaa_Success_ReceiveAction())
+                .addSendAction(new GxRaa_Success_SendAction())
                 .build();
         ScenarioNode callTermination = new NodeBuilder()
                 .addSendAction(new RxStr_SendAction())
