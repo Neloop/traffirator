@@ -24,8 +24,9 @@ public abstract class Scenario {
 
     protected final Random random = new Random();
     protected ScenarioContext context;
+    private long currentNodeDelay = 0;
     private ScenarioNode currentNode;
-    private Queue<ScenarioActionEntry> currentActions;
+    private Queue<ScenarioActionEntry> currentNodeActions;
     private final AtomicBoolean destroyed = new AtomicBoolean(false);
     private final AtomicLong sentCount = new AtomicLong(0);
     private final AtomicLong receivedCount = new AtomicLong(0);
@@ -42,7 +43,7 @@ public abstract class Scenario {
 
         // initialize current node
         currentNode = getRootNode();
-        currentActions = currentNode.getActionsCopy();
+        currentNodeActions = currentNode.getActionsCopy();
     }
 
     public synchronized void destroy() {
@@ -87,7 +88,7 @@ public abstract class Scenario {
      * If current node is processed, randomly find next one.
      */
     protected synchronized void findNextNode() throws Exception {
-        if (!currentActions.isEmpty()) {
+        if (!currentNodeActions.isEmpty()) {
             return;
         }
 
@@ -97,8 +98,10 @@ public abstract class Scenario {
         }
 
         int next = random.nextInt(100);
-        currentNode = currentNode.getChild(next);
-        currentActions = currentNode.getActionsCopy();
+        ScenarioNodeEntry nextNode = currentNode.getChild(next);
+        currentNode = nextNode.getNode();
+        currentNodeDelay = nextNode.getAverageDelay();
+        currentNodeActions = currentNode.getActionsCopy();
     }
 
     /**
@@ -106,17 +109,19 @@ public abstract class Scenario {
      * @return
      */
     public synchronized long getNextDelay() {
-        if (isEmpty() || isDestroyed() || !currentActions.peek().isSending()) {
+        if (isEmpty() || isDestroyed() || !currentNodeActions.peek().isSending()) {
             return 0;
         }
 
         int variability = getDelaysVariability();
-        long averageDelay = ((SendScenarioActionEntry) currentActions.peek()).getAverageDelay();
+        long averageDelay = currentNodeDelay + ((SendScenarioActionEntry) currentNodeActions.peek()).getAverageDelay();
         long randomPartDelay = 0;
         if (variability != 0) {
             randomPartDelay = random.nextLong() % (averageDelay * variability / 100);
         }
 
+        // we used delay of the current node and it is not needed any further
+        currentNodeDelay = 0;
         return averageDelay + randomPartDelay;
     }
 
@@ -125,11 +130,11 @@ public abstract class Scenario {
      * @return
      */
     public synchronized long getNextTimeout() {
-        if (isEmpty() || isDestroyed() || currentActions.peek().isSending()) {
+        if (isEmpty() || isDestroyed() || currentNodeActions.peek().isSending()) {
             return 0;
         }
 
-        return ((ReceiveScenarioActionEntry) currentActions.peek()).getTimeout();
+        return ((ReceiveScenarioActionEntry) currentNodeActions.peek()).getTimeout();
     }
 
     public synchronized boolean isNextSending() {
@@ -137,7 +142,7 @@ public abstract class Scenario {
             return false;
         }
 
-        return currentActions.peek().isSending();
+        return currentNodeActions.peek().isSending();
     }
 
     /**
@@ -150,16 +155,16 @@ public abstract class Scenario {
             return false;
         }
 
-        if (!currentActions.peek().isSending()) {
+        if (!currentNodeActions.peek().isSending()) {
             return false;
         }
 
-        SendScenarioActionEntry next = (SendScenarioActionEntry) currentActions.peek();
+        SendScenarioActionEntry next = (SendScenarioActionEntry) currentNodeActions.peek();
         sentCount.incrementAndGet();
         next.getAction().perform(context, null, null);
 
         // do not forget to remove successfully sent entry
-        currentActions.poll();
+        currentNodeActions.poll();
         // optionally find next node
         findNextNode();
         return true;
@@ -176,11 +181,11 @@ public abstract class Scenario {
             return;
         }
 
-        if (currentActions.peek().isSending()) {
+        if (currentNodeActions.peek().isSending()) {
             throw new Exception("Next action is sending, but event received");
         }
 
-        ReceiveScenarioActionEntry next = (ReceiveScenarioActionEntry) currentActions.peek();
+        ReceiveScenarioActionEntry next = (ReceiveScenarioActionEntry) currentNodeActions.peek();
         receivedCount.incrementAndGet();
         ScenarioAction action;
         if (appType.equals(DiameterAppType.Gx)) {
@@ -202,7 +207,7 @@ public abstract class Scenario {
 
         if (next.getGxAction() == null && next.getRxAction() == null) {
             // do not forget to remove entry, if both actions were successful
-            currentActions.poll();
+            currentNodeActions.poll();
             // optionally find next node
             findNextNode();
         }

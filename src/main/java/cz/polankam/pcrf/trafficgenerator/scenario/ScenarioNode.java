@@ -24,7 +24,7 @@ public class ScenarioNode {
         return !children.isEmpty();
     }
 
-    public ScenarioNode getChild(int probability) throws Exception {
+    public ScenarioNodeEntry getChild(int probability) throws Exception {
         if (probability < 0 || probability > 100) {
             throw new Exception("Bad probability value");
         }
@@ -32,14 +32,14 @@ public class ScenarioNode {
         if (children.isEmpty()) {
             return null;
         } else if (children.size() == 1) {
-            return children.get(0).getNode();
+            return children.get(0);
         }
 
-        ScenarioNode node = null;
+        ScenarioNodeEntry nodeEntry = null;
         int sum = 0;
         for (ScenarioNodeEntry entry : children) {
             if ((sum + entry.getProbability()) >= probability) {
-                node = entry.getNode();
+                nodeEntry = entry;
                 break;
             }
 
@@ -47,11 +47,11 @@ public class ScenarioNode {
         }
 
         // node was not found, that means there was missing padding at the end... so grab the last node
-        if (node == null) {
-            node = children.get(children.size() - 1).getNode();
+        if (nodeEntry == null) {
+            nodeEntry = children.get(children.size() - 1);
         }
 
-        return node;
+        return nodeEntry;
     }
 
     protected List<ScenarioNodeEntry> getChildren() {
@@ -65,6 +65,11 @@ public class ScenarioNode {
 
     public ScenarioNode addChild(int probability, ScenarioNode child) {
         children.add(new ScenarioNodeEntry(probability, child));
+        return this;
+    }
+
+    public ScenarioNode addChild(int probability, long averageDelay, ScenarioNode child) {
+        children.add(new ScenarioNodeEntry(probability, averageDelay, child));
         return this;
     }
 

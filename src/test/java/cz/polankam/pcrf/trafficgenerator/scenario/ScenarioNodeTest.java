@@ -19,9 +19,16 @@ class ScenarioNodeTest {
     }
 
     @Test
-    void testHasChildren_childWithProbability() {
+    void testHasChildren_childWithProbabilityWithoutDelay() {
         ScenarioNode node = new ScenarioNode();
         node.addChild(100, new ScenarioNode());
+        assertTrue(node.hasChildren());
+    }
+
+    @Test
+    void testHasChildren_childWithProbabilityAndDelay() {
+        ScenarioNode node = new ScenarioNode();
+        node.addChild(100, 4546, new ScenarioNode());
         assertTrue(node.hasChildren());
     }
 
@@ -39,6 +46,11 @@ class ScenarioNodeTest {
         assertEquals(0, node.getChildren().get(0).getProbability());
         assertEquals(0, node.getChildren().get(1).getProbability());
         assertEquals(0, node.getChildren().get(2).getProbability());
+
+        assertEquals(0, node.getChildren().get(0).getAverageDelay());
+        assertEquals(0, node.getChildren().get(1).getAverageDelay());
+        assertEquals(0, node.getChildren().get(2).getAverageDelay());
+
 
         assertEquals(a, node.getChildren().get(0).getNode());
         assertEquals(b, node.getChildren().get(1).getNode());
@@ -59,6 +71,34 @@ class ScenarioNodeTest {
         assertEquals(50, node.getChildren().get(0).getProbability());
         assertEquals(50, node.getChildren().get(1).getProbability());
         assertEquals(0, node.getChildren().get(2).getProbability());
+
+        assertEquals(0, node.getChildren().get(0).getAverageDelay());
+        assertEquals(0, node.getChildren().get(1).getAverageDelay());
+        assertEquals(0, node.getChildren().get(2).getAverageDelay());
+
+        assertEquals(a, node.getChildren().get(0).getNode());
+        assertEquals(b, node.getChildren().get(1).getNode());
+        assertEquals(c, node.getChildren().get(2).getNode());
+    }
+
+    @Test
+    void testAddChild_childWithDelay() {
+        ScenarioNode node = new ScenarioNode();
+        ScenarioNode a = new ScenarioNode(), b = new ScenarioNode(), c = new ScenarioNode();
+        node.addChild(50, 60, a);
+        node.addChild(50, 70, b);
+        node.addChild(0, 0, c);
+
+        assertTrue(node.hasChildren());
+        assertEquals(3, node.getChildren().size());
+
+        assertEquals(50, node.getChildren().get(0).getProbability());
+        assertEquals(50, node.getChildren().get(1).getProbability());
+        assertEquals(0, node.getChildren().get(2).getProbability());
+
+        assertEquals(60, node.getChildren().get(0).getAverageDelay());
+        assertEquals(70, node.getChildren().get(1).getAverageDelay());
+        assertEquals(0, node.getChildren().get(2).getAverageDelay());
 
         assertEquals(a, node.getChildren().get(0).getNode());
         assertEquals(b, node.getChildren().get(1).getNode());
@@ -147,9 +187,9 @@ class ScenarioNodeTest {
         node.addChild(25, c);
         node.addChild(25, d);
 
-        assertEquals(a, node.getChild(25));
-        assertEquals(b, node.getChild(44));
-        assertEquals(b, node.getChild(50));
+        assertEquals(a, node.getChild(25).getNode());
+        assertEquals(b, node.getChild(44).getNode());
+        assertEquals(b, node.getChild(50).getNode());
     }
 
     @Test
@@ -160,8 +200,8 @@ class ScenarioNodeTest {
         node.addChild(33, b);
         node.addChild(33, c);
 
-        assertEquals(b, node.getChild(60));
-        assertEquals(c, node.getChild(100));
+        assertEquals(b, node.getChild(60).getNode());
+        assertEquals(c, node.getChild(100).getNode());
     }
 
 }
