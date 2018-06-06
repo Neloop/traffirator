@@ -1,0 +1,296 @@
+---
+threadCount: 8
+summary: ./logs/summary.log
+timeouts:
+  logFile: ./logs/timeouts.log
+  samplingPeriod: 1000
+profile:
+  - start: 0
+    scenarios:
+      - type: CallPerformance
+        count: 100
+  - start: 120000
+    scenarios:
+      - type: CallPerformance
+        count: 200
+  - start: 240000
+    scenarios:
+      - type: CallPerformance
+        count: 300
+  - start: 360000
+    scenarios:
+      - type: CallPerformance
+        count: 400
+  - start: 480000
+    scenarios:
+      - type: CallPerformance
+        count: 500
+  - start: 600000
+    scenarios:
+      - type: CallPerformance
+        count: 600
+  - start: 720000
+    scenarios:
+      - type: CallPerformance
+        count: 700
+  - start: 840000
+    scenarios:
+      - type: CallPerformance
+        count: 800
+  - start: 960000
+    scenarios:
+      - type: CallPerformance
+        count: 900
+  - start: 1080000
+    scenarios:
+      - type: CallPerformance
+        count: 1000
+  - start: 1200000
+    scenarios:
+      - type: CallPerformance
+        count: 1100
+  - start: 1320000
+    scenarios:
+      - type: CallPerformance
+        count: 1200
+  - start: 1440000
+    scenarios:
+      - type: CallPerformance
+        count: 1300
+  - start: 1560000
+    scenarios:
+      - type: CallPerformance
+        count: 1400
+  - start: 1680000
+    scenarios:
+      - type: CallPerformance
+        count: 1500
+  - start: 1800000
+    scenarios:
+      - type: CallPerformance
+        count: 1600
+  - start: 1920000
+    scenarios:
+      - type: CallPerformance
+        count: 1700
+  - start: 2040000
+    scenarios:
+      - type: CallPerformance
+        count: 1800
+  - start: 2160000
+    scenarios:
+      - type: CallPerformance
+        count: 1900
+  - start: 2280000
+    scenarios:
+      - type: CallPerformance
+        count: 2000
+  - start: 2400000
+    scenarios:
+      - type: CallPerformance
+        count: 2100
+  - start: 2520000
+    scenarios:
+      - type: CallPerformance
+        count: 2200
+  - start: 2640000
+    scenarios:
+      - type: CallPerformance
+        count: 2300
+  - start: 2760000
+    scenarios:
+      - type: CallPerformance
+        count: 2400
+  - start: 2880000
+    scenarios:
+      - type: CallPerformance
+        count: 2500
+  - start: 3000000
+    scenarios:
+      - type: CallPerformance
+        count: 2600
+  - start: 3120000
+    scenarios:
+      - type: CallPerformance
+        count: 2700
+  - start: 3240000
+    scenarios:
+      - type: CallPerformance
+        count: 2800
+  - start: 3360000
+    scenarios:
+      - type: CallPerformance
+        count: 2900
+  - start: 3480000
+    scenarios:
+      - type: CallPerformance
+        count: 3000
+  - start: 3600000
+    scenarios:
+      - type: CallPerformance
+        count: 3100
+  - start: 3720000
+    scenarios:
+      - type: CallPerformance
+        count: 3200
+  - start: 3840000
+    scenarios:
+      - type: CallPerformance
+        count: 3300
+  - start: 3960000
+    scenarios:
+      - type: CallPerformance
+        count: 3400
+  - start: 4080000
+    scenarios:
+      - type: CallPerformance
+        count: 3500
+  - start: 4200000
+    scenarios:
+      - type: CallPerformance
+        count: 3600
+  - start: 4320000
+    scenarios:
+      - type: CallPerformance
+        count: 3700
+  - start: 4440000
+    scenarios:
+      - type: CallPerformance
+        count: 3800
+  - start: 4560000
+    scenarios:
+      - type: CallPerformance
+        count: 3900
+  - start: 4680000
+    scenarios:
+      - type: CallPerformance
+        count: 4000
+  - start: 4800000
+    scenarios:
+      - type: CallPerformance
+        count: 4100
+  - start: 4920000
+    scenarios:
+      - type: CallPerformance
+        count: 4200
+  - start: 5040000
+    scenarios:
+      - type: CallPerformance
+        count: 4300
+  - start: 5160000
+    scenarios:
+      - type: CallPerformance
+        count: 4400
+  - start: 5280000
+    scenarios:
+      - type: CallPerformance
+        count: 4500
+  - start: 5400000
+    scenarios:
+      - type: CallPerformance
+        count: 4600
+  - start: 5520000
+    scenarios:
+      - type: CallPerformance
+        count: 4700
+  - start: 5640000
+    scenarios:
+      - type: CallPerformance
+        count: 4800
+  - start: 5760000
+    scenarios:
+      - type: CallPerformance
+        count: 4900
+  - start: 5880000
+    scenarios:
+      - type: CallPerformance
+        count: 5000
+  - start: 6000000
+    scenarios:
+      - type: CallPerformance
+        count: 5100
+  - start: 6120000
+    scenarios:
+      - type: CallPerformance
+        count: 5200
+  - start: 6240000
+    scenarios:
+      - type: CallPerformance
+        count: 5300
+  - start: 6360000
+    scenarios:
+      - type: CallPerformance
+        count: 5400
+  - start: 6480000
+    scenarios:
+      - type: CallPerformance
+        count: 5500
+  - start: 6600000
+    scenarios:
+      - type: CallPerformance
+        count: 5600
+  - start: 6720000
+    scenarios:
+      - type: CallPerformance
+        count: 5700
+  - start: 6840000
+    scenarios:
+      - type: CallPerformance
+        count: 5800
+  - start: 6960000
+    scenarios:
+      - type: CallPerformance
+        count: 5900
+  - start: 7080000
+    scenarios:
+      - type: CallPerformance
+        count: 6000
+  - start: 7200000
+    scenarios:
+      - type: CallPerformance
+        count: 6100
+  - start: 7320000
+    scenarios:
+      - type: CallPerformance
+        count: 6200
+  - start: 7440000
+    scenarios:
+      - type: CallPerformance
+        count: 6300
+  - start: 7560000
+    scenarios:
+      - type: CallPerformance
+        count: 6400
+  - start: 7680000
+    scenarios:
+      - type: CallPerformance
+        count: 6500
+  - start: 7800000
+    scenarios:
+      - type: CallPerformance
+        count: 6600
+  - start: 7920000
+    scenarios:
+      - type: CallPerformance
+        count: 6700
+  - start: 8040000
+    scenarios:
+      - type: CallPerformance
+        count: 6800
+  - start: 8160000
+    scenarios:
+      - type: CallPerformance
+        count: 6900
+  - start: 8280000
+    scenarios:
+      - type: CallPerformance
+        count: 7000
+  - start: 8400000
+    scenarios:
+      - type: CallPerformance
+        count: 7100
+  - start: 8520000
+    scenarios:
+      - type: CallPerformance
+        count: 7200
+end: 3600000
