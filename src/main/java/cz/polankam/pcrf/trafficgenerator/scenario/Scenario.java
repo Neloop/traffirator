@@ -122,7 +122,7 @@ public abstract class Scenario {
         int variability = getDelaysVariability();
         long averageDelay = currentNodeDelay + ((SendScenarioActionEntry) currentNodeActions.peek()).getAverageDelay();
         long randomPartDelay = 0;
-        if (variability != 0) {
+        if (variability != 0 && averageDelay != 0) {
             randomPartDelay = random.nextLong() % (averageDelay * variability / 100);
         }
 

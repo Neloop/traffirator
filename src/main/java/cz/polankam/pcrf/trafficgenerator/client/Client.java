@@ -47,7 +47,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     /** Number of timeouts from the beginning of the execution */
     private final AtomicLong timeoutsCount;
     /** Current number of active scenarios */
-    private final AtomicLong scenariosCount;
+    private final AtomicLong currentScenariosCount;
 
     /** Boolean telling if we finished our interaction. */
     private final AtomicBoolean finished;
@@ -65,7 +65,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         finished = new AtomicBoolean(false);
         finishedReason = "OK";
         timeoutsCount = new AtomicLong(0);
-        scenariosCount = new AtomicLong(0);
+        currentScenariosCount = new AtomicLong(0);
         scenarioTypesCount = new HashMap<>();
     }
 
@@ -123,7 +123,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     }
 
     public long getScenariosCount() {
-        return scenariosCount.get();
+        return currentScenariosCount.get();
     }
 
     public synchronized void controlScenarios(String type, int count) {
@@ -136,11 +136,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
             // add scenarios
             int diff = count - scenariosCount;
             for (int i = 0; i < diff; ++i) {
-                try {
-                    createAndStartScenario(type);
-                } catch (Exception e) {
-                    logger.error(e);
-                }
+                createAndStartScenario(type);
             }
         } else {
             // delete scenarios
@@ -184,7 +180,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosForSessions.put(scenario.getGxSession().getSessionId(), scenario);
         scenariosForSessions.put(scenario.getRxSession().getSessionId(), scenario);
 
-        scenariosCount.incrementAndGet();
+        currentScenariosCount.incrementAndGet();
         logger.info("New scenario created. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
 
         return scenario;
@@ -206,7 +202,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
         scenariosReceivedRequestsMap.remove(scenario.getGxSession().getSessionId());
         scenariosReceivedRequestsMap.remove(scenario.getRxSession().getSessionId());
         scenario.destroy();
-        scenariosCount.decrementAndGet();
+        currentScenariosCount.decrementAndGet();
         logger.info("Scenario removed and destroyed. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
     }
 
