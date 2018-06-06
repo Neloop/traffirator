@@ -1,11 +1,18 @@
-package cz.polankam.pcrf.trafficgenerator.utils;
+package cz.polankam.pcrf.trafficgenerator.utils.data;
+
+import cz.polankam.pcrf.trafficgenerator.utils.data.flow.FlowDescription;
+import cz.polankam.pcrf.trafficgenerator.utils.data.flow.MediaSubComponent;
+import cz.polankam.pcrf.trafficgenerator.utils.data.flow.MediaSubComponents;
+import net.andreinc.mockneat.MockNeat;
+import net.andreinc.mockneat.types.enums.IPv4Type;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Random;
 
-public class RandomDataProvider {
+public class DataProvider {
 
+    private static final MockNeat mockNeat = MockNeat.threadLocal();
     private static final String ALPHA_NUMERIC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final String NUMERIC = "0123456789";
     private static final Random random = new Random();
@@ -28,13 +35,21 @@ public class RandomDataProvider {
         return sb.toString();
     }
 
+    private static InetAddress randomIpAddressClassA() throws UnknownHostException {
+        return InetAddress.getByName(mockNeat.ipv4s().type(IPv4Type.CLASS_A).val());
+    }
+
+    private static int randomPort() {
+        return random.nextInt(65536);
+    }
+
 
     public static int randomFramedIp() {
         return random.nextInt(Integer.MAX_VALUE);
     }
 
     public static InetAddress randomAnGwAddress() throws UnknownHostException {
-        return InetAddress.getByName("10.1.80.140");
+        return randomIpAddressClassA();
     }
 
     public static int randomMSISDN() {
@@ -42,10 +57,6 @@ public class RandomDataProvider {
     }
 
     public static int randomMediaComponentNumber() {
-        return random.nextInt(Integer.MAX_VALUE);
-    }
-
-    public static int randomFlowNumber() {
         return random.nextInt(Integer.MAX_VALUE);
     }
 
@@ -80,5 +91,21 @@ public class RandomDataProvider {
 
     public static String randomAfChargingIdentifier() {
         return randomAlphanumString(50);
+    }
+
+    public static MediaSubComponents randomMediaSubComponents() throws UnknownHostException {
+        int lowPort = randomPort();
+        int highPort = randomPort();
+        int flowNumber = random.nextInt(Integer.MAX_VALUE);
+
+        String firstIn = "permit in ip from " + randomIpAddressClassA() + " " + lowPort + " to " + randomIpAddressClassA() + " " + highPort;
+        String firstOut = "permit out ip from " + randomIpAddressClassA() + " " + highPort + " to " + randomIpAddressClassA() + " " + lowPort;
+        MediaSubComponent first = new MediaSubComponent(flowNumber, new FlowDescription(firstIn, firstOut));
+
+        String secondIn = "permit in ip from " + randomIpAddressClassA() + " " + (lowPort + 1) + " to " + randomIpAddressClassA() + " " + (highPort + 1);
+        String secondOut = "permit out ip from " + randomIpAddressClassA() + " " + (highPort + 1) + " to " + randomIpAddressClassA() + " " + (lowPort + 1);
+        MediaSubComponent second = new MediaSubComponent(flowNumber + 1, new FlowDescription(secondIn, secondOut));
+
+        return new MediaSubComponents(first, second);
     }
 }

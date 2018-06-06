@@ -2,7 +2,7 @@ package cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.factory;
 
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioContext;
 import cz.polankam.pcrf.trafficgenerator.utils.AvpUtils;
-import cz.polankam.pcrf.trafficgenerator.utils.RandomDataProvider;
+import cz.polankam.pcrf.trafficgenerator.utils.data.DataProvider;
 import cz.polankam.pcrf.trafficgenerator.utils.Vendor;
 import org.jdiameter.api.Avp;
 import org.jdiameter.api.AvpSet;
@@ -30,8 +30,8 @@ public class GxRequestsFactory {
         avps.addAvp(Avp.CC_REQUEST_TYPE, 1, true, false);
         avps.addAvp(Avp.CC_REQUEST_NUMBER, requestNumber, true, false);
         avps.addAvp(AvpUtils.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
-        avps.addAvp(AvpUtils.IP_CAN_TYPE, RandomDataProvider.randomIpCanType(), true, false);
-        avps.addAvp(AvpUtils.RAT_TYPE, RandomDataProvider.randomRatType(), true, false);
+        avps.addAvp(AvpUtils.IP_CAN_TYPE, DataProvider.randomIpCanType(), true, false);
+        avps.addAvp(AvpUtils.RAT_TYPE, DataProvider.randomRatType(), true, false);
         avps.addAvp(AvpUtils.AN_GW_ADDRESS, (InetAddress) state.get("an_gw_address"), Vendor.TGPP, false, false);
         avps.addAvp(AvpUtils.GPP_MS_TIMEZONE, 4000, true, false);
         avps.addAvp(AvpUtils.CALLED_STATION_ID, (String) state.get("called_station"), Vendor.COMMON, true, false, true);
@@ -62,11 +62,11 @@ public class GxRequestsFactory {
         AvpSet accessNetCharg = avps.addGroupedAvp(AvpUtils.ACCESS_NETWORK_CHARGING_IDENTIFIER_GX, Vendor.TGPP, true, false);
         accessNetCharg.addAvp(Avp.ACCESS_NETWORK_CHARGING_IDENTIFIER_VALUE, (String) state.get("an_ci_gw"), Vendor.TGPP, true, false, true);
 
-        int bitrate = RandomDataProvider.randomBitrate();
+        int bitrate = DataProvider.randomBitrate();
         AvpSet qosInfo = avps.addGroupedAvp(Avp.QOS_INFORMATION, Vendor.TGPP, true, false);
         qosInfo.addAvp(Avp.APN_AGGREGATE_MAX_BITRATE_UL, bitrate, Vendor.TGPP, true, false);
         qosInfo.addAvp(Avp.APN_AGGREGATE_MAX_BITRATE_DL, bitrate, Vendor.TGPP, true, false);
-        qosInfo.addAvp(Avp.GPP_USER_LOCATION_INFO, RandomDataProvider.randomUserLocation(), Vendor.TGPP, true, false, true);
+        qosInfo.addAvp(Avp.GPP_USER_LOCATION_INFO, DataProvider.randomUserLocation(), Vendor.TGPP, true, false, true);
 
         // *** RETURN REQUEST
 
