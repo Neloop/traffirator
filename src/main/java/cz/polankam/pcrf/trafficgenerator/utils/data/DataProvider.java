@@ -40,13 +40,23 @@ public class DataProvider {
         return InetAddress.getByName(mockNeat.ipv4s().type(IPv4Type.CLASS_A).val());
     }
 
+    private static int ipAddressToInt(InetAddress ip) {
+        byte[] bytes = ip.getAddress();
+        int val = 0;
+        for (int i = 0; i < bytes.length; i++) {
+          val <<= 8;
+          val |= bytes[i] & 0xff;
+        }
+        return val;
+    }
+
     private static int randomPort() {
         return random.nextInt(65536);
     }
 
 
-    public static int randomFramedIp() {
-        return random.nextInt(Integer.MAX_VALUE);
+    public static int randomFramedIp() throws UnknownHostException {
+        return ipAddressToInt(randomIpAddressClassA());
     }
 
     public static InetAddress randomAnGwAddress() throws UnknownHostException {
