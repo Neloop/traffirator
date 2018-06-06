@@ -1,4 +1,4 @@
-package cz.polankam.pcrf.trafficgenerator.utils.data.flow;
+package cz.polankam.pcrf.trafficgenerator.utils.data.media;
 
 public class FlowDescription {
     private final String in;

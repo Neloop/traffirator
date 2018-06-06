@@ -1,8 +1,8 @@
 package cz.polankam.pcrf.trafficgenerator.utils.data;
 
-import cz.polankam.pcrf.trafficgenerator.utils.data.flow.FlowDescription;
-import cz.polankam.pcrf.trafficgenerator.utils.data.flow.MediaSubComponent;
-import cz.polankam.pcrf.trafficgenerator.utils.data.flow.MediaSubComponents;
+import cz.polankam.pcrf.trafficgenerator.utils.data.media.FlowDescription;
+import cz.polankam.pcrf.trafficgenerator.utils.data.media.MediaSubComponent;
+import cz.polankam.pcrf.trafficgenerator.utils.data.media.MediaComponent;
 import net.andreinc.mockneat.MockNeat;
 import net.andreinc.mockneat.types.enums.IPv4Type;
 
@@ -56,10 +56,6 @@ public class DataProvider {
         return random.nextInt(Integer.MAX_VALUE);
     }
 
-    public static int randomMediaComponentNumber() {
-        return random.nextInt(Integer.MAX_VALUE);
-    }
-
     public static String randomIMEI() {
         int length = 15;
         StringBuilder sb = new StringBuilder(length);
@@ -93,10 +89,12 @@ public class DataProvider {
         return randomAlphanumString(50);
     }
 
-    public static MediaSubComponents randomMediaSubComponents() throws UnknownHostException {
+    public static MediaComponent randomMediaComponent() throws UnknownHostException {
+        int bandwidth = randomBitrate();
+        int componentNumber = random.nextInt(Integer.MAX_VALUE);
+        int flowNumber = random.nextInt(Integer.MAX_VALUE);
         int lowPort = randomPort();
         int highPort = randomPort();
-        int flowNumber = random.nextInt(Integer.MAX_VALUE);
 
         String firstIn = "permit in ip from " + randomIpAddressClassA() + " " + lowPort + " to " + randomIpAddressClassA() + " " + highPort;
         String firstOut = "permit out ip from " + randomIpAddressClassA() + " " + highPort + " to " + randomIpAddressClassA() + " " + lowPort;
@@ -106,6 +104,6 @@ public class DataProvider {
         String secondOut = "permit out ip from " + randomIpAddressClassA() + " " + (highPort + 1) + " to " + randomIpAddressClassA() + " " + (lowPort + 1);
         MediaSubComponent second = new MediaSubComponent(flowNumber + 1, new FlowDescription(secondIn, secondOut));
 
-        return new MediaSubComponents(first, second);
+        return new MediaComponent(bandwidth, componentNumber, first, second);
     }
 }
