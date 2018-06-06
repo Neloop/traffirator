@@ -25,6 +25,8 @@ public class TimeoutsLogger {
         logFile = new PrintStream(config.getLogFile());
         logFile.print("Time");
         logFile.print("\t");
+        logFile.print("ScenariosCount");
+        logFile.print("\t");
         logFile.print("TimeoutsCount");
         logFile.println();
     }
@@ -33,6 +35,8 @@ public class TimeoutsLogger {
         long newCount = client.getTimeoutsCount();
 
         logFile.print(System.currentTimeMillis());
+        logFile.print("\t");
+        logFile.print(client.getScenariosCount());
         logFile.print("\t");
         logFile.print(newCount - previousCount);
         logFile.println();

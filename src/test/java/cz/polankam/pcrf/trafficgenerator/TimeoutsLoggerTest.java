@@ -46,7 +46,7 @@ class TimeoutsLoggerTest {
         logger.close();
 
         String content = new String(Files.readAllBytes(Paths.get(file)));
-        assertEquals("Time\tTimeoutsCount" + System.lineSeparator(), content);
+        assertEquals("Time\tScenariosCount\tTimeoutsCount" + System.lineSeparator(), content);
     }
 
     @Test
@@ -58,14 +58,15 @@ class TimeoutsLoggerTest {
         String file = temporaryFolder.newFile().toString();
         when(config.getLogFile()).thenReturn(file);
         when(client.getTimeoutsCount()).thenReturn((long) 24568);
+        when(client.getScenariosCount()).thenReturn((long) 66857);
 
         logger.init();
         logger.log();
         logger.close();
 
         String content = new String(Files.readAllBytes(Paths.get(file)));
-        assertTrue(content.startsWith("Time\tTimeoutsCount" + System.lineSeparator()));
-        assertTrue(content.endsWith("24568" + System.lineSeparator()));
+        assertTrue(content.startsWith("Time\tScenariosCount\tTimeoutsCount" + System.lineSeparator()));
+        assertTrue(content.endsWith("\t66857\t24568" + System.lineSeparator()));
     }
 
     @Test
@@ -77,6 +78,7 @@ class TimeoutsLoggerTest {
         String file = temporaryFolder.newFile().toString();
         when(config.getLogFile()).thenReturn(file);
         when(client.getTimeoutsCount()).thenReturn((long) 24568).thenReturn((long) 554763);
+        when(client.getScenariosCount()).thenReturn((long) 8541).thenReturn((long) 5874);
 
         logger.init();
         logger.log();
@@ -84,8 +86,8 @@ class TimeoutsLoggerTest {
         logger.close();
 
         String content = new String(Files.readAllBytes(Paths.get(file)));
-        assertTrue(content.startsWith("Time\tTimeoutsCount" + System.lineSeparator()));
-        assertTrue(content.endsWith("530195" + System.lineSeparator()));
+        assertTrue(content.startsWith("Time\tScenariosCount\tTimeoutsCount" + System.lineSeparator()));
+        assertTrue(content.endsWith("\t5874\t530195" + System.lineSeparator()));
     }
 
 }
