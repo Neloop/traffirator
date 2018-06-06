@@ -32,7 +32,7 @@ public class DumpUtils {
 
     public static void dumpMessage(Message message, boolean sending) {
         logger.info((sending ? "Sending " : "Received ") + (message.isRequest() ? "Request: " : "Answer: ") + commandCodeToString(message.getCommandCode()) + " (E2E:"
-                + message.getEndToEndIdentifier() + "; HBH:" + message.getHopByHopIdentifier() + "; AppID:" + message.getApplicationId() + ")");
+                + message.getEndToEndIdentifier() + "; HBH:" + message.getHopByHopIdentifier() + "; AppID:" + message.getApplicationId() + "; SessID:" + message.getSessionId() + ")");
 
         if (!logger.isDebugEnabled()) {
             return;

@@ -195,7 +195,15 @@ public abstract class Scenario {
         }
 
         if (currentNodeActions.peek().isSending()) {
-            throw new Exception("Next action is sending, but event received");
+            String eventClassName = "";
+            if (request != null) {
+                eventClassName = request.getClass().getCanonicalName();
+            }
+            if (answer != null) {
+                eventClassName = (eventClassName.isEmpty() ? "" : ";") + answer.getClass().getCanonicalName();
+            }
+
+            throw new Exception("Next action is sending, but event '" + eventClassName + "' received");
         }
 
         ReceiveScenarioActionEntry next = (ReceiveScenarioActionEntry) currentNodeActions.peek();

@@ -1,0 +1,12 @@
+---
+threadCount: 1
+summary: ./logs/summary.log
+timeouts:
+  logFile: ./logs/timeouts.log
+  samplingPeriod: 1000
+profile:
+  - start: 0
+    scenarios:
+      - type: CallPerformance
+        count: 1
+end: 10000
