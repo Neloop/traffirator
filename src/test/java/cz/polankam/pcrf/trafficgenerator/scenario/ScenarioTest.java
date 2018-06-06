@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -61,6 +63,7 @@ class ScenarioTest {
         scenario = new ScenarioMock();
         scenario.setState(state);
         scenario.setRootNode(rootNode);
+        scenario.setDelayVariability(0);
     }
 
     @Test
@@ -128,6 +131,19 @@ class ScenarioTest {
         scenario.init(gxStack, rxStack, receivedRequests);
 
         assertEquals(5783, scenario.getNextDelay());
+        assertEquals(0, scenario.getNextTimeout());
+    }
+
+    @Test
+    void testGetNextDelay_variable() throws Exception {
+        scenario.setDelayVariability(10);
+        rootNode.addAction(new SendScenarioActionEntry(100, mock(ScenarioAction.class)));
+        scenario.init(gxStack, rxStack, receivedRequests);
+
+        long delay = scenario.getNextDelay();
+        System.out.println(delay);
+        assertTrue(delay >= 90);
+        assertTrue(delay <= 110);
         assertEquals(0, scenario.getNextTimeout());
     }
 

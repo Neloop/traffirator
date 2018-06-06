@@ -16,7 +16,7 @@ class SendScenarioActionEntryTest {
         SendScenarioActionEntry entry = new SendScenarioActionEntry(action);
 
         assertEquals(action, entry.getAction());
-        assertEquals(0, entry.getDelay());
+        assertEquals(0, entry.getAverageDelay());
         assertTrue(entry.isSending());
     }
 
@@ -27,7 +27,7 @@ class SendScenarioActionEntryTest {
         SendScenarioActionEntry entry = new SendScenarioActionEntry(delay, action);
 
         assertEquals(action, entry.getAction());
-        assertEquals(delay, entry.getDelay());
+        assertEquals(delay, entry.getAverageDelay());
         assertTrue(entry.isSending());
     }
 

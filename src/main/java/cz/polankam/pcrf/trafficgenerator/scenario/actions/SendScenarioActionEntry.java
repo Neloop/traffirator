@@ -3,17 +3,17 @@ package cz.polankam.pcrf.trafficgenerator.scenario.actions;
 
 public class SendScenarioActionEntry implements ScenarioActionEntry {
 
-    private final long delay;
+    private final long averageDelay;
     private final ScenarioAction action;
 
 
     /**
      *
-     * @param delay in milliseconds
+     * @param averageDelay in milliseconds
      * @param action
      */
-    public SendScenarioActionEntry(long delay, ScenarioAction action) {
-        this.delay = delay;
+    public SendScenarioActionEntry(long averageDelay, ScenarioAction action) {
+        this.averageDelay = averageDelay;
         this.action = action;
     }
 
@@ -37,8 +37,8 @@ public class SendScenarioActionEntry implements ScenarioActionEntry {
      * Get delay of this action in milliseconds.
      * @return in milliseconds
      */
-    public long getDelay() {
-        return delay;
+    public long getAverageDelay() {
+        return averageDelay;
     }
     
 }

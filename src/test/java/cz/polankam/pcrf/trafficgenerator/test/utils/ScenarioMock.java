@@ -12,6 +12,7 @@ public class ScenarioMock extends Scenario {
 
     private HashMap<String, Object> state;
     private ScenarioNode rootNode;
+    private int delayVariability;
 
     @Override
     protected HashMap<String, Object> createNewScenarioState() {
@@ -34,5 +35,14 @@ public class ScenarioMock extends Scenario {
     @Override
     public String getType() {
         return "MOCK";
+    }
+
+    @Override
+    public int getDelaysVariability() {
+        return delayVariability;
+    }
+
+    public void setDelayVariability(int delayVariability) {
+        this.delayVariability = delayVariability;
     }
 }

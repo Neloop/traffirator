@@ -119,4 +119,9 @@ public class CallCenterEmployeeScenario extends Scenario {
         return TYPE;
     }
 
+    @Override
+    public int getDelaysVariability() {
+        return 20;
+    }
+
 }

@@ -110,7 +110,14 @@ public abstract class Scenario {
             return 0;
         }
 
-        return ((SendScenarioActionEntry) currentActions.peek()).getDelay();
+        int variability = getDelaysVariability();
+        long averageDelay = ((SendScenarioActionEntry) currentActions.peek()).getAverageDelay();
+        long randomPartDelay = 0;
+        if (variability != 0) {
+            randomPartDelay = random.nextLong() % (averageDelay * variability / 100);
+        }
+
+        return averageDelay + randomPartDelay;
     }
 
     /**
@@ -220,5 +227,12 @@ public abstract class Scenario {
      * @return
      */
     public abstract String getType();
+
+    /**
+     * Delays are hardcoded, so we need some mechanism to have them variable. Returned value is in percents and says
+     * how much delay can be lowered or made higher from its original value.
+     * @return
+     */
+    public abstract int getDelaysVariability();
 
 }

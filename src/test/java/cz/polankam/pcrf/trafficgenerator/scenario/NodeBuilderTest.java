@@ -18,7 +18,7 @@ class NodeBuilderTest {
 
         SendScenarioActionEntry entry = (SendScenarioActionEntry) node.getActionsCopy().peek();
         assertEquals(action, entry.getAction());
-        assertEquals(0, entry.getDelay());
+        assertEquals(0, entry.getAverageDelay());
         assertTrue(entry.isSending());
     }
 
@@ -30,7 +30,7 @@ class NodeBuilderTest {
 
         SendScenarioActionEntry entry = (SendScenarioActionEntry) node.getActionsCopy().peek();
         assertEquals(action, entry.getAction());
-        assertEquals(delay, entry.getDelay());
+        assertEquals(delay, entry.getAverageDelay());
         assertTrue(entry.isSending());
     }
 
