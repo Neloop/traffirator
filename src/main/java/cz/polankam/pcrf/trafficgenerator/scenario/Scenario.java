@@ -2,10 +2,8 @@ package cz.polankam.pcrf.trafficgenerator.scenario;
 
 import cz.polankam.pcrf.trafficgenerator.client.GxStack;
 import cz.polankam.pcrf.trafficgenerator.client.RxStack;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Queue;
-import java.util.Random;
+
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -13,6 +11,7 @@ import cz.polankam.pcrf.trafficgenerator.scenario.actions.ReceiveScenarioActionE
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioAction;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioActionEntry;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.SendScenarioActionEntry;
+import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.EmptyAction;
 import cz.polankam.pcrf.trafficgenerator.utils.DiameterAppType;
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
@@ -26,7 +25,7 @@ public abstract class Scenario {
     protected ScenarioContext context;
     private long currentNodeDelay = 0;
     private ScenarioNode currentNode;
-    private Queue<ScenarioActionEntry> currentNodeActions;
+    private Deque<ScenarioActionEntry> currentNodeActions;
     private final AtomicBoolean destroyed = new AtomicBoolean(false);
     private final AtomicLong sentCount = new AtomicLong(0);
     private final AtomicLong receivedCount = new AtomicLong(0);
@@ -102,6 +101,13 @@ public abstract class Scenario {
         currentNode = nextNode.getNode();
         currentNodeDelay = nextNode.getAverageDelay();
         currentNodeActions = currentNode.getActionsCopy();
+
+        // the very first action of the node is receiving, but there is specified delay on the first action of node,
+        // this cannot be done on receiving action...
+        // resolve this by adding empty "sending" action as the first action in the current node actions
+        if (!currentNodeActions.isEmpty() && !currentNodeActions.peek().isSending() && currentNodeDelay != 0) {
+            currentNodeActions.addFirst(new SendScenarioActionEntry(new EmptyAction()));
+        }
     }
 
     /**

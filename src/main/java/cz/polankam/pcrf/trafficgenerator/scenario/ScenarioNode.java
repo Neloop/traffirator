@@ -2,10 +2,7 @@ package cz.polankam.pcrf.trafficgenerator.scenario;
 
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioActionEntry;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 
 public class ScenarioNode {
@@ -73,8 +70,8 @@ public class ScenarioNode {
         return this;
     }
 
-    public Queue<ScenarioActionEntry> getActionsCopy() {
-        Queue<ScenarioActionEntry> copy = new LinkedList<>();
+    public Deque<ScenarioActionEntry> getActionsCopy() {
+        Deque<ScenarioActionEntry> copy = new LinkedList<>();
         copy.addAll(actions);
         return copy;
     }
