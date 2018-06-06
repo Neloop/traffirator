@@ -81,15 +81,40 @@ public class CallPerformanceScenario extends Scenario {
          *
          */
 
-        START.addChild(100, connect).validateProbabilities();
-        connect.addChild(10, update).addChild(10, disconnect).addChild(10, lostConnection).addChild(70, callInit).validateProbabilities();
-        update.addChild(5, update).addChild(40, disconnect).addChild(40, lostConnection).addChild(15, callInit).validateProbabilities();
-        disconnect.addChild(50, connect).addChild(50, END).validateProbabilities();
-        lostConnection.addChild(50, connect).addChild(50, END).validateProbabilities();
-        callInit.addChild(40, callUpdateCodec).addChild(50, callTermination).addChild(10, callLostConnection).validateProbabilities();
-        callUpdateCodec.addChild(20, callUpdateCodec).addChild(70, callTermination).addChild(10, callLostConnection).validateProbabilities();
-        callTermination.addChild(10, callInit).addChild(10, update).addChild(70, disconnect).addChild(10, lostConnection).validateProbabilities();
-        callLostConnection.addChild(50, connect).addChild(50, END).validateProbabilities();
+        START.addChild(100, connect)
+                .validateProbabilities();
+        connect.addChild(10, 10_000, update)
+                .addChild(10, 10_000, disconnect)
+                .addChild(10, 10_000, lostConnection)
+                .addChild(70, 10_000, callInit)
+                .validateProbabilities();
+        update.addChild(5, 10_000, update)
+                .addChild(40, 10_000, disconnect)
+                .addChild(40, 10_000, lostConnection)
+                .addChild(15, 10_000, callInit)
+                .validateProbabilities();
+        disconnect.addChild(50, connect)
+                .addChild(50, END)
+                .validateProbabilities();
+        lostConnection.addChild(50, connect)
+                .addChild(50, END)
+                .validateProbabilities();
+        callInit.addChild(40, 10_000, callUpdateCodec)
+                .addChild(50, 10_000, callTermination)
+                .addChild(10, 10_000, callLostConnection)
+                .validateProbabilities();
+        callUpdateCodec.addChild(20, 10_000, callUpdateCodec)
+                .addChild(70, 10_000, callTermination)
+                .addChild(10, 10_000, callLostConnection)
+                .validateProbabilities();
+        callTermination.addChild(10, 10_000, callInit)
+                .addChild(10, 10_000, update)
+                .addChild(70, 10_000, disconnect)
+                .addChild(10, 10_000, lostConnection)
+                .validateProbabilities();
+        callLostConnection.addChild(50, connect)
+                .addChild(50, END)
+                .validateProbabilities();
     }
 
     @Override
