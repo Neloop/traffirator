@@ -85,16 +85,46 @@ public class TravellingManagerScenario extends Scenario {
          *
          */
 
-        START.addChild(100, connect).validateProbabilities();
-        connect.addChild(50, update).addChild(10, disconnect).addChild(10, lostConnection).addChild(30, callInit).validateProbabilities();
-        update.addChild(30, update).addChild(10, disconnect).addChild(10, lostConnection).addChild(50, callInit).validateProbabilities();
-        disconnect.addChild(50, connect).addChild(50, END).validateProbabilities();
-        lostConnection.addChild(50, connect).addChild(50, END).validateProbabilities();
-        callInit.addChild(50, callUpdate).addChild(20, callUpdateCodec).addChild(10, callTermination).addChild(20, callLostConnection).validateProbabilities();
-        callUpdate.addChild(60, callUpdate).addChild(20, callUpdateCodec).addChild(20, callTermination).validateProbabilities();
-        callUpdateCodec.addChild(20, callUpdateCodec).addChild(40, callUpdate).addChild(20, callTermination).addChild(20, callLostConnection).validateProbabilities();
-        callTermination.addChild(20, callInit).addChild(60, update).addChild(10, disconnect).addChild(10, lostConnection).validateProbabilities();
-        callLostConnection.addChild(50, connect).addChild(50, END).validateProbabilities();
+        START.addChild(100, connect)
+                .validateProbabilities();
+        connect.addChild(50, update)
+                .addChild(10, disconnect)
+                .addChild(10, lostConnection)
+                .addChild(30, callInit)
+                .validateProbabilities();
+        update.addChild(30, update)
+                .addChild(10, disconnect)
+                .addChild(10, lostConnection)
+                .addChild(50, callInit)
+                .validateProbabilities();
+        disconnect.addChild(50, connect)
+                .addChild(50, END)
+                .validateProbabilities();
+        lostConnection.addChild(50, connect)
+                .addChild(50, END)
+                .validateProbabilities();
+        callInit.addChild(50, callUpdate)
+                .addChild(20, callUpdateCodec)
+                .addChild(10, callTermination)
+                .addChild(20, callLostConnection)
+                .validateProbabilities();
+        callUpdate.addChild(60, callUpdate)
+                .addChild(20, callUpdateCodec)
+                .addChild(20, callTermination)
+                .validateProbabilities();
+        callUpdateCodec.addChild(20, callUpdateCodec)
+                .addChild(40, callUpdate)
+                .addChild(20, callTermination)
+                .addChild(20, callLostConnection)
+                .validateProbabilities();
+        callTermination.addChild(20, callInit)
+                .addChild(60, update)
+                .addChild(10, disconnect)
+                .addChild(10, lostConnection)
+                .validateProbabilities();
+        callLostConnection.addChild(50, connect)
+                .addChild(50, END)
+                .validateProbabilities();
     }
 
     @Override
