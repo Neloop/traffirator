@@ -57,6 +57,10 @@ public class DataProvider {
         return random.nextInt(Integer.MAX_VALUE);
     }
 
+    public static int randomIMSI() {
+        return random.nextInt(Integer.MAX_VALUE);
+    }
+
     public static String randomIMEI() {
         int length = 15;
         StringBuilder sb = new StringBuilder(length);

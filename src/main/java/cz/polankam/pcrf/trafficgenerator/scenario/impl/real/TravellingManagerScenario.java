@@ -135,6 +135,7 @@ public class TravellingManagerScenario extends Scenario {
         state.put("framed_ip", DataProvider.randomFramedIp());
         state.put("imei", DataProvider.randomIMEI());
         state.put("msisdn", DataProvider.randomMSISDN());
+        state.put("imsi", DataProvider.randomIMSI());
         state.put("an_gw_address", DataProvider.randomAnGwAddress());
         state.put("an_ci_gx", DataProvider.randomAnCiGx());
         state.put("called_station", "ims");

@@ -44,7 +44,12 @@ public class GxRequestsFactory {
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 0, true, false);
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_DATA, (Integer) state.get("msisdn"), true, false, true);
 
+        AvpSet subscrIMSI = avps.addGroupedAvp(Avp.SUBSCRIPTION_ID, true, false);
+        subscrIMSI.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 1, true, false);
+        subscrIMSI.addAvp(Avp.SUBSCRIPTION_ID_DATA, (Integer) state.get("imsi"), true, false, true);
+
         AvpSet suppFeatures = avps.addGroupedAvp(Avp.SUPPORTED_FEATURES, Vendor.TGPP, true, false);
+        suppFeatures.addAvp(Avp.VENDOR_ID, (int) Vendor.TGPP, true, false);
         suppFeatures.addAvp(Avp.FEATURE_LIST_ID, 1, Vendor.TGPP, true, false);
         suppFeatures.addAvp(Avp.FEATURE_LIST, 2, Vendor.TGPP, true, false);
 
@@ -95,6 +100,10 @@ public class GxRequestsFactory {
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 0, true, false);
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_DATA, (Integer) state.get("msisdn"), true, false, true);
 
+        AvpSet subscrIMSI = avps.addGroupedAvp(Avp.SUBSCRIPTION_ID, true, false);
+        subscrIMSI.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 1, true, false);
+        subscrIMSI.addAvp(Avp.SUBSCRIPTION_ID_DATA, (Integer) state.get("imsi"), true, false, true);
+
         AvpSet userEquipment = avps.addGroupedAvp(Avp.USER_EQUIPMENT_INFO, Vendor.TGPP, false, false);
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_TYPE, 0, Vendor.TGPP, false, false);
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_VALUE, (String) state.get("imei"), Vendor.TGPP, false, false, true);
@@ -133,6 +142,10 @@ public class GxRequestsFactory {
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 0, true, false);
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_DATA, (Integer) state.get("msisdn"), true, false, true);
 
+        AvpSet subscrIMSI = avps.addGroupedAvp(Avp.SUBSCRIPTION_ID, true, false);
+        subscrIMSI.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 1, true, false);
+        subscrIMSI.addAvp(Avp.SUBSCRIPTION_ID_DATA, (Integer) state.get("imsi"), true, false, true);
+
         AvpSet userEquipment = avps.addGroupedAvp(Avp.USER_EQUIPMENT_INFO, true, false);
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_TYPE, 0, true, false);
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_VALUE, (String) state.get("imei"), true, false, true);
@@ -162,6 +175,10 @@ public class GxRequestsFactory {
         AvpSet subscrMSISDN = avps.addGroupedAvp(Avp.SUBSCRIPTION_ID, true, false);
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 0, true, false);
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_DATA, (Integer) state.get("msisdn"), true, false, true);
+
+        AvpSet subscrIMSI = avps.addGroupedAvp(Avp.SUBSCRIPTION_ID, true, false);
+        subscrIMSI.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 1, true, false);
+        subscrIMSI.addAvp(Avp.SUBSCRIPTION_ID_DATA, (Integer) state.get("imsi"), true, false, true);
 
         AvpSet userEquipment = avps.addGroupedAvp(Avp.USER_EQUIPMENT_INFO, true, false);
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_TYPE, 0, true, false);
