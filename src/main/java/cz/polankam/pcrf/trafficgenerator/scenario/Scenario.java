@@ -29,6 +29,8 @@ public abstract class Scenario {
     private final AtomicBoolean destroyed = new AtomicBoolean(false);
     private final AtomicLong sentCount = new AtomicLong(0);
     private final AtomicLong receivedCount = new AtomicLong(0);
+    private boolean receivedGx = false;
+    private boolean receivedRx = false;
 
 
     public void init(GxStack gx, RxStack rx, List<AppRequestEvent> receivedRequests) throws Exception {
@@ -165,6 +167,10 @@ public abstract class Scenario {
             return false;
         }
 
+        // set receival flag to false... just to be sure
+        receivedGx = false;
+        receivedRx = false;
+
         SendScenarioActionEntry next = (SendScenarioActionEntry) currentNodeActions.peek();
         sentCount.incrementAndGet();
         next.getAction().perform(context, null, null);
@@ -180,6 +186,7 @@ public abstract class Scenario {
      *
      * @param request
      * @param answer
+     * @param appType
      * @throws java.lang.Exception
      */
     public synchronized void receiveNext(AppRequestEvent request, AppAnswerEvent answer, DiameterAppType appType) throws Exception {
@@ -196,10 +203,10 @@ public abstract class Scenario {
         ScenarioAction action;
         if (appType.equals(DiameterAppType.Gx)) {
             action = next.getGxAction();
-            next.setGxAction(null);
+            receivedGx = true;
         } else if (appType.equals(DiameterAppType.Rx)) {
             action = next.getRxAction();
-            next.setRxAction(null);
+            receivedRx = true;
         } else {
             throw new Exception("Unknown application type");
         }
@@ -211,7 +218,12 @@ public abstract class Scenario {
         // perform the action
         action.perform(context, request, answer);
 
-        if (next.getGxAction() == null && next.getRxAction() == null) {
+        if (receivedGx && receivedRx ||
+                next.getGxAction() == null && receivedRx ||
+                next.getRxAction() == null && receivedGx) {
+            receivedGx = false;
+            receivedRx = false;
+
             // do not forget to remove entry, if both actions were successful
             currentNodeActions.poll();
             // optionally find next node

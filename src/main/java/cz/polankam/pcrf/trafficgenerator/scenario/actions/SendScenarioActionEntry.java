@@ -1,6 +1,9 @@
 package cz.polankam.pcrf.trafficgenerator.scenario.actions;
 
 
+/**
+ * @note Should not have setters! Read-only structure!
+ */
 public class SendScenarioActionEntry implements ScenarioActionEntry {
 
     private final long averageDelay;
@@ -25,6 +28,7 @@ public class SendScenarioActionEntry implements ScenarioActionEntry {
         this(0, action);
     }
 
+    @Override
     public boolean isSending() {
         return true;
     }
@@ -40,5 +44,5 @@ public class SendScenarioActionEntry implements ScenarioActionEntry {
     public long getAverageDelay() {
         return averageDelay;
     }
-    
+
 }

@@ -212,7 +212,7 @@ class ScenarioTest {
         scenario.receiveNext(requestEvent, answerEvent, DiameterAppType.Gx);
         assertEquals(1, scenario.getReceivedCount());
         assertEquals(childNode, scenario.getCurrentNode());
-        assertNull(actionEntry.getGxAction());
+        assertNotNull(actionEntry.getGxAction());
         assertNull(actionEntry.getRxAction());
 
         verify(action).perform(scenario.getContext(), requestEvent, answerEvent);
@@ -232,7 +232,7 @@ class ScenarioTest {
         assertEquals(1, scenario.getReceivedCount());
         assertEquals(childNode, scenario.getCurrentNode());
         assertNull(actionEntry.getGxAction());
-        assertNull(actionEntry.getRxAction());
+        assertNotNull(actionEntry.getRxAction());
 
         verify(action).perform(scenario.getContext(), requestEvent, answerEvent);
     }
@@ -251,7 +251,7 @@ class ScenarioTest {
         scenario.receiveNext(requestEvent, answerEvent, DiameterAppType.Gx);
         assertEquals(1, scenario.getReceivedCount());
         assertEquals(rootNode, scenario.getCurrentNode());
-        assertNull(actionEntry.getGxAction());
+        assertEquals(gxAction, actionEntry.getGxAction());
         assertEquals(rxAction, actionEntry.getRxAction());
 
         verifyZeroInteractions(rxAction);
@@ -273,9 +273,32 @@ class ScenarioTest {
         assertEquals(1, scenario.getReceivedCount());
         assertEquals(rootNode, scenario.getCurrentNode());
         assertEquals(gxAction, actionEntry.getGxAction());
-        assertNull(actionEntry.getRxAction());
+        assertEquals(rxAction, actionEntry.getRxAction());
 
         verifyZeroInteractions(gxAction);
+        verify(rxAction).perform(scenario.getContext(), requestEvent, answerEvent);
+    }
+
+    @Test
+    void testReceiveNext_bothInAction_bothReceived() throws Exception {
+        ScenarioAction gxAction = mock(ScenarioAction.class);
+        ScenarioAction rxAction = mock(ScenarioAction.class);
+        ReceiveScenarioActionEntry actionEntry = new ReceiveScenarioActionEntry(gxAction, rxAction);
+        rootNode.addAction(actionEntry);
+        scenario.init(gxStack, rxStack, receivedRequests);
+
+        AppRequestEvent requestEvent = mock(AppRequestEvent.class);
+        AppAnswerEvent answerEvent = mock(AppAnswerEvent.class);
+
+        scenario.receiveNext(requestEvent, answerEvent, DiameterAppType.Rx);
+        scenario.receiveNext(requestEvent, answerEvent, DiameterAppType.Gx);
+
+        assertEquals(2, scenario.getReceivedCount());
+        assertEquals(childNode, scenario.getCurrentNode());
+        assertEquals(gxAction, actionEntry.getGxAction());
+        assertEquals(rxAction, actionEntry.getRxAction());
+
+        verify(gxAction).perform(scenario.getContext(), requestEvent, answerEvent);
         verify(rxAction).perform(scenario.getContext(), requestEvent, answerEvent);
     }
 }

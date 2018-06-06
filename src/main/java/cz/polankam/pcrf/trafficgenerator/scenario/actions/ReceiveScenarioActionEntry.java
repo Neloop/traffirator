@@ -1,6 +1,9 @@
 package cz.polankam.pcrf.trafficgenerator.scenario.actions;
 
 
+/**
+ * @note Should not have setters! Read-only structure!
+ */
 public class ReceiveScenarioActionEntry implements ScenarioActionEntry {
 
     private final long timeout;
@@ -29,6 +32,7 @@ public class ReceiveScenarioActionEntry implements ScenarioActionEntry {
         this(0, gxAction, rxAction);
     }
 
+    @Override
     public boolean isSending() {
         return false;
     }
@@ -37,16 +41,8 @@ public class ReceiveScenarioActionEntry implements ScenarioActionEntry {
         return gxAction;
     }
 
-    public void setGxAction(ScenarioAction gxAction) {
-        this.gxAction = gxAction;
-    }
-
     public ScenarioAction getRxAction() {
         return rxAction;
-    }
-
-    public void setRxAction(ScenarioAction rxAction) {
-        this.rxAction = rxAction;
     }
 
     /**
@@ -56,5 +52,5 @@ public class ReceiveScenarioActionEntry implements ScenarioActionEntry {
     public long getTimeout() {
         return timeout;
     }
-    
+
 }
