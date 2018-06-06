@@ -62,6 +62,8 @@ public class TravellingManagerScenario extends Scenario {
                 .addSendAction(new GxCcrU_LostConnection_SendAction())
                 .addReceiveAction(new GxCcaU_Success_ReceiveAction(), new RxAsr_ReceiveAction())
                 .addSendAction(new RxAsa_Success_SendAction())
+                .addSendAction(new RxStr_SendAction())
+                .addReceiveRxAction(new RxSta_Success_ReceiveAction())
                 .build();
 
         /*
