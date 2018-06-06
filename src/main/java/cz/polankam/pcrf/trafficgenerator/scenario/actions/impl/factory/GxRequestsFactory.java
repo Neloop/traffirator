@@ -167,12 +167,13 @@ public class GxRequestsFactory {
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_TYPE, 0, true, false);
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_VALUE, (String) state.get("imei"), true, false, true);
 
-        // TODO: charging rule name
-        AvpSet chargRuleReport = avps.addGroupedAvp(AvpUtils.CHARGING_RULE_REPORT, Vendor.TGPP, true, false);
-        chargRuleReport.addAvp(AvpUtils.CHARGING_RULE_NAME, "TODO: RULE NAME FROM PREVIOUS RAR", Vendor.TGPP, true, false, true);
-        chargRuleReport.addAvp(AvpUtils.CHARGING_RULE_NAME, "TODO: RULE NAME FROM PREVIOUS RAR", Vendor.TGPP, true, false, true);
-        chargRuleReport.addAvp(AvpUtils.PCC_RULE_STATUS, 1, Vendor.TGPP, true, false);
-        chargRuleReport.addAvp(AvpUtils.RULE_FAILURE_CODE, 10, Vendor.TGPP, true, false);
+        if (state.get("first_charging_rule_name") != null && state.get("second_charging_rule_name") != null) {
+            AvpSet chargRuleReport = avps.addGroupedAvp(AvpUtils.CHARGING_RULE_REPORT, Vendor.TGPP, true, false);
+            chargRuleReport.addAvp(AvpUtils.CHARGING_RULE_NAME, (String) state.get("first_charging_rule_name"), Vendor.TGPP, true, false, true);
+            chargRuleReport.addAvp(AvpUtils.CHARGING_RULE_NAME, (String) state.get("second_charging_rule_name"), Vendor.TGPP, true, false, true);
+            chargRuleReport.addAvp(AvpUtils.PCC_RULE_STATUS, 1, Vendor.TGPP, true, false);
+            chargRuleReport.addAvp(AvpUtils.RULE_FAILURE_CODE, 10, Vendor.TGPP, true, false);
+        }
 
         // *** RETURN REQUEST
 
