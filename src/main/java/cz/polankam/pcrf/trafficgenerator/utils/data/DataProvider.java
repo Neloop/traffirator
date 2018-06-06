@@ -1,5 +1,6 @@
 package cz.polankam.pcrf.trafficgenerator.utils.data;
 
+import cz.polankam.pcrf.trafficgenerator.utils.data.media.CodecData;
 import cz.polankam.pcrf.trafficgenerator.utils.data.media.FlowDescription;
 import cz.polankam.pcrf.trafficgenerator.utils.data.media.MediaSubComponent;
 import cz.polankam.pcrf.trafficgenerator.utils.data.media.MediaComponent;
@@ -96,6 +97,10 @@ public class DataProvider {
         int lowPort = randomPort();
         int highPort = randomPort();
 
+        String uplink = "uplink offer m=audio " + lowPort + " ...";
+        String downlink = "downlink answer m=audio " + highPort + " ...";
+        CodecData codecData = new CodecData(uplink, downlink);
+
         String firstIn = "permit in ip from " + randomIpAddressClassA() + " " + lowPort + " to " + randomIpAddressClassA() + " " + highPort;
         String firstOut = "permit out ip from " + randomIpAddressClassA() + " " + highPort + " to " + randomIpAddressClassA() + " " + lowPort;
         MediaSubComponent first = new MediaSubComponent(flowNumber, new FlowDescription(firstIn, firstOut));
@@ -104,6 +109,6 @@ public class DataProvider {
         String secondOut = "permit out ip from " + randomIpAddressClassA() + " " + (highPort + 1) + " to " + randomIpAddressClassA() + " " + (lowPort + 1);
         MediaSubComponent second = new MediaSubComponent(flowNumber + 1, new FlowDescription(secondIn, secondOut));
 
-        return new MediaComponent(bandwidth, componentNumber, first, second);
+        return new MediaComponent(bandwidth, componentNumber, codecData, first, second);
     }
 }

@@ -41,10 +41,10 @@ public class TravellingManagerScenario extends Scenario {
                 .addReceiveGxAction(new GxCcaU_Success_ReceiveAction())
                 .build();
         ScenarioNode callInit = new NodeBuilder()
-                .addSendAction(new RxAar_SendAction(new String[]{})) // TODO
+                .addSendAction(new RxAar_SendAction())
                 .addReceiveAction(new GxRar_ReceiveAction(), new RxAaa_Success_ReceiveAction())
                 .addSendAction(new GxRaa_Success_SendAction())
-                .addSendAction(new RxAar_SendAction(new String[]{})) // TODO
+                .addSendAction(new RxAar_SendAction())
                 .addReceiveRxAction(new RxAaa_Success_ReceiveAction())
                 .build();
         ScenarioNode callUpdate = new NodeBuilder()

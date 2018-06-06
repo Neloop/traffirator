@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RxRequestsFactory {
 
-    public static RxAARequest createAar(ScenarioContext context, String[] codecData) throws Exception {
+    public static RxAARequest createAar(ScenarioContext context) throws Exception {
         ClientRxSession session = context.getRxSession();
         ConcurrentHashMap<String, Object> state = context.getState();
 
@@ -38,8 +38,8 @@ public class RxRequestsFactory {
         mediaCompDesc.addAvp(Avp.MAX_REQUESTED_BANDWIDTH_UL, providedMedia.getBandwidth(), Vendor.TGPP, true, false);
         mediaCompDesc.addAvp(Avp.MAX_REQUESTED_BANDWIDTH_DL, providedMedia.getBandwidth(), Vendor.TGPP, true, false);
         mediaCompDesc.addAvp(AvpUtils.FLOW_STATUS, 2, Vendor.TGPP, true, false);
-        mediaCompDesc.addAvp(AvpUtils.CODEC_DATA, codecData[0], Vendor.TGPP, true, false, true); // TODO: codec data?
-        mediaCompDesc.addAvp(AvpUtils.CODEC_DATA, codecData[1], Vendor.TGPP, true, false, true); // TODO: codec data?
+        mediaCompDesc.addAvp(AvpUtils.CODEC_DATA, providedMedia.getCodecData().getUplink(), Vendor.TGPP, true, false, true);
+        mediaCompDesc.addAvp(AvpUtils.CODEC_DATA, providedMedia.getCodecData().getDownlink(), Vendor.TGPP, true, false, true);
         mediaCompDesc.addAvp(AvpUtils.AF_APPLICATION_IDENTIFIER, "sbc", Vendor.TGPP, true, false, true);
 
         AvpSet mediaSubComp = mediaCompDesc.addGroupedAvp(AvpUtils.MEDIA_SUB_COMPONENT, Vendor.TGPP, true, false);
