@@ -9,18 +9,11 @@ import cz.polankam.pcrf.trafficgenerator.test.utils.ScenarioMock;
 import cz.polankam.pcrf.trafficgenerator.utils.DiameterAppType;
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
-import org.jdiameter.api.gx.ClientGxSession;
-import org.jdiameter.api.rx.ClientRxSession;
-import org.jdiameter.client.api.ISessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -32,26 +25,14 @@ class ScenarioTest {
     private ScenarioNode childNode;
     private GxStack gxStack;
     private RxStack rxStack;
-    private ISessionFactory gxFactory;
-    private ISessionFactory rxFactory;
-    private ClientGxSession gxSession;
-    private ClientRxSession rxSession;
-    private List<AppRequestEvent> receivedRequests;
+    private SessionCreator sessionCreator;
 
     @BeforeEach
     void setUp() throws Exception {
         gxStack = mock(GxStack.class);
         rxStack = mock(RxStack.class);
-        gxFactory = mock(ISessionFactory.class);
-        rxFactory = mock(ISessionFactory.class);
-        gxSession = mock(ClientGxSession.class);
-        rxSession = mock(ClientRxSession.class);
-        receivedRequests = new ArrayList<>();
 
-        when(gxStack.getSessionFactory()).thenReturn(gxFactory);
-        when(rxStack.getSessionFactory()).thenReturn(rxFactory);
-        when(gxFactory.getNewAppSession(GxStack.authAppId, ClientGxSession.class)).thenReturn(gxSession);
-        when(rxFactory.getNewAppSession(RxStack.authAppId, ClientRxSession.class)).thenReturn(rxSession);
+        sessionCreator = mock(SessionCreator.class);
 
         state = new HashMap<>();
         state.put("stateItem", "stateValue");
@@ -68,38 +49,32 @@ class ScenarioTest {
 
     @Test
     void testInit() throws Exception {
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         ScenarioContext context = scenario.getContext();
         assertEquals(gxStack, context.getGxStack());
         assertEquals(rxStack, context.getRxStack());
-        assertEquals(gxSession, context.getGxSession());
-        assertEquals(rxSession, context.getRxSession());
-        assertEquals(receivedRequests, context.getReceivedEvents());
+        assertNotNull(context.getReceivedEvents());
         assertEquals(state, context.getState());
         assertEquals(rootNode, scenario.getCurrentNode());
         assertFalse(scenario.isEmpty());
         assertFalse(scenario.isDestroyed());
-        assertEquals(gxSession, scenario.getGxSession());
-        assertEquals(rxSession, scenario.getRxSession());
         assertEquals(0, scenario.getSentCount());
         assertEquals(0, scenario.getReceivedCount());
     }
 
     @Test
     void testDestroy() throws Exception {
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
         scenario.destroy();
 
         assertTrue(scenario.isDestroyed());
-        verify(gxSession).release();
-        verify(rxSession).release();
     }
 
     @Test
     void testFindNextNode_notEmptyActions() throws Exception {
         rootNode.addAction(new SendScenarioActionEntry(mock(ScenarioAction.class)));
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         scenario.findNextNode();
         assertEquals(rootNode, scenario.getCurrentNode());
@@ -109,7 +84,7 @@ class ScenarioTest {
     @Test
     void testFindNextNode_emptyChildren() throws Exception {
         scenario.setRootNode(new ScenarioNode());
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         scenario.findNextNode();
         assertNull(scenario.getCurrentNode());
@@ -118,7 +93,7 @@ class ScenarioTest {
 
     @Test
     void testFindNextNode_correct() throws Exception {
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         scenario.findNextNode();
         assertEquals(childNode, scenario.getCurrentNode());
@@ -128,7 +103,7 @@ class ScenarioTest {
     @Test
     void testGetNextDelay() throws Exception {
         rootNode.addAction(new SendScenarioActionEntry(5783, mock(ScenarioAction.class)));
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         assertEquals(5783, scenario.getNextDelay());
         assertEquals(0, scenario.getNextTimeout());
@@ -138,7 +113,7 @@ class ScenarioTest {
     void testGetNextDelay_variable() throws Exception {
         scenario.setDelayVariability(10);
         rootNode.addAction(new SendScenarioActionEntry(100, mock(ScenarioAction.class)));
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         long delay = scenario.getNextDelay();
         System.out.println(delay);
@@ -150,7 +125,7 @@ class ScenarioTest {
     @Test
     void testGetNextTimeout() throws Exception {
         rootNode.addAction(new ReceiveScenarioActionEntry(88567, mock(ScenarioAction.class), mock(ScenarioAction.class)));
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         assertEquals(0, scenario.getNextDelay());
         assertEquals(88567, scenario.getNextTimeout());
@@ -159,14 +134,14 @@ class ScenarioTest {
     @Test
     void testIsNextSending_bad() throws Exception {
         rootNode.addAction(new ReceiveScenarioActionEntry(mock(ScenarioAction.class), mock(ScenarioAction.class)));
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
         assertFalse(scenario.isNextSending());
     }
 
     @Test
     void testIsNextSending_correct() throws Exception {
         rootNode.addAction(new SendScenarioActionEntry(mock(ScenarioAction.class)));
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
         assertTrue(scenario.isNextSending());
     }
 
@@ -174,7 +149,7 @@ class ScenarioTest {
     void testSendNext_nextSending() throws Exception {
         ScenarioAction action = mock(ScenarioAction.class);
         rootNode.addAction(new SendScenarioActionEntry(action));
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         assertTrue(scenario.sendNext());
         assertEquals(1, scenario.getSentCount());
@@ -186,14 +161,14 @@ class ScenarioTest {
     @Test
     void testSendNext_nextReceiving() throws Exception {
         rootNode.addAction(new ReceiveScenarioActionEntry(null, null));
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
         assertFalse(scenario.sendNext());
     }
 
     @Test
     void testReceiveNext_nextSending() throws Exception {
         rootNode.addAction(new SendScenarioActionEntry(null));
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
         assertThrows(Exception.class, () -> {
             scenario.receiveNext(null, null, null);
         });
@@ -204,7 +179,7 @@ class ScenarioTest {
         ScenarioAction action = mock(ScenarioAction.class);
         ReceiveScenarioActionEntry actionEntry = new ReceiveScenarioActionEntry(action, null);
         rootNode.addAction(actionEntry);
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         AppRequestEvent requestEvent = mock(AppRequestEvent.class);
         AppAnswerEvent answerEvent = mock(AppAnswerEvent.class);
@@ -223,7 +198,7 @@ class ScenarioTest {
         ScenarioAction action = mock(ScenarioAction.class);
         ReceiveScenarioActionEntry actionEntry = new ReceiveScenarioActionEntry(null, action);
         rootNode.addAction(actionEntry);
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         AppRequestEvent requestEvent = mock(AppRequestEvent.class);
         AppAnswerEvent answerEvent = mock(AppAnswerEvent.class);
@@ -243,7 +218,7 @@ class ScenarioTest {
         ScenarioAction rxAction = mock(ScenarioAction.class);
         ReceiveScenarioActionEntry actionEntry = new ReceiveScenarioActionEntry(gxAction, rxAction);
         rootNode.addAction(actionEntry);
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         AppRequestEvent requestEvent = mock(AppRequestEvent.class);
         AppAnswerEvent answerEvent = mock(AppAnswerEvent.class);
@@ -264,7 +239,7 @@ class ScenarioTest {
         ScenarioAction rxAction = mock(ScenarioAction.class);
         ReceiveScenarioActionEntry actionEntry = new ReceiveScenarioActionEntry(gxAction, rxAction);
         rootNode.addAction(actionEntry);
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         AppRequestEvent requestEvent = mock(AppRequestEvent.class);
         AppAnswerEvent answerEvent = mock(AppAnswerEvent.class);
@@ -285,7 +260,7 @@ class ScenarioTest {
         ScenarioAction rxAction = mock(ScenarioAction.class);
         ReceiveScenarioActionEntry actionEntry = new ReceiveScenarioActionEntry(gxAction, rxAction);
         rootNode.addAction(actionEntry);
-        scenario.init(gxStack, rxStack, receivedRequests);
+        scenario.init(sessionCreator, gxStack, rxStack);
 
         AppRequestEvent requestEvent = mock(AppRequestEvent.class);
         AppAnswerEvent answerEvent = mock(AppAnswerEvent.class);

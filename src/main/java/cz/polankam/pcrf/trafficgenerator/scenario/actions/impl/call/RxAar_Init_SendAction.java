@@ -13,6 +13,7 @@ public class RxAar_Init_SendAction implements ScenarioAction {
 
     @Override
     public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {
+        context.createRxSession(); // initial request, new rx session has to be created
         RxAARequest req = RxRequestsFactory.createAar(context, true);
         context.getRxSession().sendAARequest(req);
         DumpUtils.dumpMessage(req.getMessage(), true);

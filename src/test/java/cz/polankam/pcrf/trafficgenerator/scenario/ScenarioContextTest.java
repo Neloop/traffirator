@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -22,8 +23,8 @@ class ScenarioContextTest {
     void test() {
         GxStack gx = mock(GxStack.class);
         RxStack rx = mock(RxStack.class);
-        ClientGxSession gxSession = mock(ClientGxSession.class);
-        ClientRxSession rxSession = mock(ClientRxSession.class);
+        Scenario scenario = mock(Scenario.class);
+        SessionCreator creator = mock(SessionCreator.class);
         List<AppRequestEvent> events = new ArrayList<>();
 
         // fill a state a bit
@@ -37,17 +38,42 @@ class ScenarioContextTest {
         when(rx.getServerUri()).thenReturn("rxUri");
 
         // assertions
-        ScenarioContext context = new ScenarioContext(gx, rx, gxSession, rxSession, events, state);
+        ScenarioContext context = new ScenarioContext(scenario, creator, gx, rx, events, state);
         assertEquals(gx, context.getGxStack());
         assertEquals(rx, context.getRxStack());
-        assertEquals(gxSession, context.getGxSession());
-        assertEquals(rxSession, context.getRxSession());
+        assertNull(context.getGxSession());
+        assertNull(context.getRxSession());
         assertEquals("gxRealm", context.getGxRealm());
         assertEquals("rxRealm", context.getRxRealm());
         assertEquals("gxUri", context.getGxServerUri());
         assertEquals("rxUri", context.getRxServerUri());
         assertEquals(events, context.getReceivedEvents());
         assertEquals(state, context.getState());
+    }
+
+    @Test
+    void test_sessionCreation() throws Exception {
+        GxStack gx = mock(GxStack.class);
+        RxStack rx = mock(RxStack.class);
+        ClientGxSession gxSession = mock(ClientGxSession.class);
+        ClientRxSession rxSession = mock(ClientRxSession.class);
+        Scenario scenario = mock(Scenario.class);
+        SessionCreator creator = mock(SessionCreator.class);
+        List<AppRequestEvent> events = new ArrayList<>();
+        Map<String, Object> state = new HashMap<>();
+
+        // mock setup
+        when(creator.createGxSession(null, scenario)).thenReturn(gxSession);
+        when(creator.createRxSession(null, scenario)).thenReturn(rxSession);
+
+        // assertions
+        ScenarioContext context = new ScenarioContext(scenario, creator, gx, rx, events, state);
+        assertNull(context.getGxSession());
+        assertNull(context.getRxSession());
+        assertEquals(gxSession, context.createGxSession());
+        assertEquals(rxSession, context.createRxSession());
+        assertEquals(gxSession, context.getGxSession());
+        assertEquals(rxSession, context.getRxSession());
     }
 
 }

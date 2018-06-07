@@ -13,6 +13,7 @@ public class GxCcrI_SendAction implements ScenarioAction {
 
     @Override
     public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {
+        context.createGxSession(); // initial request, new gx session has to be created
         GxCreditControlRequest req = GxRequestsFactory.createCcrI(context);
         context.getGxSession().sendCreditControlRequest(req);
         DumpUtils.dumpMessage(req.getMessage(), true);

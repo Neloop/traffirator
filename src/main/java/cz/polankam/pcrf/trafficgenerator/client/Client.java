@@ -25,9 +25,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import cz.polankam.pcrf.trafficgenerator.scenario.SessionCreator;
 
 
-public class Client implements ClientRxSessionListener, ClientGxSessionListener {
+public class Client implements ClientRxSessionListener, ClientGxSessionListener, SessionCreator {
 
     private static final Logger logger = Logger.getLogger(Client.class);
 
@@ -156,11 +157,9 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
 
     private synchronized Scenario createScenario(String type) {
         Scenario scenario;
-        List<AppRequestEvent> receivedRequests = Collections.synchronizedList(new ArrayList<>());
-
         try {
             scenario = scenarioFactory.create(type);
-            scenario.init(gx, rx, receivedRequests);
+            scenario.init(this, gx, rx);
         } catch (Exception e) {
             // should not happen, in case it will, stop whole execution
             logger.error(e);
@@ -168,18 +167,12 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
             return null;
         }
 
-        scenariosReceivedRequestsMap.put(scenario.getGxSession().getSessionId(), receivedRequests);
-        scenariosReceivedRequestsMap.put(scenario.getRxSession().getSessionId(), receivedRequests);
-
         // if there was no scenario for given type, create an empty list
         if (!scenariosForTypes.containsKey(type)) {
             scenariosForTypes.put(type, new ArrayList<>());
         }
 
         scenariosForTypes.get(type).add(scenario);
-        scenariosForSessions.put(scenario.getGxSession().getSessionId(), scenario);
-        scenariosForSessions.put(scenario.getRxSession().getSessionId(), scenario);
-
         currentScenariosCount.incrementAndGet();
         logger.info("New scenario created. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
 
@@ -197,13 +190,48 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener 
     private synchronized void removeScenario(Scenario scenario) {
         String type = scenario.getType();
         scenariosForTypes.get(type).remove(scenario);
-        scenariosForSessions.remove(scenario.getGxSession().getSessionId());
-        scenariosForSessions.remove(scenario.getRxSession().getSessionId());
-        scenariosReceivedRequestsMap.remove(scenario.getGxSession().getSessionId());
-        scenariosReceivedRequestsMap.remove(scenario.getRxSession().getSessionId());
+
+        ClientGxSession gxSession = scenario.getContext().getGxSession();
+        if (gxSession != null) {
+            scenariosForSessions.remove(gxSession.getSessionId());
+            scenariosReceivedRequestsMap.remove(gxSession.getSessionId());
+        }
+
+        ClientRxSession rxSession = scenario.getContext().getRxSession();
+        if (rxSession != null) {
+            scenariosForSessions.remove(rxSession.getSessionId());
+            scenariosReceivedRequestsMap.remove(rxSession.getSessionId());
+        }
+
         scenario.destroy();
         currentScenariosCount.decrementAndGet();
         logger.info("Scenario removed and destroyed. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
+    }
+
+    @Override
+    public synchronized ClientGxSession createGxSession(ClientGxSession oldSession, Scenario scenario) throws InternalException {
+        if (oldSession != null) {
+            scenariosForSessions.remove(oldSession.getSessionId());
+            scenariosReceivedRequestsMap.remove(oldSession.getSessionId());
+        }
+
+        ClientGxSession gxSession = gx.getSessionFactory().getNewAppSession(GxStack.authAppId, ClientGxSession.class);
+        scenariosReceivedRequestsMap.put(gxSession.getSessionId(), scenario.getContext().getReceivedEvents());
+        scenariosForSessions.put(gxSession.getSessionId(), scenario);
+        return gxSession;
+    }
+
+    @Override
+    public synchronized ClientRxSession createRxSession(ClientRxSession oldSession, Scenario scenario) throws InternalException {
+        if (oldSession != null) {
+            scenariosForSessions.remove(oldSession.getSessionId());
+            scenariosReceivedRequestsMap.remove(oldSession.getSessionId());
+        }
+
+        ClientRxSession rxSession = rx.getSessionFactory().getNewAppSession(RxStack.authAppId, ClientRxSession.class);
+        scenariosReceivedRequestsMap.put(rxSession.getSessionId(), scenario.getContext().getReceivedEvents());
+        scenariosForSessions.put(rxSession.getSessionId(), scenario);
+        return rxSession;
     }
 
     private synchronized void handleFailure(final Scenario scenario, Exception ex, String errorMessage) {

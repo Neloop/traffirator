@@ -33,14 +33,11 @@ public abstract class Scenario {
     private boolean receivedRx = false;
 
 
-    public void init(GxStack gx, RxStack rx, List<AppRequestEvent> receivedRequests) throws Exception {
-        // create sessions
-        ClientGxSession gxSession = gx.getSessionFactory().getNewAppSession(GxStack.authAppId, ClientGxSession.class);
-        ClientRxSession rxSession = rx.getSessionFactory().getNewAppSession(RxStack.authAppId, ClientRxSession.class);
-
+    public void init(SessionCreator sessionCreator, GxStack gx, RxStack rx) throws Exception {
         // create scenario state and initialize context
         HashMap<String, Object> state = createNewScenarioState();
-        context = new ScenarioContext(gx, rx, gxSession, rxSession, receivedRequests, state);
+        List<AppRequestEvent> receivedRequests = Collections.synchronizedList(new ArrayList<>());
+        context = new ScenarioContext(this, sessionCreator, gx, rx, receivedRequests, state);
 
         // initialize current node
         currentNode = getRootNode();
@@ -48,12 +45,17 @@ public abstract class Scenario {
     }
 
     public synchronized void destroy() {
-        context.getGxSession().release();
-        context.getRxSession().release();
+        if (context.getGxSession() != null) {
+            context.getGxSession().release();
+        }
+        if (context.getRxSession() != null) {
+            context.getRxSession().release();
+        }
+
         destroyed.set(true);
     }
 
-    protected ScenarioContext getContext() {
+    public ScenarioContext getContext() {
         return context;
     }
 
@@ -67,14 +69,6 @@ public abstract class Scenario {
 
     public synchronized boolean isEmpty() {
         return currentNode == null;
-    }
-
-    public ClientGxSession getGxSession() {
-        return context.getGxSession();
-    }
-
-    public ClientRxSession getRxSession() {
-        return context.getRxSession();
     }
 
     public long getSentCount() {
