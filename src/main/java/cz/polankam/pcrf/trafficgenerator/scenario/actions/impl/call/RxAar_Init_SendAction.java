@@ -9,11 +9,11 @@ import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.rx.events.RxAARequest;
 
 
-public class RxAar_SendAction implements ScenarioAction {
+public class RxAar_Init_SendAction implements ScenarioAction {
 
     @Override
     public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception {
-        RxAARequest req = RxRequestsFactory.createAar(context, false);
+        RxAARequest req = RxRequestsFactory.createAar(context, true);
         context.getRxSession().sendAARequest(req);
         DumpUtils.dumpMessage(req.getMessage(), true);
     }

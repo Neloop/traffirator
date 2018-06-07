@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RxRequestsFactory {
 
-    public static RxAARequest createAar(ScenarioContext context) throws Exception {
+    public static RxAARequest createAar(ScenarioContext context, boolean initial) throws Exception {
         ClientRxSession session = context.getRxSession();
         ConcurrentHashMap<String, Object> state = context.getState();
 
@@ -29,7 +29,15 @@ public class RxRequestsFactory {
 
         avps.addAvp(AvpUtils.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
         avps.addAvp(Avp.AF_CHARGING_IDENTIFIER, (String) state.get("af_charging_identifier"), Vendor.TGPP, true, false, true);
-        avps.addAvp(AvpUtils.SPECIFIC_ACTION, 2, Vendor.TGPP, true, false);
+        if (initial) {
+            avps.addAvp(AvpUtils.SPECIFIC_ACTION, 1, Vendor.TGPP, true, false);
+            avps.addAvp(AvpUtils.SPECIFIC_ACTION, 2, Vendor.TGPP, true, false);
+            avps.addAvp(AvpUtils.SPECIFIC_ACTION, 3, Vendor.TGPP, true, false);
+            avps.addAvp(AvpUtils.SPECIFIC_ACTION, 4, Vendor.TGPP, true, false);
+            avps.addAvp(AvpUtils.SPECIFIC_ACTION, 7, Vendor.TGPP, true, false);
+            avps.addAvp(AvpUtils.SPECIFIC_ACTION, 9, Vendor.TGPP, true, false);
+            avps.addAvp(AvpUtils.SPECIFIC_ACTION, 12, Vendor.TGPP, true, false);
+        }
 
         MediaComponent providedMedia = DataProvider.randomMediaComponent();
         AvpSet mediaCompDesc = avps.addGroupedAvp(AvpUtils.MEDIA_COMPONENT_DESCRIPTION, Vendor.TGPP, true, false);

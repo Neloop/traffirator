@@ -41,7 +41,7 @@ public class CallPerformanceScenario extends Scenario {
                 .addReceiveGxAction(3000, new GxCcaU_Success_ReceiveAction())
                 .build();
         ScenarioNode callInit = new NodeBuilder()
-                .addSendAction(new RxAar_SendAction())
+                .addSendAction(new RxAar_Init_SendAction())
                 .addReceiveAction(3000, new GxRar_ReceiveAction(), new RxAaa_Success_ReceiveAction())
                 .addSendAction(new GxRaa_Success_SendAction())
                 .addSendAction(new RxAar_SendAction())
