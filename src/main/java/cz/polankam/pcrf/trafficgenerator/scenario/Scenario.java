@@ -195,14 +195,7 @@ public abstract class Scenario {
         }
 
         if (currentNodeActions.peek().isSending()) {
-            String eventClassName = "";
-            if (request != null) {
-                eventClassName = request.getClass().getCanonicalName();
-            }
-            if (answer != null) {
-                eventClassName = (eventClassName.isEmpty() ? "" : ";") + answer.getClass().getCanonicalName();
-            }
-
+            String eventClassName = getEventNames(request, answer);
             throw new Exception("Next action is sending, but event '" + eventClassName + "' received");
         }
 
@@ -220,7 +213,8 @@ public abstract class Scenario {
         }
 
         if (action == null) {
-            throw new Exception("Unexpected message received");
+            String eventClassName = getEventNames(request, answer);
+            throw new Exception("Unexpected message '" + eventClassName + "' received");
         }
 
         // perform the action
@@ -239,6 +233,16 @@ public abstract class Scenario {
         }
     }
 
+    private String getEventNames(AppRequestEvent request, AppAnswerEvent answer) {
+        String eventClassName = "";
+        if (request != null) {
+            eventClassName = request.getClass().getCanonicalName();
+        }
+        if (answer != null) {
+            eventClassName = (eventClassName.isEmpty() ? "" : ";") + answer.getClass().getCanonicalName();
+        }
+        return eventClassName;
+    }
 
     /**
      * On every call create new unique scenario state.
