@@ -7,5 +7,5 @@ Traffic generator for PCRF server within LTE network
 
 Compile with: `mvn package`
 
-Run with: `mvn exec:java -q -Dexec.args="--config=./examples/config.yml"`
+Run with: `mvn exec:java -q -Dexec.args="--config=./examples/example-config.yml"`
 
