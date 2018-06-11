@@ -293,4 +293,4 @@ profile:
     scenarios:
       - type: CallPerformance
         count: 7200
-end: 3600000
+end: 8640000
