@@ -1,4 +1,4 @@
-for i in range(0, 144, 6):
+for i in range(0, 144, 3):
     print "  - start: {}".format(i * 60 * 1000)
     print "    scenarios:"
     print "      - type: CallCenterEmployee"
