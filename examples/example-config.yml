@@ -1,4 +1,5 @@
 ---
+description: "Description of this configuration"  # Human readable description which might be copied to summary file
 threadCount: 1  # number threads which will handle sending and receiving of messages
 summary: ./logs/summary.log  # file to which summary should be written
 timeouts:

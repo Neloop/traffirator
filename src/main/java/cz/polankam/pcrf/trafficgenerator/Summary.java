@@ -30,7 +30,7 @@ public class Summary {
         this.status = status;
     }
 
-    public void setClientConfig(Config config) {
+    public void setConfig(Config config) {
         this.config = config;
     }
 
@@ -42,6 +42,7 @@ public class Summary {
         out.println("***** SUMMARY START *****");
         out.println("Start: " + start);
         out.println("End: " + end);
+        out.println("Description: " + config.getDescription());
         out.println("Status: " + status);
 
         out.println("Initial Setup: ");

@@ -5,12 +5,21 @@ import java.util.List;
 
 public class Config {
 
+    private String description;
     private int threadCount;
     private String summary;
     private Timeouts timeouts;
     private List<ProfileItem> profile;
     private long end;
 
+
+    /**
+     * Human readable description which might be copied to summary file.
+     * @return
+     */
+    public String getDescription() {
+        return description;
+    }
 
     /**
      * Get size of internal client thread-pool.

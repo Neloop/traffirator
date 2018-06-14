@@ -127,7 +127,7 @@ public class Engine {
         // initialization
         client.init();
         timeouts.init();
-        summary.setClientConfig(config);
+        summary.setConfig(config);
 
         //
         waitForConnections();
