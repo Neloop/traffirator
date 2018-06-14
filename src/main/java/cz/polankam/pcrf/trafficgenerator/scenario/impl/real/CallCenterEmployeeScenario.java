@@ -93,11 +93,11 @@ public class CallCenterEmployeeScenario extends Scenario {
                 .addChild(5, 30_000, lostConnection)
                 .addChild(90, 6_000, callInit)
                 .validateProbabilities();
-        disconnect.addChild(50, connect)
-                .addChild(50, END)
+        disconnect.addChild(50, 30_000, connect)
+                .addChild(50, 3_000, END)
                 .validateProbabilities();
-        lostConnection.addChild(50, connect)
-                .addChild(50, END)
+        lostConnection.addChild(50, 30_000, connect)
+                .addChild(50, 3_000, END)
                 .validateProbabilities();
         callInit.addChild(20, 1_000, callUpdateCodec)
                 .addChild(70, 30_000, callTermination)
@@ -112,8 +112,8 @@ public class CallCenterEmployeeScenario extends Scenario {
                 .addChild(5, 6_000, disconnect)
                 .addChild(5, 30_000, lostConnection)
                 .validateProbabilities();
-        callLostConnection.addChild(50, connect)
-                .addChild(50, END)
+        callLostConnection.addChild(50, 30_000, connect)
+                .addChild(50, 3_000, END)
                 .validateProbabilities();
     }
 

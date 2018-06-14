@@ -97,11 +97,11 @@ public class TravellingManagerScenario extends Scenario {
                 .addChild(10, 360_000, lostConnection)
                 .addChild(50, 30_000, callInit)
                 .validateProbabilities();
-        disconnect.addChild(50, connect)
-                .addChild(50, END)
+        disconnect.addChild(50, 360_000, connect)
+                .addChild(50, 3_000, END)
                 .validateProbabilities();
-        lostConnection.addChild(50, connect)
-                .addChild(50, END)
+        lostConnection.addChild(50, 360_000, connect)
+                .addChild(50, 3_000, END)
                 .validateProbabilities();
         callInit.addChild(50, 6_000, callUpdate)
                 .addChild(20, 1_000, callUpdateCodec)
@@ -122,8 +122,8 @@ public class TravellingManagerScenario extends Scenario {
                 .addChild(10, 180_000, disconnect)
                 .addChild(10, 360_000, lostConnection)
                 .validateProbabilities();
-        callLostConnection.addChild(50, connect)
-                .addChild(50, END)
+        callLostConnection.addChild(50, 360_000, connect)
+                .addChild(50, 3_000, END)
                 .validateProbabilities();
     }
 

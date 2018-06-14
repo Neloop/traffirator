@@ -93,11 +93,11 @@ public class CallPerformanceScenario extends Scenario {
                 .addChild(40, 1_000, lostConnection)
                 .addChild(15, 1_000, callInit)
                 .validateProbabilities();
-        disconnect.addChild(50, connect)
-                .addChild(50, END)
+        disconnect.addChild(50, 1_000, connect)
+                .addChild(50, 1_000, END)
                 .validateProbabilities();
-        lostConnection.addChild(50, connect)
-                .addChild(50, END)
+        lostConnection.addChild(50, 1_000, connect)
+                .addChild(50, 1_000, END)
                 .validateProbabilities();
         callInit.addChild(40, 1_000, callUpdateCodec)
                 .addChild(50, 1_000, callTermination)
@@ -112,8 +112,8 @@ public class CallPerformanceScenario extends Scenario {
                 .addChild(70, 1_000, disconnect)
                 .addChild(10, 1_000, lostConnection)
                 .validateProbabilities();
-        callLostConnection.addChild(50, connect)
-                .addChild(50, END)
+        callLostConnection.addChild(50, 1_000, connect)
+                .addChild(50, 1_000, END)
                 .validateProbabilities();
     }
 

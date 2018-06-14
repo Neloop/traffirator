@@ -94,10 +94,10 @@ public class MalfunctioningCellPhoneScenario extends Scenario {
                 .addChild(10, 1_000, callInit)
                 .validateProbabilities();
         disconnect.addChild(90, 1_200, connect)
-                .addChild(10, END)
+                .addChild(10, 3_000, END)
                 .validateProbabilities();
         lostConnection.addChild(90, 1_000, connect)
-                .addChild(10, END)
+                .addChild(10, 3_000, END)
                 .validateProbabilities();
         callInit.addChild(10, 1_000, callUpdateCodec)
                 .addChild(10, 1_000, callTermination)
@@ -113,7 +113,7 @@ public class MalfunctioningCellPhoneScenario extends Scenario {
                 .addChild(10, 1_000, lostConnection)
                 .validateProbabilities();
         callLostConnection.addChild(90, 1_000, connect)
-                .addChild(10, END)
+                .addChild(10, 3_000, END)
                 .validateProbabilities();
     }
 

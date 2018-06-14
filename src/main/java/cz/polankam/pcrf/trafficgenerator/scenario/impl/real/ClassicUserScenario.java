@@ -93,11 +93,11 @@ public class ClassicUserScenario extends Scenario {
                 .addChild(10, 720_000, lostConnection)
                 .addChild(60, 360_000, callInit)
                 .validateProbabilities();
-        disconnect.addChild(50, connect)
-                .addChild(50, END)
+        disconnect.addChild(50, 720_000, connect)
+                .addChild(50, 3_000, END)
                 .validateProbabilities();
-        lostConnection.addChild(50, connect)
-                .addChild(50, END)
+        lostConnection.addChild(50, 720_000, connect)
+                .addChild(50, 3_000, END)
                 .validateProbabilities();
         callInit.addChild(20, 1_000, callUpdateCodec)
                 .addChild(70, 9_000, callTermination)
@@ -112,8 +112,8 @@ public class ClassicUserScenario extends Scenario {
                 .addChild(10, 1_080_000, disconnect)
                 .addChild(10, 720_000, lostConnection)
                 .validateProbabilities();
-        callLostConnection.addChild(50, connect)
-                .addChild(50, END)
+        callLostConnection.addChild(50, 720_000, connect)
+                .addChild(50, 3_000, END)
                 .validateProbabilities();
     }
 
