@@ -8,7 +8,7 @@ public class Config {
     private String description;
     private int threadCount;
     private String summary;
-    private Timeouts timeouts;
+    private Statistics statistics;
     private List<ProfileItem> profile;
     private long end;
 
@@ -46,15 +46,15 @@ public class Config {
     }
 
     /**
-     * Configuration for sampling and logging timeouts.
+     * Configuration for sampling and logging statistics.
      * @return
      */
-    public Timeouts getTimeouts() {
-        return timeouts;
+    public Statistics getStatistics() {
+        return statistics;
     }
 
-    public void setTimeouts(Timeouts timeouts) {
-        this.timeouts = timeouts;
+    public void setStatistics(Statistics statistics) {
+        this.statistics = statistics;
     }
 
     /**

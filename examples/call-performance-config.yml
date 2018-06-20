@@ -2,8 +2,8 @@
 description: "Call performance test"
 threadCount: 8
 summary: ./logs/summary.log
-timeouts:
-  logFile: ./logs/timeouts.log
+statistics:
+  logFile: ./logs/statistics.log
   samplingPeriod: 1000
 profile:
   - start: 0

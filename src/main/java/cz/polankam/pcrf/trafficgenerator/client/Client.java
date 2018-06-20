@@ -47,6 +47,10 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
 
     /** Number of timeouts from the beginning of the execution */
     private final AtomicLong timeoutsCount;
+    /** Number of sent messages from the beginning of the execution */
+    private final AtomicLong sentCount;
+    /** Number of received messages from the beginning of the execution */
+    private final AtomicLong receivedCount;
     /** Current number of active scenarios */
     private final AtomicLong currentScenariosCount;
 
@@ -66,6 +70,8 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         finished = new AtomicBoolean(false);
         finishedReason = "OK";
         timeoutsCount = new AtomicLong(0);
+        sentCount = new AtomicLong(0);
+        receivedCount = new AtomicLong(0);
         currentScenariosCount = new AtomicLong(0);
         scenarioTypesCount = new HashMap<>();
     }
@@ -121,6 +127,14 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
 
     public long getTimeoutsCount() {
         return timeoutsCount.get();
+    }
+
+    public long getSentCount() {
+        return sentCount.get();
+    }
+
+    public long getReceivedCount() {
+        return receivedCount.get();
     }
 
     public long getScenariosCount() {
@@ -261,7 +275,8 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
             boolean sent;
             try {
                 sent = scenario.sendNext();
-            } catch (Exception e) {
+                sentCount.incrementAndGet();
+	    } catch (Exception e) {
                 handleFailure(scenario, e, e.getMessage());
                 return;
             }
@@ -330,7 +345,8 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
 
             try {
                 scenario.receiveNext(request, answer, appType);
-            } catch (Exception e) {
+                receivedCount.incrementAndGet();
+	    } catch (Exception e) {
                 handleFailure(scenario, e, e.getMessage());
                 return;
             }

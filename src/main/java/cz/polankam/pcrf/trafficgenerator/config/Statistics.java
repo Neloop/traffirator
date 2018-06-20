@@ -1,7 +1,7 @@
 package cz.polankam.pcrf.trafficgenerator.config;
 
 
-public class Timeouts {
+public class Statistics {
 
     private String logFile;
     private long samplingPeriod;
