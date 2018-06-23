@@ -255,7 +255,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
 
         logger.error(errorMessage, ex);
         removeScenario(scenario);
-        logger.info("Scenario failed, creating next one");
+        logger.info("Scenario failed in state '" + scenario.getCurrentStateName() + "', creating next one");
         // send next message of newly created scenario
         sendNextMessage(createScenario(scenario.getType()));
     }

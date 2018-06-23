@@ -16,6 +16,11 @@ public class NodeBuilder {
         node = new ScenarioNode();
     }
 
+    public NodeBuilder setName(String name) {
+        node.setName(name);
+        return this;
+    }
+
     public NodeBuilder addSendAction(ScenarioAction action) {
         node.addAction(new SendScenarioActionEntry(action));
         return this;

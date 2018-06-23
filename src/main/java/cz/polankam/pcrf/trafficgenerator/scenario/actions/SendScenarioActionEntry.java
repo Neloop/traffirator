@@ -33,6 +33,11 @@ public class SendScenarioActionEntry implements ScenarioActionEntry {
         return true;
     }
 
+    @Override
+    public String getName() {
+        return ""; // TODO
+    }
+
     public ScenarioAction getAction() {
         return action;
     }

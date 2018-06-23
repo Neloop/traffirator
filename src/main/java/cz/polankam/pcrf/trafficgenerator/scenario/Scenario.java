@@ -227,6 +227,12 @@ public abstract class Scenario {
         }
     }
 
+    public synchronized String getCurrentStateName() {
+        String nodeName = currentNode != null ? currentNode.getName() : "null";
+        String actionName = currentNodeActions.peek() != null ? currentNodeActions.peek().getName() : "null";
+        return getType() + "_" + nodeName + "_" + actionName;
+    }
+
     private String getEventNames(AppRequestEvent request, AppAnswerEvent answer) {
         String eventClassName = "";
         if (request != null) {

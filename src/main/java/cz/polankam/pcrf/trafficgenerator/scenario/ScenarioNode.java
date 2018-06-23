@@ -9,6 +9,7 @@ public class ScenarioNode {
 
     private final List<ScenarioNodeEntry> children;
     private final Queue<ScenarioActionEntry> actions;
+    private String name;
 
 
     public ScenarioNode() {
@@ -16,6 +17,14 @@ public class ScenarioNode {
         actions = new LinkedList<>();
     }
 
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public boolean hasChildren() {
         return !children.isEmpty();

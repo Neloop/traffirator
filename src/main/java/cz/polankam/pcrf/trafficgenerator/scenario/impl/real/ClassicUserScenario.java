@@ -25,22 +25,27 @@ public class ClassicUserScenario extends Scenario {
         ScenarioNode END = new NodeBuilder().addSendAction(new LoggerPrintAction("*** END ***")).build();
 
         ScenarioNode connect = new NodeBuilder()
+                .setName("Connect")
                 .addSendAction(new GxCcrI_SendAction())
                 .addReceiveGxAction(3000, new GxCcaI_Success_ReceiveAction())
                 .build();
         ScenarioNode update = new NodeBuilder()
+                .setName("Update")
                 .addSendAction(new GxCcrU_SendAction())
                 .addReceiveGxAction(3000, new GxCcaU_Success_ReceiveAction())
                 .build();
         ScenarioNode disconnect = new NodeBuilder()
+                .setName("Disconnect")
                 .addSendAction(new GxCcrT_SendAction())
                 .addReceiveGxAction(3000, new GxCcaT_Success_ReceiveAction())
                 .build();
         ScenarioNode lostConnection = new NodeBuilder()
+                .setName("LostConnection")
                 .addSendAction(new GxCcrU_LostConnection_SendAction())
                 .addReceiveGxAction(3000, new GxCcaU_Success_ReceiveAction())
                 .build();
         ScenarioNode callInit = new NodeBuilder()
+                .setName("CallInit")
                 .addSendAction(new RxAar_Init_SendAction())
                 .addReceiveAction(3000, new GxRar_ReceiveAction(), new RxAaa_Success_ReceiveAction())
                 .addSendAction(new GxRaa_Success_SendAction())
@@ -48,16 +53,19 @@ public class ClassicUserScenario extends Scenario {
                 .addReceiveRxAction(3000, new RxAaa_Success_ReceiveAction())
                 .build();
         ScenarioNode callUpdateCodec = new NodeBuilder()
+                .setName("CallUpdateCodec")
                 .addSendAction(new RxAar_SendAction())
                 .addReceiveAction(3000, new GxRar_ReceiveAction(), new RxAaa_Success_ReceiveAction())
                 .addSendAction(new GxRaa_Success_SendAction())
                 .build();
         ScenarioNode callTermination = new NodeBuilder()
+                .setName("CallTermination")
                 .addSendAction(new RxStr_SendAction())
                 .addReceiveAction(3000, new GxRar_ReceiveAction(), new RxSta_Success_ReceiveAction())
                 .addSendAction(new GxRaa_Success_SendAction())
                 .build();
         ScenarioNode callLostConnection = new NodeBuilder()
+                .setName("CallLostConnection")
                 .addSendAction(new GxCcrU_LostConnection_SendAction())
                 .addReceiveAction(3000, new GxCcaU_Success_ReceiveAction(), new RxAsr_ReceiveAction())
                 .addSendAction(new RxAsa_Success_SendAction())

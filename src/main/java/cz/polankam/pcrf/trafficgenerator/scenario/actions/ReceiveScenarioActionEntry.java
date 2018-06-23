@@ -37,6 +37,11 @@ public class ReceiveScenarioActionEntry implements ScenarioActionEntry {
         return false;
     }
 
+    @Override
+    public String getName() {
+        return ""; // TODO
+    }
+
     public ScenarioAction getGxAction() {
         return gxAction;
     }
