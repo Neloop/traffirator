@@ -266,10 +266,14 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         }
 
         logger.error(errorMessage, ex);
+        boolean wasDestroyed = scenario.isDestroyed();
         removeScenario(scenario);
-        logger.info("Scenario failed in state '" + scenario.getCurrentStateName() + "', creating next one");
-        // send next message of newly created scenario
-        sendNextMessage(createScenario(scenario.getType()));
+        if (!wasDestroyed) {
+            // scenario was not yet destroyed, so create the next one
+            logger.info("Scenario failed in state '" + scenario.getCurrentStateName() + "', creating next one");
+            // send next message of newly created scenario
+            sendNextMessage(createScenario(scenario.getType()));
+        }
     }
 
     private void sendNextMessage(final Scenario scenario) {
