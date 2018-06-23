@@ -141,7 +141,8 @@ public class Engine {
         scheduleTestProfile(config, client);
 
         // schedule ending of the execution from the configuration
-        executor.schedule(() -> {
+        // has its own executor in case of deadlocks in the client
+        Executors.newScheduledThreadPool(1).schedule(() -> {
             client.finish();
             logger.info("End trigger activated");
         }, config.getEnd(), TimeUnit.MILLISECONDS);
@@ -184,6 +185,7 @@ public class Engine {
                 for (StackTraceElement ste : info.getStackTrace()) {
                     System.out.println("  " + ste);
                 }
+                System.out.println();
             }
         }
     }

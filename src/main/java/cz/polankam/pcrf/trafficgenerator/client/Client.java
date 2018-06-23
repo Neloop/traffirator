@@ -223,32 +223,44 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
     }
 
     @Override
-    public synchronized ClientGxSession createGxSession(ClientGxSession oldSession, Scenario scenario) throws InternalException {
-        if (oldSession != null) {
-            scenariosForSessions.remove(oldSession.getSessionId());
-            scenariosReceivedRequestsMap.remove(oldSession.getSessionId());
-        }
-
+    public ClientGxSession createGxSession(ClientGxSession oldSession, Scenario scenario) throws Exception {
+        // scheduled in the executor, because if not, the deadlock might be possible,
+        // if this method is called from within the scenario action
         ClientGxSession gxSession = gx.getSessionFactory().getNewAppSession(GxStack.authAppId, ClientGxSession.class);
-        scenariosReceivedRequestsMap.put(gxSession.getSessionId(), scenario.getContext().getReceivedEvents());
-        scenariosForSessions.put(gxSession.getSessionId(), scenario);
+        executorService.submit(() -> {
+            synchronized (this) {
+                if (oldSession != null) {
+                    scenariosForSessions.remove(oldSession.getSessionId());
+                    scenariosReceivedRequestsMap.remove(oldSession.getSessionId());
+                }
+
+                scenariosReceivedRequestsMap.put(gxSession.getSessionId(), scenario.getContext().getReceivedEvents());
+                scenariosForSessions.put(gxSession.getSessionId(), scenario);
+            }
+        });
         return gxSession;
     }
 
     @Override
-    public synchronized ClientRxSession createRxSession(ClientRxSession oldSession, Scenario scenario) throws InternalException {
-        if (oldSession != null) {
-            scenariosForSessions.remove(oldSession.getSessionId());
-            scenariosReceivedRequestsMap.remove(oldSession.getSessionId());
-        }
-
+    public ClientRxSession createRxSession(ClientRxSession oldSession, Scenario scenario) throws Exception {
+        // scheduled in the executor, because if not, the deadlock might be possible,
+        // if this method is called from within the scenario action
         ClientRxSession rxSession = rx.getSessionFactory().getNewAppSession(RxStack.authAppId, ClientRxSession.class);
-        scenariosReceivedRequestsMap.put(rxSession.getSessionId(), scenario.getContext().getReceivedEvents());
-        scenariosForSessions.put(rxSession.getSessionId(), scenario);
+        executorService.submit(() -> {
+            synchronized (this) {
+                if (oldSession != null) {
+                    scenariosForSessions.remove(oldSession.getSessionId());
+                    scenariosReceivedRequestsMap.remove(oldSession.getSessionId());
+                }
+
+                scenariosReceivedRequestsMap.put(rxSession.getSessionId(), scenario.getContext().getReceivedEvents());
+                scenariosForSessions.put(rxSession.getSessionId(), scenario);
+            }
+        });
         return rxSession;
     }
 
-    private synchronized void handleFailure(final Scenario scenario, Exception ex, String errorMessage) {
+    private void handleFailure(final Scenario scenario, Exception ex, String errorMessage) {
         if (scenario == null) {
             return;
         }
@@ -346,7 +358,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
             try {
                 scenario.receiveNext(request, answer, appType);
                 receivedCount.incrementAndGet();
-	    } catch (Exception e) {
+            } catch (Exception e) {
                 handleFailure(scenario, e, e.getMessage());
                 return;
             }
