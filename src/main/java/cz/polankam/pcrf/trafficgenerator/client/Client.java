@@ -272,7 +272,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         sendNextMessage(createScenario(scenario.getType()));
     }
 
-    private synchronized void sendNextMessage(final Scenario scenario) {
+    private void sendNextMessage(final Scenario scenario) {
         if (scenario == null || finished() || scenario.isDestroyed()) {
             return;
         }
