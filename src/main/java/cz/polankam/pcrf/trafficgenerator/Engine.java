@@ -14,6 +14,9 @@ import org.apache.log4j.Logger;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.Executors;
@@ -167,6 +170,23 @@ public class Engine {
         }
     }
 
+
+    public static void findDeadLocks()
+    {
+        ThreadMXBean tmx = ManagementFactory.getThreadMXBean();
+        long[] ids = tmx.findDeadlockedThreads();
+        if (ids != null) {
+            ThreadInfo[] infos = tmx.getThreadInfo(ids,true,true);
+            System.out.println("Following Threads are deadlocked:");
+            for (ThreadInfo info : infos) {
+                System.out.println(info);
+                System.out.println("Stacktrace:");
+                for (StackTraceElement ste : info.getStackTrace()) {
+                    System.out.println("  " + ste);
+                }
+            }
+        }
+    }
 
     public static void main(String[] args) {
         try {
