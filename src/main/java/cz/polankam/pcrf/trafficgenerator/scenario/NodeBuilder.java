@@ -21,6 +21,16 @@ public class NodeBuilder {
         return this;
     }
 
+    public NodeBuilder addSendAction(String name, ScenarioAction action) {
+        node.addAction(new SendScenarioActionEntry(name, action));
+        return this;
+    }
+
+    public NodeBuilder addSendAction(String name, long delay, ScenarioAction action) {
+        node.addAction(new SendScenarioActionEntry(name, delay, action));
+        return this;
+    }
+
     public NodeBuilder addSendAction(ScenarioAction action) {
         node.addAction(new SendScenarioActionEntry(action));
         return this;
@@ -28,6 +38,16 @@ public class NodeBuilder {
 
     public NodeBuilder addSendAction(long delay, ScenarioAction action) {
         node.addAction(new SendScenarioActionEntry(delay, action));
+        return this;
+    }
+
+    public NodeBuilder addReceiveGxAction(String name, ScenarioAction gxAction) {
+        node.addAction(new ReceiveScenarioActionEntry(name, gxAction, null));
+        return this;
+    }
+
+    public NodeBuilder addReceiveGxAction(String name, long timeout, ScenarioAction gxAction) {
+        node.addAction(new ReceiveScenarioActionEntry(name, timeout, gxAction, null));
         return this;
     }
 
@@ -41,6 +61,16 @@ public class NodeBuilder {
         return this;
     }
 
+    public NodeBuilder addReceiveRxAction(String name, ScenarioAction rxAction) {
+        node.addAction(new ReceiveScenarioActionEntry(name, null, rxAction));
+        return this;
+    }
+
+    public NodeBuilder addReceiveRxAction(String name, long timeout, ScenarioAction rxAction) {
+        node.addAction(new ReceiveScenarioActionEntry(name, timeout, null, rxAction));
+        return this;
+    }
+
     public NodeBuilder addReceiveRxAction(ScenarioAction rxAction) {
         node.addAction(new ReceiveScenarioActionEntry(null, rxAction));
         return this;
@@ -48,6 +78,16 @@ public class NodeBuilder {
 
     public NodeBuilder addReceiveRxAction(long timeout, ScenarioAction rxAction) {
         node.addAction(new ReceiveScenarioActionEntry(timeout, null, rxAction));
+        return this;
+    }
+
+    public NodeBuilder addReceiveAction(String name, ScenarioAction gxAction, ScenarioAction rxAction) {
+        node.addAction(new ReceiveScenarioActionEntry(name, gxAction, rxAction));
+        return this;
+    }
+
+    public NodeBuilder addReceiveAction(String name, long timeout, ScenarioAction gxAction, ScenarioAction rxAction) {
+        node.addAction(new ReceiveScenarioActionEntry(name, timeout, gxAction, rxAction));
         return this;
     }
 

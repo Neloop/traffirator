@@ -6,10 +6,25 @@ package cz.polankam.pcrf.trafficgenerator.scenario.actions;
  */
 public class ReceiveScenarioActionEntry implements ScenarioActionEntry {
 
+    private final String name;
     private final long timeout;
     private ScenarioAction gxAction;
     private ScenarioAction rxAction;
 
+
+    /**
+     *
+     * @param name
+     * @param timeout in milliseconds
+     * @param gxAction
+     * @param rxAction
+     */
+    public ReceiveScenarioActionEntry(String name, long timeout, ScenarioAction gxAction, ScenarioAction rxAction) {
+        this.name = name;
+        this.timeout = timeout;
+        this.gxAction = gxAction;
+        this.rxAction = rxAction;
+    }
 
     /**
      *
@@ -18,18 +33,26 @@ public class ReceiveScenarioActionEntry implements ScenarioActionEntry {
      * @param rxAction
      */
     public ReceiveScenarioActionEntry(long timeout, ScenarioAction gxAction, ScenarioAction rxAction) {
-        this.timeout = timeout;
-        this.gxAction = gxAction;
-        this.rxAction = rxAction;
+        this("", timeout, gxAction, rxAction);
     }
 
     /**
-     * New scenario entry with no timeout or timeout.
+     * New scenario entry with no timeout.
+     * @param name
+     * @param gxAction
+     * @param rxAction
+     */
+    public ReceiveScenarioActionEntry(String name, ScenarioAction gxAction, ScenarioAction rxAction) {
+        this(name, 0, gxAction, rxAction);
+    }
+
+    /**
+     * New scenario entry with no timeout.
      * @param gxAction
      * @param rxAction
      */
     public ReceiveScenarioActionEntry(ScenarioAction gxAction, ScenarioAction rxAction) {
-        this(0, gxAction, rxAction);
+        this("", 0, gxAction, rxAction);
     }
 
     @Override
@@ -39,7 +62,7 @@ public class ReceiveScenarioActionEntry implements ScenarioActionEntry {
 
     @Override
     public String getName() {
-        return ""; // TODO
+        return name;
     }
 
     public ScenarioAction getGxAction() {
