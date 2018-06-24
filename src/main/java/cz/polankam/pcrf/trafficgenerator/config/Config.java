@@ -70,7 +70,7 @@ public class Config {
     }
 
     /**
-     * When will the execution ends, in milliseconds.
+     * When will the execution ends, in seconds.
      * @return
      */
     public long getEnd() {

@@ -11,7 +11,7 @@ public class ProfileItem {
 
 
     /**
-     * Begin this testing profile item at, in milliseconds.
+     * Begin this testing profile item at, in seconds.
      * @return
      */
     public long getStart() {

@@ -86,14 +86,14 @@ public class Engine {
 
             if (!queue.isEmpty()) {
                 long nextStart = queue.peek().getStart() - current.getStart();
-                executor.schedule(new ChangeActionRunnable(queue, client), nextStart, TimeUnit.MILLISECONDS);
+                executor.schedule(new ChangeActionRunnable(queue, client), nextStart, TimeUnit.SECONDS);
             }
         }
     }
 
     private void scheduleTestProfile(Config config, Client client) {
         Queue<ProfileItem> queue = new LinkedList<>(config.getProfile());
-        executor.schedule(new ChangeActionRunnable(queue, client), queue.peek().getStart(), TimeUnit.MILLISECONDS);
+        executor.schedule(new ChangeActionRunnable(queue, client), queue.peek().getStart(), TimeUnit.SECONDS);
     }
 
     private Config getClientConfig() throws Exception {
@@ -145,7 +145,7 @@ public class Engine {
         Executors.newScheduledThreadPool(1).schedule(() -> {
             client.finish();
             logger.info("End trigger activated");
-        }, config.getEnd(), TimeUnit.MILLISECONDS);
+        }, config.getEnd(), TimeUnit.SECONDS);
 
         // schedule statistics logging
         executor.scheduleAtFixedRate(statistics::log, config.getStatistics().getSamplingPeriod(),

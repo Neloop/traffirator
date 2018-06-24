@@ -16,7 +16,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 180000
+  - start: 180
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -26,7 +26,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 360000
+  - start: 360
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -36,7 +36,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 540000
+  - start: 540
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -46,7 +46,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 720000
+  - start: 720
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -56,7 +56,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 900000
+  - start: 900
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -66,7 +66,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 1080000
+  - start: 1080
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -76,7 +76,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 1260000
+  - start: 1260
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -86,7 +86,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 1440000
+  - start: 1440
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -96,7 +96,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 1620000
+  - start: 1620
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -106,7 +106,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 1800000
+  - start: 1800
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -116,7 +116,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 1980000
+  - start: 1980
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -126,7 +126,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 2160000
+  - start: 2160
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -136,7 +136,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 2340000
+  - start: 2340
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -146,7 +146,7 @@ profile:
         count: 1
       - type: TravellingManager
         count: 0
-  - start: 2520000
+  - start: 2520
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -156,7 +156,7 @@ profile:
         count: 1
       - type: TravellingManager
         count: 0
-  - start: 2700000
+  - start: 2700
     scenarios:
       - type: CallCenterEmployee
         count: 2
@@ -166,7 +166,7 @@ profile:
         count: 2
       - type: TravellingManager
         count: 1
-  - start: 2880000
+  - start: 2880
     scenarios:
       - type: CallCenterEmployee
         count: 10
@@ -176,7 +176,7 @@ profile:
         count: 5
       - type: TravellingManager
         count: 3
-  - start: 3060000
+  - start: 3060
     scenarios:
       - type: CallCenterEmployee
         count: 20
@@ -186,7 +186,7 @@ profile:
         count: 7
       - type: TravellingManager
         count: 5
-  - start: 3240000
+  - start: 3240
     scenarios:
       - type: CallCenterEmployee
         count: 50
@@ -196,7 +196,7 @@ profile:
         count: 8
       - type: TravellingManager
         count: 10
-  - start: 3420000
+  - start: 3420
     scenarios:
       - type: CallCenterEmployee
         count: 50
@@ -206,7 +206,7 @@ profile:
         count: 9
       - type: TravellingManager
         count: 20
-  - start: 3600000
+  - start: 3600
     scenarios:
       - type: CallCenterEmployee
         count: 50
@@ -216,7 +216,7 @@ profile:
         count: 10
       - type: TravellingManager
         count: 30
-  - start: 3780000
+  - start: 3780
     scenarios:
       - type: CallCenterEmployee
         count: 50
@@ -226,7 +226,7 @@ profile:
         count: 10
       - type: TravellingManager
         count: 50
-  - start: 3960000
+  - start: 3960
     scenarios:
       - type: CallCenterEmployee
         count: 50
@@ -236,7 +236,7 @@ profile:
         count: 10
       - type: TravellingManager
         count: 50
-  - start: 4140000
+  - start: 4140
     scenarios:
       - type: CallCenterEmployee
         count: 50
@@ -246,7 +246,7 @@ profile:
         count: 10
       - type: TravellingManager
         count: 50
-  - start: 4320000
+  - start: 4320
     scenarios:
       - type: CallCenterEmployee
         count: 30
@@ -256,7 +256,7 @@ profile:
         count: 90
       - type: TravellingManager
         count: 50
-  - start: 4500000
+  - start: 4500
     scenarios:
       - type: CallCenterEmployee
         count: 20
@@ -266,7 +266,7 @@ profile:
         count: 90
       - type: TravellingManager
         count: 40
-  - start: 4680000
+  - start: 4680
     scenarios:
       - type: CallCenterEmployee
         count: 60
@@ -276,7 +276,7 @@ profile:
         count: 10
       - type: TravellingManager
         count: 50
-  - start: 4860000
+  - start: 4860
     scenarios:
       - type: CallCenterEmployee
         count: 70
@@ -286,7 +286,7 @@ profile:
         count: 10
       - type: TravellingManager
         count: 60
-  - start: 5040000
+  - start: 5040
     scenarios:
       - type: CallCenterEmployee
         count: 80
@@ -296,7 +296,7 @@ profile:
         count: 10
       - type: TravellingManager
         count: 60
-  - start: 5220000
+  - start: 5220
     scenarios:
       - type: CallCenterEmployee
         count: 80
@@ -306,7 +306,7 @@ profile:
         count: 10
       - type: TravellingManager
         count: 70
-  - start: 5400000
+  - start: 5400
     scenarios:
       - type: CallCenterEmployee
         count: 80
@@ -316,7 +316,7 @@ profile:
         count: 9
       - type: TravellingManager
         count: 60
-  - start: 5580000
+  - start: 5580
     scenarios:
       - type: CallCenterEmployee
         count: 70
@@ -326,7 +326,7 @@ profile:
         count: 8
       - type: TravellingManager
         count: 50
-  - start: 5760000
+  - start: 5760
     scenarios:
       - type: CallCenterEmployee
         count: 50
@@ -336,7 +336,7 @@ profile:
         count: 5
       - type: TravellingManager
         count: 50
-  - start: 5940000
+  - start: 5940
     scenarios:
       - type: CallCenterEmployee
         count: 30
@@ -346,7 +346,7 @@ profile:
         count: 5
       - type: TravellingManager
         count: 30
-  - start: 6120000
+  - start: 6120
     scenarios:
       - type: CallCenterEmployee
         count: 10
@@ -356,7 +356,7 @@ profile:
         count: 5
       - type: TravellingManager
         count: 20
-  - start: 6300000
+  - start: 6300
     scenarios:
       - type: CallCenterEmployee
         count: 5
@@ -366,7 +366,7 @@ profile:
         count: 5
       - type: TravellingManager
         count: 10
-  - start: 6480000
+  - start: 6480
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -376,7 +376,7 @@ profile:
         count: 3
       - type: TravellingManager
         count: 5
-  - start: 6660000
+  - start: 6660
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -386,7 +386,7 @@ profile:
         count: 3
       - type: TravellingManager
         count: 3
-  - start: 6840000
+  - start: 6840
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -396,7 +396,7 @@ profile:
         count: 2
       - type: TravellingManager
         count: 2
-  - start: 7020000
+  - start: 7020
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -406,7 +406,7 @@ profile:
         count: 2
       - type: TravellingManager
         count: 1
-  - start: 7200000
+  - start: 7200
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -416,7 +416,7 @@ profile:
         count: 2
       - type: TravellingManager
         count: 1
-  - start: 7380000
+  - start: 7380
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -426,7 +426,7 @@ profile:
         count: 2
       - type: TravellingManager
         count: 1
-  - start: 7560000
+  - start: 7560
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -436,7 +436,7 @@ profile:
         count: 1
       - type: TravellingManager
         count: 0
-  - start: 7740000
+  - start: 7740
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -446,7 +446,7 @@ profile:
         count: 1
       - type: TravellingManager
         count: 0
-  - start: 7920000
+  - start: 7920
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -456,7 +456,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 8100000
+  - start: 8100
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -466,7 +466,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 8280000
+  - start: 8280
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -476,7 +476,7 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-  - start: 8460000
+  - start: 8460
     scenarios:
       - type: CallCenterEmployee
         count: 0
@@ -486,4 +486,4 @@ profile:
         count: 0
       - type: TravellingManager
         count: 0
-end: 8640000
+end: 8640

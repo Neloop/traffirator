@@ -10,8 +10,8 @@ profile:
     scenarios:
       - type: CallPerformance
         count: 100000
-  - start: 600000
+  - start: 600
     scenarios:
       - type: CallPerformance
         count: 1000
-end: 8640000
+end: 8640
