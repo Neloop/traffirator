@@ -46,7 +46,7 @@ class StatisticsLoggerTest {
         logger.close();
 
         String content = new String(Files.readAllBytes(Paths.get(file)));
-        assertEquals("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount" + System.lineSeparator(), content);
+        assertEquals("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount\tProcessLoad [%]" + System.lineSeparator(), content);
     }
 
     @Test
@@ -67,8 +67,8 @@ class StatisticsLoggerTest {
         logger.close();
 
         String content = new String(Files.readAllBytes(Paths.get(file)));
-        assertTrue(content.startsWith("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount" + System.lineSeparator()));
-        assertTrue(content.endsWith("\t66857\t24568\t82462\t55842" + System.lineSeparator()));
+        assertTrue(content.startsWith("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount\tProcessLoad [%]" + System.lineSeparator()));
+        assertTrue(content.contains("\t66857\t24568\t82462\t55842\t"));
     }
 
     @Test
@@ -90,8 +90,8 @@ class StatisticsLoggerTest {
         logger.close();
 
         String content = new String(Files.readAllBytes(Paths.get(file)));
-        assertTrue(content.startsWith("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount" + System.lineSeparator()));
-        assertTrue(content.endsWith("\t5874\t530195\t457124\t757394" + System.lineSeparator()));
+        assertTrue(content.startsWith("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount\tProcessLoad [%]" + System.lineSeparator()));
+        assertTrue(content.contains("\t5874\t530195\t457124\t757394\t"));
     }
 
 }

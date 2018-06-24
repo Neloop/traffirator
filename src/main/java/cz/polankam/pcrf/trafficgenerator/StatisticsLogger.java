@@ -1,16 +1,20 @@
 package cz.polankam.pcrf.trafficgenerator;
 
+import com.sun.management.OperatingSystemMXBean;
 import cz.polankam.pcrf.trafficgenerator.client.Client;
 import cz.polankam.pcrf.trafficgenerator.config.Statistics;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.lang.management.ManagementFactory;
 
 
 public class StatisticsLogger {
 
     private final Client client;
     private final Statistics config;
+    private final OperatingSystemMXBean osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+
     private PrintStream logFile;
     /** Client is returning timeouts in absolute numbers, this is cache for last count. */
     private long previousTimeouts = 0;
@@ -36,6 +40,8 @@ public class StatisticsLogger {
         logFile.print("SentCount");
         logFile.print("\t");
         logFile.print("ReceivedCount");
+        logFile.print("\t");
+        logFile.print("ProcessLoad [%]");
         logFile.println();
     }
 
@@ -53,6 +59,8 @@ public class StatisticsLogger {
         logFile.print(sentCount - previousSent);
         logFile.print("\t");
         logFile.print(receivedCount - previousReceived);
+        logFile.print("\t");
+        logFile.printf("%.2f", osBean.getProcessCpuLoad() * 100);
         logFile.println();
 
         previousTimeouts = timeoutsCount;
