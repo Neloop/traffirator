@@ -222,21 +222,23 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         logger.info("Scenario removed and destroyed. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
     }
 
+    private synchronized void registerNewSession(AppSession oldSession, AppSession newSession, Scenario scenario) {
+        if (oldSession != null) {
+            scenariosForSessions.remove(oldSession.getSessionId());
+            scenariosReceivedRequestsMap.remove(oldSession.getSessionId());
+        }
+
+        scenariosReceivedRequestsMap.put(newSession.getSessionId(), scenario.getContext().getReceivedEvents());
+        scenariosForSessions.put(newSession.getSessionId(), scenario);
+    }
+
     @Override
     public ClientGxSession createGxSession(ClientGxSession oldSession, Scenario scenario) throws Exception {
         // scheduled in the executor, because if not, the deadlock might be possible,
         // if this method is called from within the scenario action
         ClientGxSession gxSession = gx.getSessionFactory().getNewAppSession(GxStack.authAppId, ClientGxSession.class);
         executorService.submit(() -> {
-            synchronized (this) {
-                if (oldSession != null) {
-                    scenariosForSessions.remove(oldSession.getSessionId());
-                    scenariosReceivedRequestsMap.remove(oldSession.getSessionId());
-                }
-
-                scenariosReceivedRequestsMap.put(gxSession.getSessionId(), scenario.getContext().getReceivedEvents());
-                scenariosForSessions.put(gxSession.getSessionId(), scenario);
-            }
+            registerNewSession(oldSession, gxSession, scenario);
         });
         return gxSession;
     }
@@ -247,15 +249,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         // if this method is called from within the scenario action
         ClientRxSession rxSession = rx.getSessionFactory().getNewAppSession(RxStack.authAppId, ClientRxSession.class);
         executorService.submit(() -> {
-            synchronized (this) {
-                if (oldSession != null) {
-                    scenariosForSessions.remove(oldSession.getSessionId());
-                    scenariosReceivedRequestsMap.remove(oldSession.getSessionId());
-                }
-
-                scenariosReceivedRequestsMap.put(rxSession.getSessionId(), scenario.getContext().getReceivedEvents());
-                scenariosForSessions.put(rxSession.getSessionId(), scenario);
-            }
+            registerNewSession(oldSession, rxSession, scenario);
         });
         return rxSession;
     }
