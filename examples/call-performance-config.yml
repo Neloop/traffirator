@@ -9,289 +9,289 @@ profile:
   - start: 0
     scenarios:
       - type: CallPerformance
-        count: 100
+        count: 80
   - start: 120
     scenarios:
       - type: CallPerformance
-        count: 200
+        count: 160
   - start: 240
     scenarios:
       - type: CallPerformance
-        count: 300
+        count: 240
   - start: 360
     scenarios:
       - type: CallPerformance
-        count: 400
+        count: 320
   - start: 480
     scenarios:
       - type: CallPerformance
-        count: 500
+        count: 400
   - start: 600
     scenarios:
       - type: CallPerformance
-        count: 600
+        count: 480
   - start: 720
     scenarios:
       - type: CallPerformance
-        count: 700
+        count: 560
   - start: 840
     scenarios:
       - type: CallPerformance
-        count: 800
+        count: 640
   - start: 960
     scenarios:
       - type: CallPerformance
-        count: 900
+        count: 720
   - start: 1080
     scenarios:
       - type: CallPerformance
-        count: 1000
+        count: 800
   - start: 1200
     scenarios:
       - type: CallPerformance
-        count: 1100
+        count: 880
   - start: 1320
     scenarios:
       - type: CallPerformance
-        count: 1200
+        count: 960
   - start: 1440
     scenarios:
       - type: CallPerformance
-        count: 1300
+        count: 1040
   - start: 1560
     scenarios:
       - type: CallPerformance
-        count: 1400
+        count: 1120
   - start: 1680
     scenarios:
       - type: CallPerformance
-        count: 1500
+        count: 1200
   - start: 1800
     scenarios:
       - type: CallPerformance
-        count: 1600
+        count: 1280
   - start: 1920
     scenarios:
       - type: CallPerformance
-        count: 1700
+        count: 1360
   - start: 2040
     scenarios:
       - type: CallPerformance
-        count: 1800
+        count: 1440
   - start: 2160
     scenarios:
       - type: CallPerformance
-        count: 1900
+        count: 1520
   - start: 2280
     scenarios:
       - type: CallPerformance
-        count: 2000
+        count: 1600
   - start: 2400
     scenarios:
       - type: CallPerformance
-        count: 2100
+        count: 1680
   - start: 2520
     scenarios:
       - type: CallPerformance
-        count: 2200
+        count: 1760
   - start: 2640
     scenarios:
       - type: CallPerformance
-        count: 2300
+        count: 1840
   - start: 2760
     scenarios:
       - type: CallPerformance
-        count: 2400
+        count: 1920
   - start: 2880
     scenarios:
       - type: CallPerformance
-        count: 2500
+        count: 2000
   - start: 3000
     scenarios:
       - type: CallPerformance
-        count: 2600
+        count: 2080
   - start: 3120
     scenarios:
       - type: CallPerformance
-        count: 2700
+        count: 2160
   - start: 3240
     scenarios:
       - type: CallPerformance
-        count: 2800
+        count: 2240
   - start: 3360
     scenarios:
       - type: CallPerformance
-        count: 2900
+        count: 2320
   - start: 3480
     scenarios:
       - type: CallPerformance
-        count: 3000
+        count: 2400
   - start: 3600
     scenarios:
       - type: CallPerformance
-        count: 3100
+        count: 2480
   - start: 3720
     scenarios:
       - type: CallPerformance
-        count: 3200
+        count: 2560
   - start: 3840
     scenarios:
       - type: CallPerformance
-        count: 3300
+        count: 2640
   - start: 3960
     scenarios:
       - type: CallPerformance
-        count: 3400
+        count: 2720
   - start: 4080
     scenarios:
       - type: CallPerformance
-        count: 3500
+        count: 2800
   - start: 4200
     scenarios:
       - type: CallPerformance
-        count: 3600
+        count: 2880
   - start: 4320
     scenarios:
       - type: CallPerformance
-        count: 3700
+        count: 2960
   - start: 4440
     scenarios:
       - type: CallPerformance
-        count: 3800
+        count: 3040
   - start: 4560
     scenarios:
       - type: CallPerformance
-        count: 3900
+        count: 3120
   - start: 4680
     scenarios:
       - type: CallPerformance
-        count: 4000
+        count: 3200
   - start: 4800
     scenarios:
       - type: CallPerformance
-        count: 4100
+        count: 3280
   - start: 4920
     scenarios:
       - type: CallPerformance
-        count: 4200
+        count: 3360
   - start: 5040
     scenarios:
       - type: CallPerformance
-        count: 4300
+        count: 3440
   - start: 5160
     scenarios:
       - type: CallPerformance
-        count: 4400
+        count: 3520
   - start: 5280
     scenarios:
       - type: CallPerformance
-        count: 4500
+        count: 3600
   - start: 5400
     scenarios:
       - type: CallPerformance
-        count: 4600
+        count: 3680
   - start: 5520
     scenarios:
       - type: CallPerformance
-        count: 4700
+        count: 3760
   - start: 5640
     scenarios:
       - type: CallPerformance
-        count: 4800
+        count: 3840
   - start: 5760
     scenarios:
       - type: CallPerformance
-        count: 4900
+        count: 3920
   - start: 5880
     scenarios:
       - type: CallPerformance
-        count: 5000
+        count: 4000
   - start: 6000
     scenarios:
       - type: CallPerformance
-        count: 5100
+        count: 4080
   - start: 6120
     scenarios:
       - type: CallPerformance
-        count: 5200
+        count: 4160
   - start: 6240
     scenarios:
       - type: CallPerformance
-        count: 5300
+        count: 4240
   - start: 6360
     scenarios:
       - type: CallPerformance
-        count: 5400
+        count: 4320
   - start: 6480
     scenarios:
       - type: CallPerformance
-        count: 5500
+        count: 4400
   - start: 6600
     scenarios:
       - type: CallPerformance
-        count: 5600
+        count: 4480
   - start: 6720
     scenarios:
       - type: CallPerformance
-        count: 5700
+        count: 4560
   - start: 6840
     scenarios:
       - type: CallPerformance
-        count: 5800
+        count: 4640
   - start: 6960
     scenarios:
       - type: CallPerformance
-        count: 5900
+        count: 4720
   - start: 7080
     scenarios:
       - type: CallPerformance
-        count: 6000
+        count: 4800
   - start: 7200
     scenarios:
       - type: CallPerformance
-        count: 6100
+        count: 4880
   - start: 7320
     scenarios:
       - type: CallPerformance
-        count: 6200
+        count: 4960
   - start: 7440
     scenarios:
       - type: CallPerformance
-        count: 6300
+        count: 5040
   - start: 7560
     scenarios:
       - type: CallPerformance
-        count: 6400
+        count: 5120
   - start: 7680
     scenarios:
       - type: CallPerformance
-        count: 6500
+        count: 5200
   - start: 7800
     scenarios:
       - type: CallPerformance
-        count: 6600
+        count: 5280
   - start: 7920
     scenarios:
       - type: CallPerformance
-        count: 6700
+        count: 5360
   - start: 8040
     scenarios:
       - type: CallPerformance
-        count: 6800
+        count: 5440
   - start: 8160
     scenarios:
       - type: CallPerformance
-        count: 6900
+        count: 5520
   - start: 8280
     scenarios:
       - type: CallPerformance
-        count: 7000
+        count: 5600
   - start: 8400
     scenarios:
       - type: CallPerformance
-        count: 7100
+        count: 5680
   - start: 8520
     scenarios:
       - type: CallPerformance
-        count: 7200
+        count: 5760
 end: 8640
