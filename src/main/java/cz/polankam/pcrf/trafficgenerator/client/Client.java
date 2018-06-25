@@ -51,6 +51,8 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
     private final AtomicLong sentCount;
     /** Number of received messages from the beginning of the execution */
     private final AtomicLong receivedCount;
+    /** Number of failures from the beginning of the execution */
+    private final AtomicLong failuresCount;
     /** Current number of active scenarios */
     private final AtomicLong currentScenariosCount;
 
@@ -72,6 +74,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         timeoutsCount = new AtomicLong(0);
         sentCount = new AtomicLong(0);
         receivedCount = new AtomicLong(0);
+        failuresCount = new AtomicLong(0);
         currentScenariosCount = new AtomicLong(0);
         scenarioTypesCount = new HashMap<>();
     }
@@ -135,6 +138,10 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
 
     public long getReceivedCount() {
         return receivedCount.get();
+    }
+
+    public long getFailuresCount() {
+        return failuresCount.get();
     }
 
     public long getScenariosCount() {
@@ -262,6 +269,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         logger.error(errorMessage, ex);
         boolean wasDestroyed = scenario.isDestroyed();
         removeScenario(scenario);
+        failuresCount.incrementAndGet();
         if (!wasDestroyed) {
             // scenario was not yet destroyed, so create the next one
             logger.info("Scenario failed in state '" + scenario.getCurrentStateName() + "', creating next one");

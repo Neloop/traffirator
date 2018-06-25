@@ -46,7 +46,7 @@ class StatisticsLoggerTest {
         logger.close();
 
         String content = new String(Files.readAllBytes(Paths.get(file)));
-        assertEquals("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount\tProcessLoad [%]" + System.lineSeparator(), content);
+        assertEquals("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount\tFailuresCount\tProcessLoad [%]" + System.lineSeparator(), content);
     }
 
     @Test
@@ -61,14 +61,15 @@ class StatisticsLoggerTest {
         when(client.getScenariosCount()).thenReturn((long) 66857);
         when(client.getSentCount()).thenReturn((long) 82462);
         when(client.getReceivedCount()).thenReturn((long) 55842);
+        when(client.getFailuresCount()).thenReturn((long) 2354);
 
         logger.init();
         logger.log();
         logger.close();
 
         String content = new String(Files.readAllBytes(Paths.get(file)));
-        assertTrue(content.startsWith("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount\tProcessLoad [%]" + System.lineSeparator()));
-        assertTrue(content.contains("\t66857\t24568\t82462\t55842\t"));
+        assertTrue(content.startsWith("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount\tFailuresCount\tProcessLoad [%]" + System.lineSeparator()));
+        assertTrue(content.contains("\t66857\t24568\t82462\t55842\t2354\t"));
     }
 
     @Test
@@ -83,6 +84,7 @@ class StatisticsLoggerTest {
         when(client.getScenariosCount()).thenReturn((long) 8541).thenReturn((long) 5874);
         when(client.getSentCount()).thenReturn((long) 85412).thenReturn((long) 542536);
         when(client.getReceivedCount()).thenReturn((long) 96842).thenReturn((long) 854236);
+        when(client.getFailuresCount()).thenReturn((long) 8632).thenReturn((long) 99632);
 
         logger.init();
         logger.log();
@@ -90,8 +92,8 @@ class StatisticsLoggerTest {
         logger.close();
 
         String content = new String(Files.readAllBytes(Paths.get(file)));
-        assertTrue(content.startsWith("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount\tProcessLoad [%]" + System.lineSeparator()));
-        assertTrue(content.contains("\t5874\t530195\t457124\t757394\t"));
+        assertTrue(content.startsWith("Time\tScenariosCount\tTimeoutsCount\tSentCount\tReceivedCount\tFailuresCount\tProcessLoad [%]" + System.lineSeparator()));
+        assertTrue(content.contains("\t5874\t530195\t457124\t757394\t91000\t"));
     }
 
 }

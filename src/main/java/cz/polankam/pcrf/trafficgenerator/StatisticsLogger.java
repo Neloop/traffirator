@@ -22,6 +22,8 @@ public class StatisticsLogger {
     private long previousSent = 0;
     /** Client is returning received messages in absolute numbers, this is cache for last count. */
     private long previousReceived = 0;
+    /** Client is returning failures in absolute numbers, this is cache for last count. */
+    private long previousFailures = 0;
 
     public StatisticsLogger(Client client, Statistics config) {
         this.client = client;
@@ -41,6 +43,8 @@ public class StatisticsLogger {
         logFile.print("\t");
         logFile.print("ReceivedCount");
         logFile.print("\t");
+        logFile.print("FailuresCount");
+        logFile.print("\t");
         logFile.print("ProcessLoad [%]");
         logFile.println();
     }
@@ -49,6 +53,7 @@ public class StatisticsLogger {
         long timeoutsCount = client.getTimeoutsCount();
         long sentCount = client.getSentCount();
         long receivedCount = client.getReceivedCount();
+        long failuresCount = client.getFailuresCount();
 
         logFile.print(System.currentTimeMillis());
         logFile.print("\t");
@@ -60,12 +65,15 @@ public class StatisticsLogger {
         logFile.print("\t");
         logFile.print(receivedCount - previousReceived);
         logFile.print("\t");
+        logFile.print(failuresCount - previousFailures);
+        logFile.print("\t");
         logFile.printf("%.2f", osBean.getProcessCpuLoad() * 100);
         logFile.println();
 
         previousTimeouts = timeoutsCount;
         previousSent = sentCount;
         previousReceived = receivedCount;
+        previousFailures = failuresCount;
     }
 
     public void close() {
