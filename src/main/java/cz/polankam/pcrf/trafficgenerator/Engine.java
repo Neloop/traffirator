@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import cz.polankam.pcrf.trafficgenerator.client.Client;
 import cz.polankam.pcrf.trafficgenerator.config.Config;
-import cz.polankam.pcrf.trafficgenerator.config.ProfileItem;
 import cz.polankam.pcrf.trafficgenerator.config.ProfileValidator;
-import cz.polankam.pcrf.trafficgenerator.config.ScenarioItem;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
@@ -17,8 +15,6 @@ import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -66,54 +62,6 @@ public class Engine {
         }
     }
 
-    class ChangeActionRunnable implements Runnable {
-
-        private final Queue<ProfileItem> queue;
-        private final int burstLimit;
-        private final Client client;
-
-        ChangeActionRunnable(Queue<ProfileItem> queue, int burstLimit, Client client) {
-            this.queue = queue;
-            this.burstLimit = burstLimit;
-            this.client = client;
-        }
-
-        @Override
-        public void run() {
-            ProfileItem current = queue.poll();
-            int previousSecond = 0;
-            int previousScenarioBurst = 0;
-            for (ScenarioItem scenario : current.getScenarios()) {
-                int scenariosCount = scenario.getCount();
-                while (scenariosCount > 0) {
-                    int burst = burstLimit;
-                    if (scenariosCount < burstLimit) {
-                        burst = scenariosCount;
-                    }
-
-                    final int burstFinal = burst - previousScenarioBurst;
-                    executor.schedule(() -> {
-                        client.controlScenarios(scenario.getType(), burstFinal);
-                    }, ++previousSecond, TimeUnit.SECONDS);
-
-                    scenariosCount -= burst;
-                    previousScenarioBurst = burst % burstLimit;
-                }
-            }
-            summary.addChange(current);
-
-            if (!queue.isEmpty()) {
-                long nextStart = queue.peek().getStart() - current.getStart();
-                executor.schedule(new ChangeActionRunnable(queue, burstLimit, client), nextStart, TimeUnit.SECONDS);
-            }
-        }
-    }
-
-    private void scheduleTestProfile(Config config, Client client) {
-        Queue<ProfileItem> queue = new LinkedList<>(config.getProfile().getFlow());
-        executor.schedule(new ChangeActionRunnable(queue, config.getProfile().getBurstLimit(), client), queue.peek().getStart(), TimeUnit.SECONDS);
-    }
-
     private Config getClientConfig() throws Exception {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
@@ -156,7 +104,7 @@ public class Engine {
         // start sending/receiving messages on gx and rx interfaces
         summary.setStart();
         // schedule execution of test profile
-        scheduleTestProfile(config, client);
+        ProfileChangeRunner.start(executor, summary, config, client);
 
         // schedule ending of the execution from the configuration
         // has its own executor in case of deadlocks in the client
