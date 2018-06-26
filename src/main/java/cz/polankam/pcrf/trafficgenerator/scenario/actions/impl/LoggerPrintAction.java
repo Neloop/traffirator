@@ -20,7 +20,7 @@ public class LoggerPrintAction implements ScenarioAction {
     
     @Override
     public void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) {
-        logger.info(message);
+        logger.debug(message);
     }
     
 }

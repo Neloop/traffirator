@@ -190,6 +190,9 @@ public class GxRequestsFactory {
             chargRuleReport.addAvp(AvpUtils.CHARGING_RULE_NAME, (String) state.get("second_charging_rule_name"), Vendor.TGPP, true, false, true);
             chargRuleReport.addAvp(AvpUtils.PCC_RULE_STATUS, 1, Vendor.TGPP, true, false);
             chargRuleReport.addAvp(AvpUtils.RULE_FAILURE_CODE, 10, Vendor.TGPP, true, false);
+
+            state.remove("first_charging_rule_name");
+            state.remove("second_charging_rule_name");
         }
 
         // *** RETURN REQUEST
