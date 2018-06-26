@@ -69,31 +69,49 @@ public class Engine {
     class ChangeActionRunnable implements Runnable {
 
         private final Queue<ProfileItem> queue;
+        private final int burstLimit;
         private final Client client;
 
-        ChangeActionRunnable(Queue<ProfileItem> queue, Client client) {
+        ChangeActionRunnable(Queue<ProfileItem> queue, int burstLimit, Client client) {
             this.queue = queue;
+            this.burstLimit = burstLimit;
             this.client = client;
         }
 
         @Override
         public void run() {
             ProfileItem current = queue.poll();
+            int previousSecond = 0;
+            int previousScenarioBurst = 0;
             for (ScenarioItem scenario : current.getScenarios()) {
-                client.controlScenarios(scenario.getType(), scenario.getCount());
+                int scenariosCount = scenario.getCount();
+                while (scenariosCount > 0) {
+                    int burst = burstLimit;
+                    if (scenariosCount < burstLimit) {
+                        burst = scenariosCount;
+                    }
+
+                    final int burstFinal = burst - previousScenarioBurst;
+                    executor.schedule(() -> {
+                        client.controlScenarios(scenario.getType(), burstFinal);
+                    }, ++previousSecond, TimeUnit.SECONDS);
+
+                    scenariosCount -= burst;
+                    previousScenarioBurst = burst % burstLimit;
+                }
             }
             summary.addChange(current);
 
             if (!queue.isEmpty()) {
                 long nextStart = queue.peek().getStart() - current.getStart();
-                executor.schedule(new ChangeActionRunnable(queue, client), nextStart, TimeUnit.SECONDS);
+                executor.schedule(new ChangeActionRunnable(queue, burstLimit, client), nextStart, TimeUnit.SECONDS);
             }
         }
     }
 
     private void scheduleTestProfile(Config config, Client client) {
         Queue<ProfileItem> queue = new LinkedList<>(config.getProfile().getFlow());
-        executor.schedule(new ChangeActionRunnable(queue, client), queue.peek().getStart(), TimeUnit.SECONDS);
+        executor.schedule(new ChangeActionRunnable(queue, config.getProfile().getBurstLimit(), client), queue.peek().getStart(), TimeUnit.SECONDS);
     }
 
     private Config getClientConfig() throws Exception {
