@@ -309,7 +309,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
                     // delete scenario from all internal structures
                     removeScenario(scenario);
 
-                    logger.info("Scenario empty, loading next");
+                    logger.debug("Scenario '" + scenario.getCurrentStateName() + "' empty, loading next");
                     // send next message of newly created scenario
                     sendNextMessage(createScenario(scenario.getType()));
                 } else if (sent && isNextSending) {

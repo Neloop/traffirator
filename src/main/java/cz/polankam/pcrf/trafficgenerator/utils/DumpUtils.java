@@ -31,10 +31,10 @@ public class DumpUtils {
 
 
     public static void dumpMessage(Message message, boolean sending) {
-        logger.info((sending ? "Sending " : "Received ") + (message.isRequest() ? "Request: " : "Answer: ") + commandCodeToString(message.getCommandCode()) + " (E2E:"
+        logger.debug((sending ? "Sending " : "Received ") + (message.isRequest() ? "Request: " : "Answer: ") + commandCodeToString(message.getCommandCode()) + " (E2E:"
                 + message.getEndToEndIdentifier() + "; HBH:" + message.getHopByHopIdentifier() + "; AppID:" + message.getApplicationId() + "; SessID:" + message.getSessionId() + ")");
 
-        if (!logger.isDebugEnabled()) {
+        if (!logger.isTraceEnabled()) {
             return;
         }
 
@@ -63,7 +63,7 @@ public class DumpUtils {
     }
 
     public static void printAvps(AvpSet avpSet) throws AvpDataException {
-        logger.debug("AVPS[" + avpSet.size() + "]: \n");
+        logger.trace("AVPS[" + avpSet.size() + "]: \n");
         printAvpsAux(avpSet, 0);
     }
 
@@ -82,9 +82,9 @@ public class DumpUtils {
             AvpRepresentation avpRep = dictionary.getAvp(avp.getCode(), avp.getVendorId());
 
             if (avpRep != null && avpRep.getType().equals("Grouped")) {
-                logger.debug(prefix + "<avp name=\"" + avpRep.getName() + "\" code=\"" + avp.getCode() + "\" vendor=\"" + avp.getVendorId() + "\">");
+                logger.trace(prefix + "<avp name=\"" + avpRep.getName() + "\" code=\"" + avp.getCode() + "\" vendor=\"" + avp.getVendorId() + "\">");
                 printAvpsAux(avp.getGrouped(), level + 1);
-                logger.debug(prefix + "</avp>");
+                logger.trace(prefix + "</avp>");
             } else if (avpRep != null) {
                 String value;
 
@@ -101,7 +101,7 @@ public class DumpUtils {
                     value = new String(avp.getOctetString(), StandardCharsets.UTF_8);
                 }
 
-                logger.debug(prefix + "<avp name=\"" + avpRep.getName() + "\" code=\"" + avp.getCode() + "\" vendor=\"" + avp.getVendorId()
+                logger.trace(prefix + "<avp name=\"" + avpRep.getName() + "\" code=\"" + avp.getCode() + "\" vendor=\"" + avp.getVendorId()
                         + "\" value=\"" + value + "\" />");
             }
         }
