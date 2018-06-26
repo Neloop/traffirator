@@ -5,6 +5,7 @@ import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -14,44 +15,85 @@ class ProfileValidatorTest {
 
     @Test
     void testValidate_nullProfile() {
-        ProfileValidator validator = new ProfileValidator(new ScenarioFactory());
         assertThrows(ValidationException.class, () -> {
-            validator.validate(new Config());
+            new ProfileValidator(new ScenarioFactory()).validate(new Config());
         });
     }
 
     @Test
     void testValidate_emptyProfile() {
-        ProfileValidator validator = new ProfileValidator(new ScenarioFactory());
+        Profile profile = new Profile();
+        profile.setBurstLimit(345);
+        profile.setEnd(678);
+        profile.setFlow(new ArrayList<>());
+
         Config config = new Config();
-        config.setProfile(new ArrayList<>());
+        config.setProfile(profile);
 
         assertThrows(ValidationException.class, () -> {
-            validator.validate(config);
+            new ProfileValidator(new ScenarioFactory()).validate(config);
+        });
+    }
+
+    @Test
+    void testValidate_invalidBurstLimit() {
+        Profile profile = new Profile();
+        profile.setBurstLimit(-82);
+        profile.setEnd(346);
+        profile.setFlow(Collections.singletonList(new ProfileItem()));
+
+        Config config = new Config();
+        config.setProfile(profile);
+
+        assertThrows(ValidationException.class, () -> {
+            new ProfileValidator(new ScenarioFactory()).validate(config);
+        });
+    }
+
+    @Test
+    void testValidate_invalidEnd() {
+        Profile profile = new Profile();
+        profile.setBurstLimit(5462);
+        profile.setEnd(-836);
+        profile.setFlow(Collections.singletonList(new ProfileItem()));
+
+        Config config = new Config();
+        config.setProfile(profile);
+
+        assertThrows(ValidationException.class, () -> {
+            new ProfileValidator(new ScenarioFactory()).validate(config);
         });
     }
 
     @Test
     void testValidate_negativeStart() {
-        ProfileValidator validator = new ProfileValidator(new ScenarioFactory());
+        Profile profile = new Profile();
+        profile.setBurstLimit(351);
+        profile.setEnd(38);
+
         Config config = new Config();
+        config.setProfile(profile);
 
         ProfileItem item = new ProfileItem();
         item.setStart(-54);
 
-        List<ProfileItem> profile = new ArrayList<>();
-        profile.add(item);
-        config.setProfile(profile);
+        List<ProfileItem> items = new ArrayList<>();
+        items.add(item);
+        profile.setFlow(items);
 
         assertThrows(ValidationException.class, () -> {
-            validator.validate(config);
+            new ProfileValidator(new ScenarioFactory()).validate(config);
         });
     }
 
     @Test
     void testValidate_badStart() {
-        ProfileValidator validator = new ProfileValidator(new ScenarioFactory());
+        Profile profile = new Profile();
+        profile.setBurstLimit(27);
+        profile.setEnd(927);
+
         Config config = new Config();
+        config.setProfile(profile);
 
         ProfileItem item1 = new ProfileItem();
         ProfileItem item2 = new ProfileItem();
@@ -59,13 +101,13 @@ class ProfileValidatorTest {
         item1.setStart(345);
         item2.setStart(43);
 
-        List<ProfileItem> profile = new ArrayList<>();
-        profile.add(item1);
-        profile.add(item2);
-        config.setProfile(profile);
+        List<ProfileItem> items = new ArrayList<>();
+        items.add(item1);
+        items.add(item2);
+        profile.setFlow(items);
 
         assertThrows(ValidationException.class, () -> {
-            validator.validate(config);
+            new ProfileValidator(new ScenarioFactory()).validate(config);
         });
     }
 
@@ -74,8 +116,12 @@ class ProfileValidatorTest {
         ScenarioFactory factory = mock(ScenarioFactory.class);
         when(factory.check("non-existing")).thenReturn(false);
 
-        ProfileValidator validator = new ProfileValidator(factory);
+        Profile profile = new Profile();
+        profile.setBurstLimit(937);
+        profile.setEnd(354);
+
         Config config = new Config();
+        config.setProfile(profile);
 
         ScenarioItem scenarioItem = new ScenarioItem();
         scenarioItem.setType("non-existing");
@@ -84,12 +130,12 @@ class ProfileValidatorTest {
         item.setStart(6658);
         item.getScenarios().add(scenarioItem);
 
-        List<ProfileItem> profile = new ArrayList<>();
-        profile.add(item);
-        config.setProfile(profile);
+        List<ProfileItem> items = new ArrayList<>();
+        items.add(item);
+        profile.setFlow(items);
 
         assertThrows(ValidationException.class, () -> {
-            validator.validate(config);
+            new ProfileValidator(new ScenarioFactory()).validate(config);
         });
     }
 
@@ -98,8 +144,12 @@ class ProfileValidatorTest {
         ScenarioFactory factory = mock(ScenarioFactory.class);
         when(factory.check("existing")).thenReturn(true);
 
-        ProfileValidator validator = new ProfileValidator(factory);
+        Profile profile = new Profile();
+        profile.setBurstLimit(976);
+        profile.setEnd(2485);
+
         Config config = new Config();
+        config.setProfile(profile);
 
         ScenarioItem scenarioItem = new ScenarioItem();
         scenarioItem.setType("existing");
@@ -113,12 +163,12 @@ class ProfileValidatorTest {
         item1.getScenarios().add(scenarioItem);
         item2.getScenarios().add(scenarioItem);
 
-        List<ProfileItem> profile = new ArrayList<>();
-        profile.add(item1);
-        profile.add(item2);
-        config.setProfile(profile);
+        List<ProfileItem> items = new ArrayList<>();
+        items.add(item1);
+        items.add(item2);
+        profile.setFlow(items);
 
-        validator.validate(config);
+        new ProfileValidator(factory).validate(config);
         verify(factory, times(2)).check("existing");
     }
 }

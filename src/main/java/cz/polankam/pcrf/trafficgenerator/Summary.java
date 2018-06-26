@@ -47,7 +47,8 @@ public class Summary {
 
         out.println("Initial Setup: ");
         out.println("    Thread Count: " + config.getThreadCount());
-        out.println("    End: " + config.getEnd());
+        out.println("    End: " + config.getProfile().getEnd());
+        out.println("    Burst Limit: " + config.getProfile().getBurstLimit());
 
         if (!changes.isEmpty()) {
             out.println("Changes:");

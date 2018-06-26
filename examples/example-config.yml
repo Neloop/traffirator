@@ -6,12 +6,14 @@ statistics:
   logFile: ./logs/statistics.log  # file where sampled statistics counts will be written
   samplingPeriod: 1000  # period of sampling for statistics logging, in milliseconds
 profile:  # testing profile
-  - start: 0  # begin this testing profile item at, in seconds
-    scenarios:  # list of scenarios used in this profile item
-      - type: Demo  # type of the used scenario
-        count: 1  # number of scenarios with particular type which will be spawned, in absolute numbers
-  - start: 10
-    scenarios:
-      - type: Demo
-        count: 10
-end: 20  # when will the execution ends, in seconds
+  burstLimit: 10  # corresponds to the max number of new calls that can be created in one second
+  end: 20  # when will the execution ends, in seconds
+  flow:
+    - start: 0  # begin this testing profile item at, in seconds
+      scenarios:  # list of scenarios used in this profile item
+        - type: Demo  # type of the used scenario
+          count: 1  # number of scenarios with particular type which will be spawned, in absolute numbers
+    - start: 10
+      scenarios:
+        - type: Demo
+          count: 10

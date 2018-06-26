@@ -1,7 +1,5 @@
 package cz.polankam.pcrf.trafficgenerator.config;
 
-import java.util.List;
-
 
 public class Config {
 
@@ -9,8 +7,7 @@ public class Config {
     private int threadCount;
     private String summary;
     private Statistics statistics;
-    private List<ProfileItem> profile;
-    private long end;
+    private Profile profile;
 
 
     /**
@@ -61,23 +58,12 @@ public class Config {
      * Testing profile configuration.
      * @return
      */
-    public List<ProfileItem> getProfile() {
+    public Profile getProfile() {
         return profile;
     }
 
-    public void setProfile(List<ProfileItem> profile) {
+    public void setProfile(Profile profile) {
         this.profile = profile;
     }
 
-    /**
-     * When will the execution ends, in seconds.
-     * @return
-     */
-    public long getEnd() {
-        return end;
-    }
-
-    public void setEnd(long end) {
-        this.end = end;
-    }
 }

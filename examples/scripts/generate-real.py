@@ -5,14 +5,14 @@ malfunctioning_list = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 5, 7, 8,
 travelling_list = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 5, 10, 20, 30, 50, 50, 50, 50, 40, 50, 60, 60, 70, 60, 50, 50, 30, 20, 10, 5, 3, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0 ];
 
 for time, call, classic, malfunctioning, travelling in zip(times, call_center_list, classic_list, malfunctioning_list, travelling_list):
-    print "  - start: {}".format(time * 60)
-    print "    scenarios:"
-    print "      - type: CallCenterEmployee"
-    print "        count: {}".format(call)
-    print "      - type: ClassicUser"
-    print "        count: {}".format(classic)
-    print "      - type: MalfunctioningCellPhone"
-    print "        count: {}".format(malfunctioning)
-    print "      - type: TravellingManager"
-    print "        count: {}".format(travelling)
+    print "    - start: {}".format(time * 60)
+    print "      scenarios:"
+    print "        - type: CallCenterEmployee"
+    print "          count: {}".format(call)
+    print "        - type: ClassicUser"
+    print "          count: {}".format(classic)
+    print "        - type: MalfunctioningCellPhone"
+    print "          count: {}".format(malfunctioning)
+    print "        - type: TravellingManager"
+    print "          count: {}".format(travelling)
 

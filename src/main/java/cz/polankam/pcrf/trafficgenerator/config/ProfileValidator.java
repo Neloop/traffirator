@@ -17,15 +17,27 @@ public class ProfileValidator {
      * Validate test profile from given configuration. Validator checks for correct order of events and if correct types
      * of scenarios are given.
      * @param config
-     * @throws Exception
+     * @throws ValidationException
      */
     public void validate(Config config) throws ValidationException {
-        if (config.getProfile() == null || config.getProfile().isEmpty()) {
+        if (config.getProfile() == null) {
+            throw new ValidationException("Configuration does not contain test profile");
+        }
+
+        if (config.getProfile().getBurstLimit() <= 0) {
+            throw new ValidationException("Burst limit in the profile cannot be less than or equals to zero");
+        }
+
+        if (config.getProfile().getEnd() <= 0) {
+            throw new ValidationException("End in the profile cannot be less than or equals to zero");
+        }
+
+        if (config.getProfile().getFlow().isEmpty()) {
             throw new ValidationException("Test profile has to contain at least one item");
         }
 
         long previous = 0;
-        for (ProfileItem item : config.getProfile()) {
+        for (ProfileItem item : config.getProfile().getFlow()) {
             if (item.getStart() < 0) {
                 throw new ValidationException("Profile item start '" + item.getStart() + "' is lower than zero");
             }

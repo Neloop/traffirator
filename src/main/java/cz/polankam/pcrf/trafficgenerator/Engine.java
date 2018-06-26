@@ -92,7 +92,7 @@ public class Engine {
     }
 
     private void scheduleTestProfile(Config config, Client client) {
-        Queue<ProfileItem> queue = new LinkedList<>(config.getProfile());
+        Queue<ProfileItem> queue = new LinkedList<>(config.getProfile().getFlow());
         executor.schedule(new ChangeActionRunnable(queue, client), queue.peek().getStart(), TimeUnit.SECONDS);
     }
 
@@ -145,7 +145,7 @@ public class Engine {
         Executors.newScheduledThreadPool(1).schedule(() -> {
             client.finish();
             logger.info("End trigger activated");
-        }, config.getEnd(), TimeUnit.SECONDS);
+        }, config.getProfile().getEnd(), TimeUnit.SECONDS);
 
         // schedule statistics logging
         executor.scheduleAtFixedRate(statistics::log, config.getStatistics().getSamplingPeriod(),
