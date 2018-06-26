@@ -57,24 +57,21 @@ public class ProfileChangeRunner implements Runnable {
             int scenariosIncrementalCount = scenario.getCount() - currentCount;
 
             if (scenariosIncrementalCount < 0) {
-                // Number of scenarios has to be lowered, this action can be instant
+                // number of scenarios has to be lowered, this action can be instant
                 context.client.controlScenarios(scenario.getType(), scenario.getCount(), 0);
             } else {
                 int baseCountForScenario = currentCount;
                 while (scenariosIncrementalCount > 0) {
                     int currentBurstLimit = context.burstLimit - previousScenarioBurst;
-                    int burst = currentBurstLimit;
-                    if (scenariosIncrementalCount < currentBurstLimit) {
-                        burst = scenariosIncrementalCount;
-                    }
+                    int burst = scenariosIncrementalCount < currentBurstLimit ? scenariosIncrementalCount : currentBurstLimit;
 
                     // control the scenario, delays are handled by the client itself
                     context.client.controlScenarios(scenario.getType(), baseCountForScenario + burst, secondsDelay);
 
-                    secondsDelay += previousScenarioBurst > 0 ? 0 : 1;
                     scenariosIncrementalCount -= burst;
                     previousScenarioBurst = (burst + previousScenarioBurst) % context.burstLimit;
                     baseCountForScenario += burst;
+                    secondsDelay += previousScenarioBurst > 0 ? 0 : 1;
                 }
             }
         }
