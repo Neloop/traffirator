@@ -148,27 +148,37 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         return currentScenariosCount.get();
     }
 
-    public synchronized void controlScenarios(String type, int count) {
-        int scenariosCount = scenarioTypesCount.getOrDefault(type, 0);
-        if (scenariosCount == count) {
-            return;
-        }
+    /**
+     *
+     * @param type
+     * @param count
+     * @param delay in seconds
+     */
+    public void controlScenarios(String type, int count, int delay) {
+        executorService.schedule(() -> {
+            synchronized (this) {
+                int scenariosCount = scenarioTypesCount.getOrDefault(type, 0);
+                if (scenariosCount == count) {
+                    return;
+                }
 
-        if (scenariosCount < count) {
-            // add scenarios
-            int diff = count - scenariosCount;
-            for (int i = 0; i < diff; ++i) {
-                createAndStartScenario(type);
-            }
-        } else {
-            // delete scenarios
-            int diff = scenariosCount - count;
-            for (int i = 0; i < diff; ++i) {
-                removeRandomScenario(type);
-            }
-        }
+                if (scenariosCount < count) {
+                    // add scenarios
+                    int diff = count - scenariosCount;
+                    for (int i = 0; i < diff; ++i) {
+                        createAndStartScenario(type);
+                    }
+                } else {
+                    // delete scenarios
+                    int diff = scenariosCount - count;
+                    for (int i = 0; i < diff; ++i) {
+                        removeRandomScenario(type);
+                    }
+                }
 
-        scenarioTypesCount.put(type, count);
+                scenarioTypesCount.put(type, count);
+            }
+        }, delay, TimeUnit.SECONDS);
     }
 
     private synchronized void createAndStartScenario(String type) {

@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ProfileChangeRunner implements Runnable {
 
-    private static class Context {
+    protected static class Context {
         final ScheduledExecutorService executor;
         final Summary summary;
         final Queue<ProfileItem> queue;
@@ -42,7 +42,7 @@ public class ProfileChangeRunner implements Runnable {
 
     private final Context context;
 
-    private ProfileChangeRunner(Context context) {
+    ProfileChangeRunner(Context context) {
         this.context = context;
     }
 
@@ -58,7 +58,7 @@ public class ProfileChangeRunner implements Runnable {
 
             if (scenariosIncrementalCount < 0) {
                 // Number of scenarios has to be lowered, this action can be instant
-                context.client.controlScenarios(scenario.getType(), scenario.getCount());
+                context.client.controlScenarios(scenario.getType(), scenario.getCount(), 0);
             } else {
                 int baseCountForScenario = currentCount;
                 while (scenariosIncrementalCount > 0) {
@@ -66,15 +66,12 @@ public class ProfileChangeRunner implements Runnable {
                     int burst = currentBurstLimit;
                     if (scenariosIncrementalCount < currentBurstLimit) {
                         burst = scenariosIncrementalCount;
-                    } else {
-                        ++secondsDelay;
                     }
 
-                    final int countFinal = baseCountForScenario + burst;
-                    context.executor.schedule(() -> {
-                        context.client.controlScenarios(scenario.getType(), countFinal);
-                    }, secondsDelay, TimeUnit.SECONDS);
+                    // control the scenario, delays are handled by the client itself
+                    context.client.controlScenarios(scenario.getType(), baseCountForScenario + burst, secondsDelay);
 
+                    secondsDelay += previousScenarioBurst > 0 ? 0 : 1;
                     scenariosIncrementalCount -= burst;
                     previousScenarioBurst = (burst + previousScenarioBurst) % context.burstLimit;
                     baseCountForScenario += burst;

@@ -15,8 +15,9 @@ public class ScenarioItem {
         return type;
     }
 
-    public void setType(String type) {
+    public ScenarioItem setType(String type) {
         this.type = type;
+        return this;
     }
 
     /**
@@ -27,7 +28,8 @@ public class ScenarioItem {
         return count;
     }
 
-    public void setCount(int count) {
+    public ScenarioItem setCount(int count) {
         this.count = count;
+        return this;
     }
 }

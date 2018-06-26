@@ -18,8 +18,9 @@ public class ProfileItem {
         return start;
     }
 
-    public void setStart(long start) {
+    public ProfileItem setStart(long start) {
         this.start = start;
+        return this;
     }
 
     /**
@@ -30,7 +31,8 @@ public class ProfileItem {
         return scenarios;
     }
 
-    public void setScenarios(List<ScenarioItem> scenarios) {
+    public ProfileItem setScenarios(List<ScenarioItem> scenarios) {
         this.scenarios = scenarios;
+        return this;
     }
 }
