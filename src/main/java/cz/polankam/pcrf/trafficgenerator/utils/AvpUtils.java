@@ -31,6 +31,7 @@ public class AvpUtils {
     public static int SPECIFIC_ACTION = 513;
     public static int CHARGING_RULE_REPORT = 1018;
     public static int CHARGING_RULE_NAME = 1005;
+    public static int CHARGING_RULE_INSTALL = 1001;
     public static int PCC_RULE_STATUS = 1019;
     public static int RULE_FAILURE_CODE = 1031;
 }

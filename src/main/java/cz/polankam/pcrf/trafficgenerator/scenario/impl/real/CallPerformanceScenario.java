@@ -70,7 +70,8 @@ public class CallPerformanceScenario extends Scenario {
                 .addReceiveAction("CCA-LC-ASR", 3000, new GxCcaU_Success_ReceiveAction(), new RxAsr_ReceiveAction())
                 .addSendAction("ASA", new RxAsa_Success_SendAction())
                 .addSendAction("STR", new RxStr_SendAction())
-                .addReceiveRxAction("STA", 3000, new RxSta_Success_ReceiveAction())
+                .addReceiveAction("RAR-STA", 3000, new GxRar_ReceiveAction(), new RxSta_Success_ReceiveAction())
+                .addSendAction("RAA", new GxRaa_Success_SendAction())
                 .build();
 
         /*

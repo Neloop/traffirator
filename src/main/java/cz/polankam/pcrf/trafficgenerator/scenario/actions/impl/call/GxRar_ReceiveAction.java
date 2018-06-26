@@ -20,13 +20,16 @@ public class GxRar_ReceiveAction implements ScenarioAction {
             throw new Exception("Received bad app event, answer '" + answerClassName + "'; request '" + requestClassName + "'");
         }
 
-        AvpSet ruleNameAvp = request.getMessage().getAvps().getAvps(AvpUtils.CHARGING_RULE_NAME);
-        if (ruleNameAvp != null && ruleNameAvp.size() == 2) {
-            Avp[] ruleNameArr = ruleNameAvp.asArray();
-            String firstChargingRuleName = new String(ruleNameArr[0].getOctetString());
-            String secondChargingRuleName = new String(ruleNameArr[1].getOctetString());
-            context.getState().put("first_charging_rule_name", firstChargingRuleName);
-            context.getState().put("second_charging_rule_name", secondChargingRuleName);
+        Avp ruleInstall = request.getMessage().getAvps().getAvp(AvpUtils.CHARGING_RULE_INSTALL);
+        if (ruleInstall != null) {
+            AvpSet rulesDefinition = ruleInstall.getGrouped();
+            if (rulesDefinition != null && rulesDefinition.size() == 2) {
+                Avp[] rulesDefinitionArr = rulesDefinition.asArray();
+                String firstChargingRuleName = new String(rulesDefinitionArr[0].getGrouped().getAvp(AvpUtils.CHARGING_RULE_NAME).getOctetString());
+                String secondChargingRuleName = new String(rulesDefinitionArr[1].getGrouped().getAvp(AvpUtils.CHARGING_RULE_NAME).getOctetString());
+                context.getState().put("first_charging_rule_name", firstChargingRuleName);
+                context.getState().put("second_charging_rule_name", secondChargingRuleName);
+            }
         }
     }
 
