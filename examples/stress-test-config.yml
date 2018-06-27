@@ -6,13 +6,13 @@ statistics:
   logFile: ./logs/statistics.log
   samplingPeriod: 1000
 profile:
-  burstLimit: 1000
+  burstLimit: 500
   end: 8640
   flow:
     - start: 0
       scenarios:
         - type: CallPerformance
-          count: 20000
+          count: 50000
     - start: 600
       scenarios:
         - type: CallPerformance
