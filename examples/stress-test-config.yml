@@ -17,3 +17,19 @@ profile:
       scenarios:
         - type: CallPerformance
           count: 100
+    - start: 2880
+      scenarios:
+        - type: CallPerformance
+          count: 50000
+    - start: 3480
+      scenarios:
+        - type: CallPerformance
+          count: 100
+    - start: 5760
+      scenarios:
+        - type: CallPerformance
+          count: 50000
+    - start: 6360
+      scenarios:
+        - type: CallPerformance
+          count: 100
