@@ -6,7 +6,7 @@ statistics:
   logFile: ./logs/statistics.log
   samplingPeriod: 1000
 profile:
-  burstLimit: 100
+  burstLimit: 200
   end: 8640
   flow:
     - start: 0

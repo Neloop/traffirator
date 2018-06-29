@@ -48,7 +48,7 @@ The configuration of the generator is defined in the YAML configuration format. 
     * **logFile** - The path, where the statistics file will be placed.
     * **samplingPeriod** - Sampling period in milliseconds, which will be used as period between the collections of information from the generator.
 * **profile** - Definition of the profile, which will be executed.
-    * **burstLimit** - Burst limit corresponds to the maximum number of new calls that can be created in one second.
+    * **burstLimit** - Burst limit corresponds to the maximum number of new scenarios that can be created in one second.
     * **end** - Defines the point in time, when the execution should end, it is defined in seconds.
     * **flow** - Contains the list of the profile entries.
         * **start** - The time, when this profile item begins and should be applied, it is defined in seconds.

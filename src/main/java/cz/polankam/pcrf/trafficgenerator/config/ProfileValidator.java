@@ -3,11 +3,17 @@ package cz.polankam.pcrf.trafficgenerator.config;
 import cz.polankam.pcrf.trafficgenerator.exceptions.ValidationException;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 
-
+/**
+ * Validator which might be used for validation of the profile configuration of the application.
+ */
 public class ProfileValidator {
 
     private ScenarioFactory scenarioFactory;
 
+    /**
+     * Constructor.
+     * @param factory scenario factory
+     */
     public ProfileValidator(ScenarioFactory factory) {
         this.scenarioFactory = factory;
     }
@@ -16,8 +22,8 @@ public class ProfileValidator {
     /**
      * Validate test profile from given configuration. Validator checks for correct order of events and if correct types
      * of scenarios are given.
-     * @param config
-     * @throws ValidationException
+     * @param config application configuration
+     * @throws ValidationException in case of validation error
      */
     public void validate(Config config) throws ValidationException {
         if (config.getProfile() == null) {

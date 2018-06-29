@@ -12,7 +12,11 @@ import org.jdiameter.common.impl.app.rx.RxSessionFactoryImpl;
 import org.jdiameter.server.impl.app.rx.IServerRxSessionData;
 import org.jdiameter.server.impl.app.rx.ServerRxSessionImpl;
 
-
+/**
+ * Copied from the jDiameter sources. Bugfix for not setting the application identification applied.
+ * Bugfix was submitted as an issue on the jDiameter GitHub pages and then successfully merged as a pull request.
+ * But fixed version was not yet released in the maven repository.
+ */
 public class MyRxSessionFactoryImpl extends RxSessionFactoryImpl {
 
   public MyRxSessionFactoryImpl(SessionFactory sessionFactory) {
