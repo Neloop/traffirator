@@ -17,7 +17,7 @@ public class ScenarioContext {
     private final GxStack gx;
     private final RxStack rx;
 
-    private final SessionCreator sessionCreator;
+    private final SessionProvider sessionProvider;
     private ClientGxSession gxSession;
     private ClientRxSession rxSession;
 
@@ -25,12 +25,12 @@ public class ScenarioContext {
     private final ConcurrentHashMap<String, Object> state;
 
 
-    public ScenarioContext(Scenario scenario, SessionCreator sessionCreator, GxStack gx, RxStack rx,
-            List<AppRequestEvent> receivedEvents, Map<String, Object> state) {
+    public ScenarioContext(Scenario scenario, SessionProvider sessionProvider, GxStack gx, RxStack rx,
+                           List<AppRequestEvent> receivedEvents, Map<String, Object> state) {
         this.gx = gx;
         this.rx = rx;
         this.scenario = scenario;
-        this.sessionCreator = sessionCreator;
+        this.sessionProvider = sessionProvider;
         this.receivedEvents = receivedEvents;
 
         this.state = new ConcurrentHashMap<>();
@@ -50,7 +50,7 @@ public class ScenarioContext {
     }
 
     public ClientGxSession createGxSession() throws Exception {
-        return gxSession = sessionCreator.createGxSession(gxSession, scenario);
+        return gxSession = sessionProvider.createGxSession(gxSession, scenario);
     }
 
     public ClientRxSession getRxSession() {
@@ -58,7 +58,7 @@ public class ScenarioContext {
     }
 
     public ClientRxSession createRxSession() throws Exception {
-        return rxSession = sessionCreator.createRxSession(rxSession, scenario);
+        return rxSession = sessionProvider.createRxSession(rxSession, scenario);
     }
 
     public String getGxRealm() {

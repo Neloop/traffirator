@@ -15,8 +15,6 @@ import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.EmptyAction;
 import cz.polankam.pcrf.trafficgenerator.utils.DiameterAppType;
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
-import org.jdiameter.api.gx.ClientGxSession;
-import org.jdiameter.api.rx.ClientRxSession;
 
 
 public abstract class Scenario {
@@ -33,11 +31,11 @@ public abstract class Scenario {
     private boolean receivedRx = false;
 
 
-    public void init(SessionCreator sessionCreator, GxStack gx, RxStack rx) throws Exception {
+    public void init(SessionProvider sessionProvider, GxStack gx, RxStack rx) throws Exception {
         // create scenario state and initialize context
         HashMap<String, Object> state = createNewScenarioState();
         List<AppRequestEvent> receivedRequests = Collections.synchronizedList(new ArrayList<>());
-        context = new ScenarioContext(this, sessionCreator, gx, rx, receivedRequests, state);
+        context = new ScenarioContext(this, sessionProvider, gx, rx, receivedRequests, state);
 
         // initialize current node
         currentNode = getRootNode();

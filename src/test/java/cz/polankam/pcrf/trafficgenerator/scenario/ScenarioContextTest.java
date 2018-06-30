@@ -24,7 +24,7 @@ class ScenarioContextTest {
         GxStack gx = mock(GxStack.class);
         RxStack rx = mock(RxStack.class);
         Scenario scenario = mock(Scenario.class);
-        SessionCreator creator = mock(SessionCreator.class);
+        SessionProvider creator = mock(SessionProvider.class);
         List<AppRequestEvent> events = new ArrayList<>();
 
         // fill a state a bit
@@ -58,7 +58,7 @@ class ScenarioContextTest {
         ClientGxSession gxSession = mock(ClientGxSession.class);
         ClientRxSession rxSession = mock(ClientRxSession.class);
         Scenario scenario = mock(Scenario.class);
-        SessionCreator creator = mock(SessionCreator.class);
+        SessionProvider creator = mock(SessionProvider.class);
         List<AppRequestEvent> events = new ArrayList<>();
         Map<String, Object> state = new HashMap<>();
 

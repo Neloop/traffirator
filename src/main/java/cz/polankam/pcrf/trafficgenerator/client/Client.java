@@ -25,10 +25,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
-import cz.polankam.pcrf.trafficgenerator.scenario.SessionCreator;
+import cz.polankam.pcrf.trafficgenerator.scenario.SessionProvider;
 
 
-public class Client implements ClientRxSessionListener, ClientGxSessionListener, SessionCreator {
+public class Client implements ClientRxSessionListener, ClientGxSessionListener, SessionProvider {
 
     private static final Logger logger = Logger.getLogger(Client.class);
 

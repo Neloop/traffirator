@@ -13,10 +13,10 @@ public interface ScenarioAction {
 
     /**
      * Perform this scenario action with given parameters.
-     * @param context
-     * @param request
-     * @param answer
-     * @throws Exception
+     * @param context scenario context
+     * @param request request message which should be processed, null if answer should be processed
+     * @param answer answer message which should be processed, null if request should be processed
+     * @throws Exception in case of error
      */
     void perform(ScenarioContext context, AppRequestEvent request, AppAnswerEvent answer) throws Exception;
 }
