@@ -2,7 +2,7 @@ package cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.call;
 
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioContext;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.ScenarioAction;
-import cz.polankam.pcrf.trafficgenerator.utils.AvpUtils;
+import cz.polankam.pcrf.trafficgenerator.utils.AvpCode;
 import org.jdiameter.api.Avp;
 import org.jdiameter.api.AvpSet;
 import org.jdiameter.api.app.AppAnswerEvent;
@@ -20,13 +20,13 @@ public class GxRar_ReceiveAction implements ScenarioAction {
             throw new Exception("Received bad app event, answer '" + answerClassName + "'; request '" + requestClassName + "'");
         }
 
-        Avp ruleInstall = request.getMessage().getAvps().getAvp(AvpUtils.CHARGING_RULE_INSTALL);
+        Avp ruleInstall = request.getMessage().getAvps().getAvp(AvpCode.CHARGING_RULE_INSTALL);
         if (ruleInstall != null) {
             AvpSet rulesDefinition = ruleInstall.getGrouped();
             if (rulesDefinition != null && rulesDefinition.size() == 2) {
                 Avp[] rulesDefinitionArr = rulesDefinition.asArray();
-                String firstChargingRuleName = new String(rulesDefinitionArr[0].getGrouped().getAvp(AvpUtils.CHARGING_RULE_NAME).getOctetString());
-                String secondChargingRuleName = new String(rulesDefinitionArr[1].getGrouped().getAvp(AvpUtils.CHARGING_RULE_NAME).getOctetString());
+                String firstChargingRuleName = new String(rulesDefinitionArr[0].getGrouped().getAvp(AvpCode.CHARGING_RULE_NAME).getOctetString());
+                String secondChargingRuleName = new String(rulesDefinitionArr[1].getGrouped().getAvp(AvpCode.CHARGING_RULE_NAME).getOctetString());
                 context.getState().put("first_charging_rule_name", firstChargingRuleName);
                 context.getState().put("second_charging_rule_name", secondChargingRuleName);
             }

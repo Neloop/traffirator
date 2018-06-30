@@ -1,7 +1,7 @@
 package cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.factory;
 
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioContext;
-import cz.polankam.pcrf.trafficgenerator.utils.AvpUtils;
+import cz.polankam.pcrf.trafficgenerator.utils.AvpCode;
 import cz.polankam.pcrf.trafficgenerator.utils.data.DataProvider;
 import cz.polankam.pcrf.trafficgenerator.utils.Vendor;
 import org.jdiameter.api.Avp;
@@ -29,16 +29,16 @@ public class GxRequestsFactory {
 
         avps.addAvp(Avp.CC_REQUEST_TYPE, 1, true, false);
         avps.addAvp(Avp.CC_REQUEST_NUMBER, requestNumber, true, false);
-        avps.addAvp(AvpUtils.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
-        avps.addAvp(AvpUtils.IP_CAN_TYPE, DataProvider.randomIpCanType(), true, false);
-        avps.addAvp(AvpUtils.RAT_TYPE, DataProvider.randomRatType(), true, false);
-        avps.addAvp(AvpUtils.AN_GW_ADDRESS, (InetAddress) state.get("an_gw_address"), Vendor.TGPP, false, false);
-        avps.addAvp(AvpUtils.GPP_MS_TIMEZONE, 4000, true, false);
-        avps.addAvp(AvpUtils.CALLED_STATION_ID, (String) state.get("called_station"), Vendor.COMMON, true, false, true);
-        avps.addAvp(AvpUtils.BEARER_USAGE, 0, Vendor.TGPP, true, false);
-        avps.addAvp(AvpUtils.ONLINE, 0, Vendor.TGPP, true, false);
-        avps.addAvp(AvpUtils.OFFLINE, 0, Vendor.TGPP, true, false);
-        avps.addAvp(AvpUtils.ACCESS_NETWORK_CHARGING_ADDRESS, (InetAddress) state.get("an_gw_address"), Vendor.TGPP, true, false);
+        avps.addAvp(AvpCode.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
+        avps.addAvp(AvpCode.IP_CAN_TYPE, DataProvider.randomIpCanType(), true, false);
+        avps.addAvp(AvpCode.RAT_TYPE, DataProvider.randomRatType(), true, false);
+        avps.addAvp(AvpCode.AN_GW_ADDRESS, (InetAddress) state.get("an_gw_address"), Vendor.TGPP, false, false);
+        avps.addAvp(AvpCode.GPP_MS_TIMEZONE, 4000, true, false);
+        avps.addAvp(AvpCode.CALLED_STATION_ID, (String) state.get("called_station"), Vendor.COMMON, true, false, true);
+        avps.addAvp(AvpCode.BEARER_USAGE, 0, Vendor.TGPP, true, false);
+        avps.addAvp(AvpCode.ONLINE, 0, Vendor.TGPP, true, false);
+        avps.addAvp(AvpCode.OFFLINE, 0, Vendor.TGPP, true, false);
+        avps.addAvp(AvpCode.ACCESS_NETWORK_CHARGING_ADDRESS, (InetAddress) state.get("an_gw_address"), Vendor.TGPP, true, false);
 
         AvpSet subscrMSISDN = avps.addGroupedAvp(Avp.SUBSCRIPTION_ID, true, false);
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 0, true, false);
@@ -57,14 +57,14 @@ public class GxRequestsFactory {
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_TYPE, 0, Vendor.TGPP, false, false);
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_VALUE, (String) state.get("imei"), Vendor.TGPP, false, false, true);
 
-        AvpSet epsBearer = avps.addGroupedAvp(AvpUtils.DEFAULT_EPS_BEARER_QOS, Vendor.TGPP, true, false);
+        AvpSet epsBearer = avps.addGroupedAvp(AvpCode.DEFAULT_EPS_BEARER_QOS, Vendor.TGPP, true, false);
         epsBearer.addAvp(Avp.QOS_CLASS_IDENTIFIER, 5, Vendor.TGPP, true, false);
         AvpSet allocRetPrior = epsBearer.addGroupedAvp(Avp.ALLOCATION_RETENTION_PRIORITY, Vendor.TGPP, true, false);
         allocRetPrior.addAvp(Avp.PRIORITY_LEVEL, 11, Vendor.TGPP, true, false);
-        allocRetPrior.addAvp(AvpUtils.PRE_EMPTION_CAPABILITY, 1, Vendor.TGPP, true, false);
-        allocRetPrior.addAvp(AvpUtils.PRE_EMPTION_VULNERABILITY, 1, Vendor.TGPP, true, false);
+        allocRetPrior.addAvp(AvpCode.PRE_EMPTION_CAPABILITY, 1, Vendor.TGPP, true, false);
+        allocRetPrior.addAvp(AvpCode.PRE_EMPTION_VULNERABILITY, 1, Vendor.TGPP, true, false);
 
-        AvpSet accessNetCharg = avps.addGroupedAvp(AvpUtils.ACCESS_NETWORK_CHARGING_IDENTIFIER_GX, Vendor.TGPP, true, false);
+        AvpSet accessNetCharg = avps.addGroupedAvp(AvpCode.ACCESS_NETWORK_CHARGING_IDENTIFIER_GX, Vendor.TGPP, true, false);
         accessNetCharg.addAvp(Avp.ACCESS_NETWORK_CHARGING_IDENTIFIER_VALUE, (String) state.get("an_ci_gx"), Vendor.TGPP, true, false, true);
 
         int bitrate = DataProvider.randomBitrate();
@@ -91,9 +91,9 @@ public class GxRequestsFactory {
 
         avps.addAvp(Avp.CC_REQUEST_TYPE, 3, true, false);
         avps.addAvp(Avp.CC_REQUEST_NUMBER, requestNumber, true, false);
-        avps.addAvp(AvpUtils.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
-        avps.addAvp(AvpUtils.CALLED_STATION_ID, (String) state.get("called_station"), true, false, true);
-        avps.addAvp(AvpUtils.ACCESS_NETWORK_CHARGING_ADDRESS, (InetAddress) state.get("an_gw_address"), true, false);
+        avps.addAvp(AvpCode.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
+        avps.addAvp(AvpCode.CALLED_STATION_ID, (String) state.get("called_station"), true, false, true);
+        avps.addAvp(AvpCode.ACCESS_NETWORK_CHARGING_ADDRESS, (InetAddress) state.get("an_gw_address"), true, false);
         avps.addAvp(Avp.TERMINATION_CAUSE, 1, true, false);
 
         AvpSet subscrMSISDN = avps.addGroupedAvp(Avp.SUBSCRIPTION_ID, true, false);
@@ -133,10 +133,10 @@ public class GxRequestsFactory {
 
         avps.addAvp(Avp.CC_REQUEST_TYPE, 2, true, false);
         avps.addAvp(Avp.CC_REQUEST_NUMBER, requestNumber, true, false);
-        avps.addAvp(AvpUtils.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
-        avps.addAvp(AvpUtils.CALLED_STATION_ID, (String) state.get("called_station"), true, false, true);
-        avps.addAvp(AvpUtils.ACCESS_NETWORK_CHARGING_ADDRESS, (InetAddress) state.get("an_gw_address"), true, false);
-        avps.addAvp(AvpUtils.EVENT_TRIGGER, 17, true, false);
+        avps.addAvp(AvpCode.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
+        avps.addAvp(AvpCode.CALLED_STATION_ID, (String) state.get("called_station"), true, false, true);
+        avps.addAvp(AvpCode.ACCESS_NETWORK_CHARGING_ADDRESS, (InetAddress) state.get("an_gw_address"), true, false);
+        avps.addAvp(AvpCode.EVENT_TRIGGER, 17, true, false);
 
         AvpSet subscrMSISDN = avps.addGroupedAvp(Avp.SUBSCRIPTION_ID, true, false);
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 0, true, false);
@@ -168,9 +168,9 @@ public class GxRequestsFactory {
 
         avps.addAvp(Avp.CC_REQUEST_TYPE, 2, true, false);
         avps.addAvp(Avp.CC_REQUEST_NUMBER, requestNumber, true, false);
-        avps.addAvp(AvpUtils.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
-        avps.addAvp(AvpUtils.CALLED_STATION_ID, "ims", true, false, true);
-        avps.addAvp(AvpUtils.ACCESS_NETWORK_CHARGING_ADDRESS, (InetAddress) state.get("an_gw_address"), true, false);
+        avps.addAvp(AvpCode.FRAMED_IP_ADDRESS, (Integer) state.get("framed_ip"), Vendor.COMMON, true, false);
+        avps.addAvp(AvpCode.CALLED_STATION_ID, "ims", true, false, true);
+        avps.addAvp(AvpCode.ACCESS_NETWORK_CHARGING_ADDRESS, (InetAddress) state.get("an_gw_address"), true, false);
 
         AvpSet subscrMSISDN = avps.addGroupedAvp(Avp.SUBSCRIPTION_ID, true, false);
         subscrMSISDN.addAvp(Avp.SUBSCRIPTION_ID_TYPE, 0, true, false);
@@ -185,11 +185,11 @@ public class GxRequestsFactory {
         userEquipment.addAvp(Avp.USER_EQUIPMENT_INFO_VALUE, (String) state.get("imei"), true, false, true);
 
         if (state.get("first_charging_rule_name") != null && state.get("second_charging_rule_name") != null) {
-            AvpSet chargRuleReport = avps.addGroupedAvp(AvpUtils.CHARGING_RULE_REPORT, Vendor.TGPP, true, false);
-            chargRuleReport.addAvp(AvpUtils.CHARGING_RULE_NAME, (String) state.get("first_charging_rule_name"), Vendor.TGPP, true, false, true);
-            chargRuleReport.addAvp(AvpUtils.CHARGING_RULE_NAME, (String) state.get("second_charging_rule_name"), Vendor.TGPP, true, false, true);
-            chargRuleReport.addAvp(AvpUtils.PCC_RULE_STATUS, 1, Vendor.TGPP, true, false);
-            chargRuleReport.addAvp(AvpUtils.RULE_FAILURE_CODE, 10, Vendor.TGPP, true, false);
+            AvpSet chargRuleReport = avps.addGroupedAvp(AvpCode.CHARGING_RULE_REPORT, Vendor.TGPP, true, false);
+            chargRuleReport.addAvp(AvpCode.CHARGING_RULE_NAME, (String) state.get("first_charging_rule_name"), Vendor.TGPP, true, false, true);
+            chargRuleReport.addAvp(AvpCode.CHARGING_RULE_NAME, (String) state.get("second_charging_rule_name"), Vendor.TGPP, true, false, true);
+            chargRuleReport.addAvp(AvpCode.PCC_RULE_STATUS, 1, Vendor.TGPP, true, false);
+            chargRuleReport.addAvp(AvpCode.RULE_FAILURE_CODE, 10, Vendor.TGPP, true, false);
 
             state.remove("first_charging_rule_name");
             state.remove("second_charging_rule_name");

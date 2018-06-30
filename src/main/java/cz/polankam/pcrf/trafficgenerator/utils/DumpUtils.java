@@ -10,7 +10,7 @@ import org.mobicents.diameter.dictionary.AvpDictionary;
 import org.mobicents.diameter.dictionary.AvpRepresentation;
 
 /**
- * Static utils for dump/print of Avps and other stuff.
+ * Static utils for dump/print of AVPs and other stuff.
  */
 public class DumpUtils {
 
@@ -30,6 +30,12 @@ public class DumpUtils {
     }
 
 
+    /**
+     * Dump given message object into the logger, basic information are logged in debug mode, more verbose information
+     * use trace log level.
+     * @param message message structure containing AVPs
+     * @param sending if true the message was sent by the generator, otherwise it was received
+     */
     public static void dumpMessage(Message message, boolean sending) {
         logger.debug((sending ? "Sending " : "Received ") + (message.isRequest() ? "Request: " : "Answer: ") + commandCodeToString(message.getCommandCode()) + " (E2E:"
                 + message.getEndToEndIdentifier() + "; HBH:" + message.getHopByHopIdentifier() + "; AppID:" + message.getApplicationId() + "; SessID:" + message.getSessionId() + ")");
@@ -45,7 +51,12 @@ public class DumpUtils {
         }
     }
 
-    public static String commandCodeToString(int cmd) {
+    /**
+     * From the given command code derive the command name.
+     * @param cmd command code
+     * @return textual interpretation of the command code
+     */
+    private static String commandCodeToString(int cmd) {
         switch (cmd) {
             case 258:
                 return "Re-Auth";
@@ -62,18 +73,22 @@ public class DumpUtils {
         }
     }
 
-    public static void printAvps(AvpSet avpSet) throws AvpDataException {
+    /**
+     * Prints the AVPs present in an AvpSet.
+     * @param avpSet the AvpSet containing the AVPs to be printed
+     * @throws AvpDataException in case of error
+     */
+    private static void printAvps(AvpSet avpSet) throws AvpDataException {
         logger.trace("AVPS[" + avpSet.size() + "]: \n");
         printAvpsAux(avpSet, 0);
     }
 
     /**
-     * Prints the AVPs present in an AvpSet with a specified 'tab' level
-     *
+     * Prints the AVPs present in an AvpSet with a specified 'tab' level.
      * @param avpSet the AvpSet containing the AVPs to be printed
      * @param level an int representing the number of 'tabs' to make a pretty
      * print
-     * @throws AvpDataException
+     * @throws AvpDataException in case of error
      */
     private static void printAvpsAux(AvpSet avpSet, int level) throws AvpDataException {
         String prefix = "                      ".substring(0, level * 2);
@@ -96,8 +111,7 @@ public class DumpUtils {
                     value = String.valueOf(avp.getUnsigned32());
                 } else if (avpRep.getType().equals("Float32")) {
                     value = String.valueOf(avp.getFloat32());
-                } else //value = avp.getOctetString();
-                {
+                } else {
                     value = new String(avp.getOctetString(), StandardCharsets.UTF_8);
                 }
 

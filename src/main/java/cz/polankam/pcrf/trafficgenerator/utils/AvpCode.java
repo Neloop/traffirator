@@ -1,7 +1,9 @@
 package cz.polankam.pcrf.trafficgenerator.utils;
 
-
-public class AvpUtils {
+/**
+ * Class containing useful AVP codes, which might be used in messages generation.
+ */
+public class AvpCode {
     public static int FRAMED_IP_ADDRESS = 8;
     public static int MEDIA_COMPONENT_DESCRIPTION = 517;
     public static int MEDIA_COMPONENT_NUMBER = 518;
