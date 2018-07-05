@@ -16,15 +16,15 @@ public class ProfileChangeRunner implements Runnable {
 
     protected static class Context {
         final ScheduledExecutorService executor;
-        final Summary summary;
+        final SummaryLogger summaryLogger;
         final Queue<ProfileItem> queue;
         final int burstLimit;
         final Client client;
         final Map<String, Integer> lastCountCache;
 
-        public Context(ScheduledExecutorService executor, Summary summary, Queue<ProfileItem> queue, int burstLimit, Client client) {
+        public Context(ScheduledExecutorService executor, SummaryLogger summaryLogger, Queue<ProfileItem> queue, int burstLimit, Client client) {
             this.executor = executor;
-            this.summary = summary;
+            this.summaryLogger = summaryLogger;
             this.queue = queue;
             this.burstLimit = burstLimit;
             this.client = client;
@@ -33,9 +33,9 @@ public class ProfileChangeRunner implements Runnable {
     }
 
 
-    public static void start(ScheduledExecutorService executor, Summary summary, Config config, Client client) {
+    public static void start(ScheduledExecutorService executor, SummaryLogger summaryLogger, Config config, Client client) {
         Queue<ProfileItem> queue = new LinkedList<>(config.getProfile().getFlow());
-        Context context = new Context(executor, summary, queue, config.getProfile().getBurstLimit(), client);
+        Context context = new Context(executor, summaryLogger, queue, config.getProfile().getBurstLimit(), client);
         executor.schedule(new ProfileChangeRunner(context), queue.peek().getStart(), TimeUnit.SECONDS);
     }
 
@@ -76,7 +76,7 @@ public class ProfileChangeRunner implements Runnable {
             }
         }
 
-        context.summary.addChange(current);
+        context.summaryLogger.addChange(current);
 
         if (!context.queue.isEmpty()) {
             long nextStart = context.queue.peek().getStart() - current.getStart();

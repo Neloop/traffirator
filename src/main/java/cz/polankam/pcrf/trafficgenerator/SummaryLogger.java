@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
-public class Summary {
+/**
+ *
+ */
+public class SummaryLogger {
 
     private long start;
     private long end;
@@ -18,26 +20,48 @@ public class Summary {
     private Config config;
     private final List<Map.Entry<Long, ProfileItem>> changes = new ArrayList<>();
 
+    /**
+     *
+     */
     public void setStart() {
         start = System.currentTimeMillis();
     }
 
+    /**
+     *
+     */
     public void setEnd() {
         end = System.currentTimeMillis();
     }
 
+    /**
+     *
+     * @param status
+     */
     public void setStatus(String status) {
         this.status = status;
     }
 
+    /**
+     *
+     * @param config
+     */
     public void setConfig(Config config) {
         this.config = config;
     }
 
+    /**
+     *
+     * @param item
+     */
     public synchronized void addChange(ProfileItem item) {
         changes.add(new AbstractMap.SimpleEntry<>(System.currentTimeMillis(), item));
     }
 
+    /**
+     *
+     * @param out
+     */
     public void printSummary(PrintStream out) {
         out.println("***** SUMMARY START *****");
         out.println("Start: " + start);

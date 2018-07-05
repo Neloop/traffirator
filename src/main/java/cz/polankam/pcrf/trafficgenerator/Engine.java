@@ -24,7 +24,7 @@ public class Engine {
 
     private static final Logger logger = Logger.getLogger(Engine.class);
 
-    private final Summary summary;
+    private final SummaryLogger summaryLogger;
     private final String[] args;
     private CommandLine cmd;
     private PrintStream summaryOut;
@@ -34,7 +34,7 @@ public class Engine {
 
     private Engine(String[] args) {
         this.args = args;
-        summary = new Summary();
+        summaryLogger = new SummaryLogger();
         summaryOut = System.out;
         scenarioFactory = new ScenarioFactory();
         profileValidator = new ProfileValidator(scenarioFactory);
@@ -96,15 +96,15 @@ public class Engine {
         // initialization
         client.init();
         statistics.init();
-        summary.setConfig(config);
+        summaryLogger.setConfig(config);
 
         //
         waitForConnections();
 
         // start sending/receiving messages on gx and rx interfaces
-        summary.setStart();
+        summaryLogger.setStart();
         // schedule execution of test profile
-        ProfileChangeRunner.start(executor, summary, config, client);
+        ProfileChangeRunner.start(executor, summaryLogger, config, client);
 
         // schedule ending of the execution from the configuration
         // has its own executor in case of deadlocks in the client
@@ -129,9 +129,9 @@ public class Engine {
             client.destroy();
             logger.info("All done... Good bye!");
         } finally {
-            summary.setEnd();
-            summary.setStatus(client.getFinishedReason());
-            summary.printSummary(summaryOut);
+            summaryLogger.setEnd();
+            summaryLogger.setStatus(client.getFinishedReason());
+            summaryLogger.printSummary(summaryOut);
             summaryOut.close();
             statistics.close();
         }

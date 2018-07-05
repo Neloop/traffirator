@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -22,7 +21,7 @@ class ProfileChangeRunnerTest {
 
     private ProfileChangeRunner.Context context;
     private ScheduledExecutorService executor;
-    private Summary summary;
+    private SummaryLogger summaryLogger;
     private Queue<ProfileItem> queue;
     private int burstLimit;
     private Client client;
@@ -30,14 +29,14 @@ class ProfileChangeRunnerTest {
     @BeforeEach
     void setUp() {
         executor = mock(ScheduledExecutorService.class);
-        summary = mock(Summary.class);
+        summaryLogger = mock(SummaryLogger.class);
         queue = new LinkedList<>();
         burstLimit = 100;
         client = mock(Client.class);
 
         context = new ProfileChangeRunner.Context(
                 executor,
-                summary,
+                summaryLogger,
                 queue,
                 burstLimit,
                 client
