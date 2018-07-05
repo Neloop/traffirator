@@ -5,13 +5,12 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import cz.polankam.pcrf.trafficgenerator.client.Client;
 import cz.polankam.pcrf.trafficgenerator.config.Config;
 import cz.polankam.pcrf.trafficgenerator.config.ProfileValidator;
+import cz.polankam.pcrf.trafficgenerator.exceptions.ValidationException;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
@@ -19,7 +18,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * Main class of the whole application. Engine start the execution by loading the configuration given by the command
+ * line arguments, creating the base Diameter Client class and providing it the base dependencies. Also profile changes
+ * are scheduled, statistics logger invoked and summary log created and after the execution written to.
+ */
 public class Engine {
 
     private static final Logger logger = Logger.getLogger(Engine.class);
@@ -32,6 +35,10 @@ public class Engine {
     private final ScenarioFactory scenarioFactory;
     private final ProfileValidator profileValidator;
 
+    /**
+     * Constructor.
+     * @param args command line arguments
+     */
     private Engine(String[] args) {
         this.args = args;
         summaryLogger = new SummaryLogger();
@@ -41,6 +48,10 @@ public class Engine {
     }
 
 
+    /**
+     * Process command line arguments given by the user upon execution.
+     * @throws ParseException in case of parsing error
+     */
     private void processCmdArguments() throws ParseException {
         Options options = new Options();
 
@@ -62,7 +73,14 @@ public class Engine {
         }
     }
 
-    private Config getClientConfig() throws Exception {
+    /**
+     * Gets the path to the configuration file from the cmd arguments, parses it and returns it.
+     * There is also the validation of the values provided in the configuration.
+     * @return configuration of the application
+     * @throws IOException in case of file error
+     * @throws ValidationException validation of config failed
+     */
+    private Config getConfig() throws IOException, ValidationException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
         String filename = cmd.getOptionValue("config");
@@ -74,20 +92,29 @@ public class Engine {
         }
     }
 
+    /**
+     * There is no way how to tell if the jDiameter successfully connected to the server. The least thing we can do is
+     * to wait a bit.
+     * @throws Exception in case of error
+     */
     private void waitForConnections() throws Exception {
         //wait for connection to peer
         logger.info("Waiting for connection to peer...");
         Thread.sleep(5000);
         logger.info("Enough waiting, lets roll");
-
     }
 
+    /**
+     * Start the whole execution, load configuration, create loggers, start the change runner and start
+     * the Client class, which is the main sender/receiver.
+     * @throws Exception in case of any error
+     */
     private void start() throws Exception {
         logger.info("****************************************");
         logger.info("* STARTING TRAFFIRATOR *****************");
         logger.info("****************************************");
 
-        Config config = getClientConfig();
+        Config config = getConfig();
         // prepare executor service based on given thread count and pass it to the client
         executor = Executors.newScheduledThreadPool(config.getThreadCount());
         Client client = new Client(executor, scenarioFactory);
@@ -138,6 +165,9 @@ public class Engine {
     }
 
 
+    /**
+     * Helper method for finding deadlocks if needed it has to be used.
+     */
     public static void findDeadLocks()
     {
         ThreadMXBean tmx = ManagementFactory.getThreadMXBean();
@@ -156,6 +186,10 @@ public class Engine {
         }
     }
 
+    /**
+     * Entry point of the application.
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         try {
             Engine engine = new Engine(args);
@@ -167,7 +201,7 @@ public class Engine {
             System.exit(1);
         }
 
-        // for some reasons jdiameter keeps some threads started even after destroying stack and such... so kill it
+        // for some reasons jDiameter keeps some threads started even after destroying stack and such... so kill it
         System.exit(0);
     }
 

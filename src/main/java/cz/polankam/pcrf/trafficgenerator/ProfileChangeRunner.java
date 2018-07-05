@@ -12,8 +12,19 @@ import java.util.Queue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * ProfileChangeRunner is separate class which is used for changing the current count of active scenarios in the
+ * Diameter <code>Client</code> class. The class have static method which is used to startup the execution of
+ * the changes using the provided executor. After that profile changes are done automatically with based on given
+ * information. The changes are using the burst limit from configuration, so they do not flood the server.
+ * The run class is executed once and then the next execution is done by constructing the class again and scheduling it
+ * to the executor.
+ */
 public class ProfileChangeRunner implements Runnable {
 
+    /**
+     * Helper class used as context/holder between the calls of the <code>ProfileChangeRunner</code>.
+     */
     protected static class Context {
         final ScheduledExecutorService executor;
         final SummaryLogger summaryLogger;
@@ -33,6 +44,14 @@ public class ProfileChangeRunner implements Runnable {
     }
 
 
+    /**
+     * Start the <code>ProfileChangeRunner</code> class and schedule its next execution. After that the changes are
+     * automatically scheduled one after each other.
+     * @param executor executor used for scheduling the changes
+     * @param summaryLogger summary log file
+     * @param config configuration of the application
+     * @param client Diameter client
+     */
     public static void start(ScheduledExecutorService executor, SummaryLogger summaryLogger, Config config, Client client) {
         Queue<ProfileItem> queue = new LinkedList<>(config.getProfile().getFlow());
         Context context = new Context(executor, summaryLogger, queue, config.getProfile().getBurstLimit(), client);
@@ -42,10 +61,18 @@ public class ProfileChangeRunner implements Runnable {
 
     private final Context context;
 
+    /**
+     * Constructor.
+     * @param context context with all needed classes
+     */
     ProfileChangeRunner(Context context) {
         this.context = context;
     }
 
+    /**
+     * Pick up the next change from the queue of changes and made it happen using the provided burst limit.
+     * If there is next change which should be executed then schedule it using the given executor service.
+     */
     @Override
     public void run() {
         ProfileItem current = context.queue.poll();

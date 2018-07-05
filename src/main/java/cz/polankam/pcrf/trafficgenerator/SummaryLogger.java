@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
+ * Ensures that proper summary log is printed, the summary contains information concerning current execution.
+ * There is a start of the execution, end, there is also description and initial setup which was provided by
+ * the configuration. Also changes made to the scenarios count are logged here.
  */
 public class SummaryLogger {
 
@@ -21,46 +23,46 @@ public class SummaryLogger {
     private final List<Map.Entry<Long, ProfileItem>> changes = new ArrayList<>();
 
     /**
-     *
+     * Set the starting point of the execution.
      */
     public void setStart() {
         start = System.currentTimeMillis();
     }
 
     /**
-     *
+     * Set the end of the execution.
      */
     public void setEnd() {
         end = System.currentTimeMillis();
     }
 
     /**
-     *
-     * @param status
+     * Set the status of the execution, if it was OK or not.
+     * @param status textual representation of status
      */
     public void setStatus(String status) {
         this.status = status;
     }
 
     /**
-     *
-     * @param config
+     * Set configuration used during the execution and given by the user.
+     * @param config configuration structure loaded from the YAML
      */
     public void setConfig(Config config) {
         this.config = config;
     }
 
     /**
-     *
-     * @param item
+     * Add change entry, which changed the amount of the currently active scenarios.
+     * @param item item from the configuration describing the change
      */
     public synchronized void addChange(ProfileItem item) {
         changes.add(new AbstractMap.SimpleEntry<>(System.currentTimeMillis(), item));
     }
 
     /**
-     *
-     * @param out
+     * Print the summary log into given output stream.
+     * @param out output stream
      */
     public void printSummary(PrintStream out) {
         out.println("***** SUMMARY START *****");
