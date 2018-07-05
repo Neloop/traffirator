@@ -3,7 +3,10 @@ package cz.polankam.pcrf.trafficgenerator.client;
 import org.apache.log4j.Logger;
 import org.jdiameter.api.ApplicationId;
 
-
+/**
+ * Implementation of the <code>AppStack</code> base class which is representing the Rx application stack in
+ * the application. The path to the configuration file is hardcoded to resources directory to rx-client-config.xml file.
+ */
 public class RxStack extends AppStack {
 
     private static final Logger log = Logger.getLogger(RxStack.class);

@@ -12,7 +12,7 @@ profile:
     - start: 0
       scenarios:
         - type: CallPerformance
-          count: 50000
+          count: 10000
     - start: 600
       scenarios:
         - type: CallPerformance
@@ -20,7 +20,7 @@ profile:
     - start: 2880
       scenarios:
         - type: CallPerformance
-          count: 50000
+          count: 10000
     - start: 3480
       scenarios:
         - type: CallPerformance
@@ -28,7 +28,7 @@ profile:
     - start: 5760
       scenarios:
         - type: CallPerformance
-          count: 50000
+          count: 10000
     - start: 6360
       scenarios:
         - type: CallPerformance

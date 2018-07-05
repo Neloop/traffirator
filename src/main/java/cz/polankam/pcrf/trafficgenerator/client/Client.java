@@ -27,7 +27,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import cz.polankam.pcrf.trafficgenerator.scenario.SessionProvider;
 
-
+/**
+ * Client is the main class which manages the reception and sending of the Diameter messages. It implements
+ * listener interfaces provided by the jDiameter and contains instances of Gx and Rx stacks, which are used for sending
+ * of messages. All actions taken by the client should be scheduled to the given executor service to avoid
+ * synchronization issues.
+ * @note By now the client class is very much in need of refactoring.
+ */
 public class Client implements ClientRxSessionListener, ClientGxSessionListener, SessionProvider {
 
     private static final Logger logger = Logger.getLogger(Client.class);
@@ -61,6 +67,11 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
     private String finishedReason;
 
 
+    /**
+     * Constructor.
+     * @param executor scheduler
+     * @param factory scenario factory
+     */
     public Client(ScheduledExecutorService executor, ScenarioFactory factory) {
         gx = new GxStack();
         rx = new RxStack();
@@ -79,6 +90,9 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         scenarioTypesCount = new HashMap<>();
     }
 
+    /**
+     * Get and prepare session factories for the Gx and Rx interfaces. Also register them to the jDiameter stacks.
+     */
     private void prepareSessionFactories() {
         // Gx session factory
         GxSessionFactoryImpl gxSessionFactory = new GxSessionFactoryImpl(gx.getSessionFactory());
@@ -91,6 +105,9 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         rx.getSessionFactory().registerAppFacory(ClientRxSession.class, rxSessionFactory);
     }
 
+    /**
+     * Initialize the client by initializing the Diameter stacks and preparing the session factories.
+     */
     public synchronized void init() {
         gx.initStack();
         rx.initStack();
@@ -99,6 +116,11 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         prepareSessionFactories();
     }
 
+    /**
+     * Shutdown executor service and destroy all currently active scenarios. Gx and Rx stacks are also properly
+     * destroyed.
+     * @throws Exception in case of error
+     */
     public synchronized void destroy() throws Exception {
         executorService.shutdownNow();
         for (String scenarioType : scenariosForTypes.keySet()) {
@@ -111,48 +133,85 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         rx.destroy();
     }
 
+    /**
+     * Request the end of the execution.
+     */
     public void finish() {
         finished.set(true);
     }
 
+    /**
+     * Request the end of the execution with given reason.
+     * @param reason reason why the execution was stopped
+     */
     public synchronized void finish(String reason) {
         finished.set(true);
         finishedReason = reason;
     }
 
+    /**
+     * Determine if the client was finished or not.
+     * @return true if finished, false otherwise
+     */
     public boolean finished() {
         return finished.get();
     }
 
+    /**
+     * Get finished reason, default is "OK".
+     * @return textual status
+     */
     public String getFinishedReason() {
         return finishedReason;
     }
 
+    /**
+     * Get current count of the timeouts from the beginning of the execution.
+     * @return count of scenarios which timeout
+     */
     public long getTimeoutsCount() {
         return timeoutsCount.get();
     }
 
+    /**
+     * Get current count of the sent messages from the beginning of the execution.
+     * @return number of sent messages
+     */
     public long getSentCount() {
         return sentCount.get();
     }
 
+    /**
+     * Get current count of the received messages from the beginning of the execution.
+     * @return number of received messages
+     */
     public long getReceivedCount() {
         return receivedCount.get();
     }
 
+    /**
+     * Get current count of the scenarios, which failed, from the beginning of the execution.
+     * @return number of failures
+     */
     public long getFailuresCount() {
         return failuresCount.get();
     }
 
+    /**
+     * Get current count of the scenarios.
+     * @return number of scenarios
+     */
     public long getScenariosCount() {
         return currentScenariosCount.get();
     }
 
     /**
-     *
-     * @param type
-     * @param count
-     * @param delay in seconds
+     * Change the number of active scenarios of given type. The count should be applied after given delay.
+     * If the number is higher than the current one, new scenarios are spawned, otherwise random active scenarios are
+     * ended.
+     * @param type type of the scenarios which should be managed
+     * @param count number of the scenarios for given type
+     * @param delay delay of the change, in seconds
      */
     public void controlScenarios(String type, int count, int delay) {
         executorService.schedule(() -> {
@@ -181,11 +240,21 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         }, delay, TimeUnit.SECONDS);
     }
 
+    /**
+     * Create scenario of given type and start it.
+     * @param type type of the scenario
+     */
     private synchronized void createAndStartScenario(String type) {
         Scenario scenario = createScenario(type);
         sendNextMessage(scenario);
     }
 
+    /**
+     * Create scenario of given types using scenario factory, but do not start it.
+     * Scenario is added to all needed internal structures.
+     * @param type type of the scenario
+     * @return newly created scenario.
+     */
     private synchronized Scenario createScenario(String type) {
         Scenario scenario;
         try {
@@ -210,6 +279,10 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         return scenario;
     }
 
+    /**
+     * Remove random scenario of given type. For the time being the random means the first one in the scenarios list.
+     * @param type type of the scenario
+     */
     private synchronized void removeRandomScenario(String type) {
         if (scenariosForTypes.get(type).isEmpty()) {
             return;
@@ -218,6 +291,10 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         removeScenario(scenariosForTypes.get(type).get(0));
     }
 
+    /**
+     * Remove given scenario from all structures within this class and destroy it properly.
+     * @param scenario scenario to be removed
+     */
     private synchronized void removeScenario(Scenario scenario) {
         String type = scenario.getType();
         if (scenariosForTypes.get(type).remove(scenario)) {
@@ -240,6 +317,12 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         logger.info("Scenario removed and destroyed. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
     }
 
+    /**
+     * Register given session regardless of application into the internal client structures.
+     * @param oldSession old session which is replaced by the new one
+     * @param newSession newly created session
+     * @param scenario scenario connected to the session
+     */
     private synchronized void registerNewSession(AppSession oldSession, AppSession newSession, Scenario scenario) {
         if (oldSession != null) {
             scenariosForSessions.remove(oldSession.getSessionId());
@@ -272,6 +355,13 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         return rxSession;
     }
 
+    /**
+     * Handle failure of the given scenario, optionally exception or error message can be provided as a reason of
+     * failure. Failure is handled by destroying the scenario and spawning a new one.
+     * @param scenario failed scenario
+     * @param ex optionally given exception connected to failure
+     * @param errorMessage error message which represents failure reason
+     */
     private void handleFailure(final Scenario scenario, Exception ex, String errorMessage) {
         if (scenario == null) {
             return;
@@ -289,6 +379,12 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         }
     }
 
+    /**
+     * Send next message from the given scenario if the scenario is not destroyed. The sending is scheduled with the
+     * delay from the sending message. After successful send, next message is sent if there is one, otherwise
+     * the scenario waits for incoming messages or if the scenario is empty, then the new scenario is spawned.
+     * @param scenario scenario which will be processed
+     */
     private void sendNextMessage(final Scenario scenario) {
         if (scenario == null || finished() || scenario.isDestroyed()) {
             return;
@@ -305,7 +401,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
             try {
                 sent = scenario.sendNext();
                 sentCount.incrementAndGet();
-	    } catch (Exception e) {
+            } catch (Exception e) {
                 handleFailure(scenario, e, e.getMessage());
                 return;
             }
@@ -335,11 +431,12 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
     }
 
     /**
+     * Process incoming message, processing is scheduled in scheduler and synchronized within.
      * Whole process method cannot be synchronized, because jdiameter is holding its own lock locked during processing
-     * of incomings message. Thus locking this method would lead to deadlock in some situations.
-     * @param session
-     * @param request
-     * @param answer
+     * of incoming message. Thus locking this method would lead to deadlock in some situations.
+     * @param session session connected to the received message
+     * @param request if the request was received
+     * @param answer if the answer was received
      */
     private void processIncoming(AppSession session, AppRequestEvent request, AppAnswerEvent answer, DiameterAppType appType) {
         executorService.execute(() -> {
@@ -390,6 +487,12 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         });
     }
 
+    /**
+     * Schedule the processing of the timeout for the given scenario. If message was received in the timeout period,
+     * the timeout is not processed at all, if the message was not received, the scenario is marked as timeouted and
+     * handled as a failed one.
+     * @param scenario scenario to be processed
+     */
     private void processTimeout(Scenario scenario) {
         if (scenario == null || finished() || scenario.isDestroyed()) {
             return;

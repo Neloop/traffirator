@@ -18,7 +18,11 @@ import org.jdiameter.client.impl.helpers.Parameters;
 import org.jdiameter.server.impl.StackImpl;
 import org.jdiameter.server.impl.helpers.XMLConfiguration;
 
-
+/**
+ * Base class for the Diameter application stacks. It features some basic getters of the stack capabilities and
+ * characteristics. <code>AppStack</code> base class holds also the commong initialization routine of the stack which
+ * might be called from the children.
+ */
 public abstract class AppStack {
 
     private static final Logger logger = Logger.getLogger(AppStack.class);
@@ -29,6 +33,12 @@ public abstract class AppStack {
     protected String realmName;
     protected String serverURI;
 
+    /**
+     * Initialize the stack with the given information.
+     * @param configFile XML configuration file of the stack
+     * @param appId application identification of the stack
+     * @param identifier stack identifier, for debugging purposes
+     */
     protected void initStack(String configFile, ApplicationId appId, String identifier) {
         logger.info("Initializing " + identifier + " Stack...");
         try (InputStream is = this.getClass().getClassLoader().getResourceAsStream(configFile)) {
@@ -84,23 +94,43 @@ public abstract class AppStack {
         logger.info(identifier + " Stack initialization successfully completed.");
     }
 
+    /**
+     * Shutdown the Diameter stack gracefully and then destroy it.
+     * @throws Exception in case of error
+     */
     public void destroy() throws Exception {
         stack.stop(0, TimeUnit.SECONDS, DisconnectCause.REBOOTING);
         stack.destroy();
     }
 
+    /**
+     * Get the special application session factory for the stack.
+     * @return session factory interface
+     */
     public ISessionFactory getSessionFactory() {
         return factory;
     }
 
+    /**
+     * Get the realm of this application stack.
+     * @return textual representation of realm
+     */
     public String getRealm() {
         return realmName;
     }
 
+    /**
+     * Get the URI of the server to which this stack is connected.
+     * @return textual uri
+     */
     public String getServerUri() {
         return serverURI;
     }
 
+    /**
+     * To be implemented in the children. It should initialize current stack by calling the
+     * <code>initStack(String, ApplicationId, String)</code> base method, which takes care of most of the things.
+     */
     public abstract void initStack();
 
 }
