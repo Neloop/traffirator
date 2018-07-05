@@ -2,6 +2,8 @@ package cz.polankam.pcrf.trafficgenerator.scenario.actions;
 
 
 /**
+ * Represents action which sends the message to the remote server.
+ * In addition to the action it holds the delay for the action.
  * @note Should not have setters! Read-only structure!
  */
 public class SendScenarioActionEntry implements ScenarioActionEntry {
@@ -12,10 +14,10 @@ public class SendScenarioActionEntry implements ScenarioActionEntry {
 
 
     /**
-     *
-     * @param name
+     * Constructor.
+     * @param name name of the action
      * @param averageDelay in milliseconds
-     * @param action
+     * @param action performed action
      */
     public SendScenarioActionEntry(String name, long averageDelay, ScenarioAction action) {
         this.name = name;
@@ -24,25 +26,26 @@ public class SendScenarioActionEntry implements ScenarioActionEntry {
     }
 
     /**
-     *
+     * Constructor with default empty action name.
      * @param averageDelay in milliseconds
-     * @param action
+     * @param action performed action
      */
     public SendScenarioActionEntry(long averageDelay, ScenarioAction action) {
         this("", averageDelay, action);
     }
 
     /**
-     * New scenario entry with no delay or timeout.
-     * @param action
+     * New scenario entry with no delay.
+     * @param name name of the action
+     * @param action performed action
      */
     public SendScenarioActionEntry(String name, ScenarioAction action) {
         this(name, 0, action);
     }
 
     /**
-     * New scenario entry with no delay or timeout.
-     * @param action
+     * New scenario entry with no delay and default empty name.
+     * @param action performed action
      */
     public SendScenarioActionEntry(ScenarioAction action) {
         this(0, action);
@@ -58,6 +61,10 @@ public class SendScenarioActionEntry implements ScenarioActionEntry {
         return name;
     }
 
+    /**
+     * Get the sending action for this entry.
+     * @return specific action
+     */
     public ScenarioAction getAction() {
         return action;
     }

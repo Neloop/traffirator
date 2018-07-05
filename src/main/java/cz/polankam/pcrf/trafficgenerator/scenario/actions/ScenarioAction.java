@@ -4,7 +4,10 @@ import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioContext;
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 
-
+/**
+ * Represents single scenario action, which are performed in defined order. Can be sending or receiving action, or any
+ * other action which somehow process the messages.
+ */
 @FunctionalInterface
 public interface ScenarioAction {
 
