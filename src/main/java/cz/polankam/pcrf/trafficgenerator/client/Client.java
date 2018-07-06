@@ -368,14 +368,20 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
         }
 
         logger.error(errorMessage, ex);
-        boolean wasDestroyed = scenario.isDestroyed();
-        removeScenario(scenario);
-        failuresCount.incrementAndGet();
+        boolean wasDestroyed;
+        synchronized (this) {
+            wasDestroyed = scenario.isDestroyed();
+            removeScenario(scenario);
+        }
+
         if (!wasDestroyed) {
+            failuresCount.incrementAndGet();
             // scenario was not yet destroyed, so create the next one
             logger.info("Scenario failed in state '" + scenario.getCurrentStateName() + "', creating next one");
             // send next message of newly created scenario
             sendNextMessage(createScenario(scenario.getType()));
+        } else {
+            logger.info("Scenario already destroyed, noop");
         }
     }
 
@@ -406,26 +412,30 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
                 return;
             }
 
+            boolean isNextSending;
+            boolean isScenarioEmpty;
             synchronized (this) {
                 if (scenario.isDestroyed()) {
                     return;
                 }
 
-                boolean isNextSending = scenario.isNextSending();
-                if (scenario.isEmpty()) { // check if scenario is empty and if so, handle creating next one
-                    // delete scenario from all internal structures
+                isNextSending = scenario.isNextSending();
+                isScenarioEmpty = scenario.isEmpty();
+                if (isScenarioEmpty) {
                     removeScenario(scenario);
-
-                    logger.debug("Scenario '" + scenario.getCurrentStateName() + "' empty, loading next");
-                    // send next message of newly created scenario
-                    sendNextMessage(createScenario(scenario.getType()));
-                } else if (sent && isNextSending) {
-                    // message was sent, check if there are others in queue
-                    sendNextMessage(scenario);
-                } else if (!isNextSending) {
-                    // next one is receiving, schedule the timeout guard
-                    processTimeout(scenario);
                 }
+            }
+
+            if (isScenarioEmpty) {
+                logger.debug("Scenario '" + scenario.getCurrentStateName() + "' empty, loading next");
+                // send next message of newly created scenario
+                sendNextMessage(createScenario(scenario.getType()));
+            } else if (sent && isNextSending) {
+                // message was sent, check if there are others in queue
+                sendNextMessage(scenario);
+            } else if (!isNextSending) {
+                // next one is receiving, schedule the timeout guard
+                processTimeout(scenario);
             }
         }, delay, TimeUnit.MILLISECONDS);
     }
