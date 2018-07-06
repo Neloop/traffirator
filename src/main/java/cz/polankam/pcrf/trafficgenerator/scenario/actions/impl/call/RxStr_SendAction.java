@@ -8,7 +8,9 @@ import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.rx.events.RxSessionTermRequest;
 
-
+/**
+ * Action which will send STR request to the Rx interface.
+ */
 public class RxStr_SendAction implements ScenarioAction {
 
     @Override

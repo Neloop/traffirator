@@ -7,7 +7,9 @@ import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.gx.events.GxCreditControlAnswer;
 
-
+/**
+ * Action which will receive CCA initial answer and validate if it has success result code.
+ */
 public class GxCcaI_Success_ReceiveAction implements ScenarioAction {
 
     @Override

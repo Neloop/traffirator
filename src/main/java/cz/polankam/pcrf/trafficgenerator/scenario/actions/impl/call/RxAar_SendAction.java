@@ -8,7 +8,9 @@ import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.rx.events.RxAARequest;
 
-
+/**
+ * Action which will send AAR request to the Rx interface. This AAR is used on changing the call codec.
+ */
 public class RxAar_SendAction implements ScenarioAction {
 
     @Override

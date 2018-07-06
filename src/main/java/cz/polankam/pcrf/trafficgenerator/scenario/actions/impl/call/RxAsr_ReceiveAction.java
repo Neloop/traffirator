@@ -6,7 +6,9 @@ import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.rx.events.RxAbortSessionRequest;
 
-
+/**
+ * Action which receive ASR request and validate its type.
+ */
 public class RxAsr_ReceiveAction implements ScenarioAction {
 
     @Override

@@ -13,9 +13,17 @@ import org.jdiameter.common.impl.app.gx.GxCreditControlRequestImpl;
 import java.net.InetAddress;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * Class containing factories for all Gx related messages. All centered in the factory for better management.
+ */
 public class GxRequestsFactory {
 
+    /**
+     * Create initial CCR request, which is sent during the first connection of the device to the network.
+     * @param context scenario context
+     * @return CCR initial message
+     * @throws Exception in case of any error
+     */
     public static GxCreditControlRequest createCcrI(ScenarioContext context) throws Exception {
         ClientGxSession session = context.getGxSession();
         ConcurrentHashMap<String, Object> state = context.getState();
@@ -78,6 +86,12 @@ public class GxRequestsFactory {
         return req;
     }
 
+    /**
+     * Create termination CCR request, which is sent in case of disconnection of device from the network.
+     * @param context scenario context
+     * @return CCR termination request
+     * @throws Exception in case of any error
+     */
     public static GxCreditControlRequest createCcrT(ScenarioContext context) throws Exception {
         ClientGxSession session = context.getGxSession();
         ConcurrentHashMap<String, Object> state = context.getState();
@@ -116,9 +130,9 @@ public class GxRequestsFactory {
     /**
      * Revalidation time event. Periodically revalidation is requested to confirm that session is alive,
      * PCEF sends CCR-U with the correct event trigger.
-     * @param context
-     * @return
-     * @throws Exception
+     * @param context scenario context
+     * @return CCR update request
+     * @throws Exception in case of any error
      */
     public static GxCreditControlRequest createCcrU(ScenarioContext context) throws Exception {
         ClientGxSession session = context.getGxSession();
@@ -155,6 +169,13 @@ public class GxRequestsFactory {
         return req;
     }
 
+    /**
+     * Create lost connection update request, this request is sent by the PCEF in case of sudden lost connection of
+     * the device. Lost connection CCR message is subtype of the CCR-U messages.
+     * @param context scenario context
+     * @return CCR lost connection update request
+     * @throws Exception in case of any error
+     */
     public static GxCreditControlRequest createCcrU_LostConnection(ScenarioContext context) throws Exception {
         ClientGxSession session = context.getGxSession();
         ConcurrentHashMap<String, Object> state = context.getState();

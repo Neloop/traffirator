@@ -8,7 +8,10 @@ import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.gx.events.GxCreditControlRequest;
 
-
+/**
+ * Action which will send CCR request to the Gx interface. This CCR is used in case of lost connection of
+ * the user device.
+ */
 public class GxCcrU_LostConnection_SendAction implements ScenarioAction {
 
     @Override

@@ -9,7 +9,9 @@ import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.gx.events.GxReAuthRequest;
 import org.jdiameter.common.impl.app.gx.GxReAuthAnswerImpl;
 
-
+/**
+ * Action which will send RAA answer, which is constructed based on the previously received RAR request.
+ */
 public class GxRaa_Success_SendAction implements ScenarioAction {
 
     @Override

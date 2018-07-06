@@ -15,9 +15,20 @@ import org.jdiameter.common.impl.app.rx.RxSessionTermRequestImpl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * Class containing factories for all Rx related messages. All centered in the factory for better management.
+ */
 public class RxRequestsFactory {
 
+    /**
+     * Create AAR request, which requests from the PCRF bearer for the call. Can be sent in the initiation of the call
+     * or if the codec of the call is changed.
+     * @param context scenario context
+     * @param changeMedia true, if the Media-Component-Description AVP values should be randomly generated, false if
+     *                    they should be loaded from the scenario context
+     * @return AAR request
+     * @throws Exception in case of any error
+     */
     public static RxAARequest createAar(ScenarioContext context, boolean changeMedia) throws Exception {
         ClientRxSession session = context.getRxSession();
         ConcurrentHashMap<String, Object> state = context.getState();
@@ -75,6 +86,12 @@ public class RxRequestsFactory {
         return req;
     }
 
+    /**
+     * Create session termination request, which is sent when the call is terminated.
+     * @param context scenario context
+     * @return STR request
+     * @throws Exception in case of any error
+     */
     public static RxSessionTermRequest createStr(ScenarioContext context) throws Exception {
         ClientRxSession session = context.getRxSession();
 

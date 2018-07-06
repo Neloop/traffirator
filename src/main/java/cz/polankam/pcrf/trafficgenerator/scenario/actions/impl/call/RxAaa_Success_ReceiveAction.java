@@ -7,7 +7,9 @@ import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.rx.events.RxAAAnswer;
 
-
+/**
+ * Action which will receive AAA and validate if it was successful.
+ */
 public class RxAaa_Success_ReceiveAction implements ScenarioAction {
 
     @Override

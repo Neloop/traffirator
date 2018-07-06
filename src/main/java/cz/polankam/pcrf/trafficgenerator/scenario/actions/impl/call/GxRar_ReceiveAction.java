@@ -9,7 +9,9 @@ import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.gx.events.GxReAuthRequest;
 
-
+/**
+ * Action which will received RAR request and saves the charging rules sent back by the PCRF.
+ */
 public class GxRar_ReceiveAction implements ScenarioAction {
 
     @Override

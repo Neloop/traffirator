@@ -9,7 +9,10 @@ import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.rx.events.RxAbortSessionRequest;
 import org.jdiameter.common.impl.app.rx.RxAbortSessionAnswerImpl;
 
-
+/**
+ * Action which will send ASA successful answer to the Rx interface. Answer is constructed based on previously received
+ * ASR request.
+ */
 public class RxAsa_Success_SendAction implements ScenarioAction {
 
     @Override
