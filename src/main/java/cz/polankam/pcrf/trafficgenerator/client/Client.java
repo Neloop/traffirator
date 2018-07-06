@@ -288,17 +288,24 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
             return;
         }
 
-        removeScenario(scenariosForTypes.get(type).get(0));
+        while (!scenariosForTypes.get(type).isEmpty()) {
+            if (removeScenario(scenariosForTypes.get(type).get(0))) {
+                return;
+            }
+        }
     }
 
     /**
      * Remove given scenario from all structures within this class and destroy it properly.
      * @param scenario scenario to be removed
+     * @return if the scenario was remove or not
      */
-    private synchronized void removeScenario(Scenario scenario) {
+    private synchronized boolean removeScenario(Scenario scenario) {
         String type = scenario.getType();
+        boolean result = false;
         if (scenariosForTypes.get(type).remove(scenario)) {
             currentScenariosCount.decrementAndGet();
+            result = true;
         }
 
         ClientGxSession gxSession = scenario.getContext().getGxSession();
@@ -315,6 +322,7 @@ public class Client implements ClientRxSessionListener, ClientGxSessionListener,
 
         scenario.destroy();
         logger.info("Scenario removed and destroyed. Current active scenarios for type '" + type + "': " + scenariosForTypes.get(type).size());
+        return result;
     }
 
     /**
