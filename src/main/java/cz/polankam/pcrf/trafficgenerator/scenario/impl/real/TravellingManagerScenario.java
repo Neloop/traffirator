@@ -10,7 +10,11 @@ import cz.polankam.pcrf.trafficgenerator.utils.data.DataProvider;
 
 import java.util.HashMap;
 
-
+/**
+ * Travelling manager scenario simulates the user which is often changing its location and also making calls a lot.
+ * Because of high probability of update of the location, there is even special state in the call, which ensures,
+ * that there are updates of position during the call.
+ */
 public class TravellingManagerScenario extends Scenario {
 
     public static final String TYPE = "TravellingManager";

@@ -10,7 +10,10 @@ import cz.polankam.pcrf.trafficgenerator.utils.data.DataProvider;
 
 import java.util.HashMap;
 
-
+/**
+ * Call center scenario simulates a operator in the office, who is making a big amount of calls in a row. The calls
+ * are rather short and without updates, after one call another will probably start.
+ */
 public class CallCenterEmployeeScenario extends Scenario {
 
     public static final String TYPE = "CallCenterEmployee";

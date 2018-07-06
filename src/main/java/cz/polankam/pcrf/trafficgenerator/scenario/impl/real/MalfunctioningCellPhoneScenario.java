@@ -10,7 +10,10 @@ import cz.polankam.pcrf.trafficgenerator.utils.data.DataProvider;
 
 import java.util.HashMap;
 
-
+/**
+ * Simulates malfunctioning cell phone which is often connecting and disconnecting or losing a connection. If the call
+ * happens, there is very high probability of losing a connection. There are also quite small delays.
+ */
 public class MalfunctioningCellPhoneScenario extends Scenario {
 
     public static final String TYPE = "MalfunctioningCellPhone";

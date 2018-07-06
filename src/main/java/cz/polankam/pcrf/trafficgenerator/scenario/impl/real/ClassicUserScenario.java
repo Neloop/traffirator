@@ -10,7 +10,10 @@ import cz.polankam.pcrf.trafficgenerator.utils.data.DataProvider;
 
 import java.util.HashMap;
 
-
+/**
+ * Scenario simulates classic user in the telecommunication network. There are quite big delays between all actions.
+ * The call if it happens is quite short and with low probability of updates of codec.
+ */
 public class ClassicUserScenario extends Scenario {
 
     public static final String TYPE = "ClassicUser";

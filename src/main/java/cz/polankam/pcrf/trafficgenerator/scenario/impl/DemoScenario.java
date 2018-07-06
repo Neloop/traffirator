@@ -6,7 +6,10 @@ import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioNode;
 import cz.polankam.pcrf.trafficgenerator.scenario.actions.impl.StdoutPrintAction;
 import java.util.HashMap;
 
-
+/**
+ * Demo scenario which is not sending any messages to the Diameter interfaces.
+ * It just prints information on the standard input and works as a proof of functionality.
+ */
 public class DemoScenario extends Scenario {
 
     public static final String TYPE = "Demo";

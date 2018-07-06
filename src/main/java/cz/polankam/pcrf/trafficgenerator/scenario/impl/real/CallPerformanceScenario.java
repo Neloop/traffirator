@@ -10,7 +10,10 @@ import cz.polankam.pcrf.trafficgenerator.utils.data.DataProvider;
 
 import java.util.HashMap;
 
-
+/**
+ * Scenario made for the purposes of performance tests. There are small delays and there is high probability of making
+ * a call and immediatelly end it properly, after that the user device is disconnected from the network.
+ */
 public class CallPerformanceScenario extends Scenario {
 
     public static final String TYPE = "CallPerformance";
