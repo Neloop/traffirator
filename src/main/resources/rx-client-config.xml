@@ -33,7 +33,7 @@
     <DpaTimeOut value="5000" />
     <RecTimeOut value="10000" />
     <Concurrent>
-      <Entity name="ApplicationSession" size="2" />
+      <Entity name="ApplicationSession" size="4" />
       <Entity name="ThreadGroup" size="64" />
       <Entity name="ProcessingMessageTimer" size="1" />
       <Entity name="DuplicationMessageTimer" size="1" />
