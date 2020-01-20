@@ -4,7 +4,8 @@ import java.io.InputStream;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdiameter.api.ApplicationId;
 import org.jdiameter.api.Configuration;
 import org.jdiameter.api.DisconnectCause;
@@ -25,7 +26,7 @@ import org.jdiameter.server.impl.helpers.XMLConfiguration;
  */
 public abstract class AppStack {
 
-    private static final Logger logger = Logger.getLogger(AppStack.class);
+    private static final Logger logger = LogManager.getLogger(AppStack.class);
 
 
     protected Stack stack;

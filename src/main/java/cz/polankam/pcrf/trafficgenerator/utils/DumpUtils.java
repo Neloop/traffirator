@@ -1,7 +1,9 @@
 package cz.polankam.pcrf.trafficgenerator.utils;
 
 import java.nio.charset.StandardCharsets;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdiameter.api.Avp;
 import org.jdiameter.api.AvpDataException;
 import org.jdiameter.api.AvpSet;
@@ -14,7 +16,7 @@ import org.mobicents.diameter.dictionary.AvpRepresentation;
  */
 public class DumpUtils {
 
-    private static final Logger logger = Logger.getLogger(DumpUtils.class);
+    private static final Logger logger = LogManager.getLogger(DumpUtils.class);
 
     private static final String dictionaryFile = "dictionary.xml";
     private static final AvpDictionary dictionary = AvpDictionary.INSTANCE;

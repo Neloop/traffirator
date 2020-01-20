@@ -1,6 +1,7 @@
 package cz.polankam.pcrf.trafficgenerator.client;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdiameter.api.ApplicationId;
 
 /**
@@ -9,7 +10,7 @@ import org.jdiameter.api.ApplicationId;
  */
 public class RxStack extends AppStack {
 
-    private static final Logger log = Logger.getLogger(RxStack.class);
+    private static final Logger log = LogManager.getLogger(RxStack.class);
 
     // configuration files
     private static final String configFile = "rx-client-config.xml";

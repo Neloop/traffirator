@@ -5,7 +5,9 @@ import cz.polankam.pcrf.trafficgenerator.scenario.Scenario;
 import cz.polankam.pcrf.trafficgenerator.scenario.ScenarioFactory;
 import cz.polankam.pcrf.trafficgenerator.utils.DiameterAppType;
 import cz.polankam.pcrf.trafficgenerator.utils.DumpUtils;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jdiameter.api.InternalException;
 import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
@@ -36,7 +38,7 @@ import cz.polankam.pcrf.trafficgenerator.scenario.SessionProvider;
  */
 public class Client implements ClientRxSessionListener, ClientGxSessionListener, SessionProvider {
 
-    private static final Logger logger = Logger.getLogger(Client.class);
+    private static final Logger logger = LogManager.getLogger(Client.class);
 
     private final GxStack gx;
     private final RxStack rx;
