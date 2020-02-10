@@ -11,6 +11,8 @@ Unlike test profiles, scenarios cannot be defined dynamically and are hard-coded
 
 The project is released under the **MIT** license and uses the **jDiameter** library for the communication over the Gx and Rx interfaces.
 
+The **traffirator** generator is part of the master thesis written and defended on **[MFF](https://www.mff.cuni.cz/)** (Faculty of Mathematics and Physics, Charles University), the thesis with attachments is publicly accessible and can be found at [https://is.cuni.cz/webapps/zzp/detail/192875](https://is.cuni.cz/webapps/zzp/detail/192875).
+
 ## Installation and Compilation
 
 For the time being, traffirator is distributed only in the form of the GitHub repository. If we want to use traffirator we have to clone the repository. By the following command, we clone the repository to the current directory.
