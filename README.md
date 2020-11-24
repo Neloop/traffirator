@@ -1,6 +1,6 @@
 # Traffirator - PCRF Traffic Generator
 
-[![Build Status](https://travis-ci.org/Neloop/traffirator.svg?branch=master)](https://travis-ci.org/Neloop/traffirator)
+[![Build Status](https://github.com/Neloop/traffirator/workflows/CI/badge.svg)](https://github.com/Neloop/traffirator/actions)
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/Neloop/traffirator/blob/master/LICENSE)
 
 **Traffirator** is a traffic generator for the **PCRF** server placed within the LTE network. Traffirator generates traffic for the **Gx** and **Rx** interfaces of the PCRF server. It simulates user equipments connected to the LTE network, which might perform calls and usual maintenance of the user sessions.
