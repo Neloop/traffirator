@@ -85,9 +85,9 @@
         </dependency>
 
         <dependency>
-            <groupId>net.andreinc.mockneat</groupId>
+            <groupId>net.andreinc</groupId>
             <artifactId>mockneat</artifactId>
-            <version>0.3.8</version>
+            <version>0.4.8</version>
         </dependency>
 
         <dependency>
